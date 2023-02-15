@@ -1,9 +1,8 @@
-import { Amplify } from '../src';
+import { Amplify } from '../src/core';
 
 Amplify.configure({
     Auth: {
-        identityPoolId: 'asdads',
-        userPoolClientId: 'asda',
-        userPoolId: ''
+        userPoolId: "",
+        identityPoolId: ""
     }
 });

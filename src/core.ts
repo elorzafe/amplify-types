@@ -87,7 +87,19 @@ type IdentityPoolConfig = {
     identityPoolId: string,
 }
 
-type UserPoolAndIdentityPoolConfig = UserPoolConfig & IdentityPoolConfig;
+type UserPoolAndIdentityPoolConfig = {
+    userPoolId: string,
+    identityPoolId: string,
+    userPoolClientId: string,
+    signUpVerificationMethod?: 'code' | 'link',
+    oauth?: {
+        domain: string,
+        scope: UserPoolScopes,
+        redirectSignIn: string,
+        redirectSignOut: string,
+        responseType: 'code' | 'token'
+    }
+} 
 
 type AmplifyType = {
     configure: (config: AmplifyConfigure) => void
