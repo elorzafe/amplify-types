@@ -1,25 +1,65 @@
 export const Storage = {
-    put: function (putOptions: PutOptions): Promise<StorageUploadResult> {
-        throw new Error("Function not implemented.")
-    }
+  //TODO: figure out how to get the storageuploadresult to show values
+  /**
+   * Allows you to upload objects.
+   * @PutOptions object to upload file information
+   *
+   */
+  uploadFile: function (
+    putOptions: PutOptions
+    //TODO: How to fix the UploadTask and get it to be returned if resumable is set to true
+  ): Promise<StorageUploadResult> | UploadTask {
+    throw new Error("Function not implemented.");
+  },
+};
+
+export interface UploadTask {
+  resume(): any;
+  pause(): any;
+  percent: number;
+  isInProgress: boolean;
 }
 
 type PutOptions = {
-    Name : string,
-    uploadObject: any
-    uploadLocation : string
-    level : StorageAccessLevels
-}
+  //name
+  name: string;
+  uploadObject: any;
+  uploadLocation: string;
+  progressIndicator?: (progress: number) => void;
+  level?: StorageAccessLevels;
+  serverSideEncryptionOptions?: ServerSideEncryptionOptions;
+  acl?: ACLOptions; // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/enums/objectcannedacl.html
+  cacheControl?: ACLOptions; // (String) Specifies caching behavior along the request/reply chain
+  contentDisposition?: "attachment"; //TODO: What does this mean?
+  expires?: Date; //TODO: Is data here right to use?
+  metadata?: Record<string, string>; // (map<String>) A map of metadata to store with the object in S3.
+  resumable?: boolean;
+  useAccelerateEndpoint?: boolean;
+};
+
+type ACLOptions =
+  | "authenticated-read"
+  | "aws-exec-read"
+  | "bucket-owner-full-control"
+  | "bucket-owner-read"
+  | "private"
+  | "public-read"
+  | "public-read-write";
+
+type ServerSideEncryptionOptions = {
+  serverSideEncryption?: "AES256" | "aws:kms";
+  SSECustomerAlgorithm?: string;
+  SSECustomerKey?: string; //TODO: fix this type
+  SSECustomerKeyMD5?: string;
+  SSEKMSKeyId?: string;
+};
 
 type StorageUploadResult = {
-    objectName: boolean,
-    location: string,
-}
+  objectName: boolean;
+  location: string;
+};
 
-type StorageAccessLevels =  
-"public" 
-| "private" 
-| "protected"
+type StorageAccessLevels = "public" | "private" | "protected";
 
 // type AuthSignInOptions = {
 //     username: string,
@@ -29,31 +69,29 @@ type StorageAccessLevels =
 // }
 
 type AuthStandardAttributeKey =
-    | "address"
-    | "birthDate"
-    | "email"
-    | "emailVerified"
-    | "familyName"
-    | "gender"
-    | "givenName"
-    | "locale"
-    | "middleName"
-    | "name"
-    | "nickname"
-    | "phoneNumber"
-    | "phoneNumberVerified"
-    | "picture"
-    | "preferredUsername"
-    | "profile"
-    | "sub"
-    | "updatedAt"
-    | "website"
-    | "zoneInfo"
-
+  | "address"
+  | "birthDate"
+  | "email"
+  | "emailVerified"
+  | "familyName"
+  | "gender"
+  | "givenName"
+  | "locale"
+  | "middleName"
+  | "name"
+  | "nickname"
+  | "phoneNumber"
+  | "phoneNumberVerified"
+  | "picture"
+  | "preferredUsername"
+  | "profile"
+  | "sub"
+  | "updatedAt"
+  | "website"
+  | "zoneInfo";
 
 // type AuthUserAttributeKey = AuthStandardAttributeKey
 //     | string | Record<string, string>
-
 
 // const enum DeliveryMedium {
 //     EMAIL = "EMAIL",
@@ -90,4 +128,3 @@ type AuthStandardAttributeKey =
 //     RESET_PASSWORD = "RESET_PASSWORD",
 //     DONE = "DONE",
 // }
-

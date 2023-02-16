@@ -1,4 +1,4 @@
-import { Auth } from './../src/auth';
+import { Auth, AuthSignInStep } from './../src/auth';
 import { Storage } from './../src/storage';
 import { Amplify } from '../src/core';
 
@@ -9,3 +9,8 @@ Amplify.configure({
         userPoolClientId: "",
     }
 });
+
+var test = Auth.signIn({username: "jjj",})
+
+
+
