@@ -1,7 +1,5 @@
-import { Auth } from './../src/auth';
-import { Storage } from './../src/storage';
+import { Storage } from '../src/storage';
 import { Amplify } from '../src/core';
-
 
 Amplify.configure({
     Auth: {
@@ -9,3 +7,5 @@ Amplify.configure({
         userPoolClientId: "",
     }
 });
+
+Storage.put({fileName : "tesds", uploadLocation: "dsadsaads", level : "private"})
