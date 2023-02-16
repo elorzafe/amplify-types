@@ -8,4 +8,4 @@ Amplify.configure({
     }
 });
 
-Storage.put({fileName : "tesds", uploadLocation: "dsadsaads", level : "private"})
+Storage.put({Name : "tesds", uploadObject: "dsadsaads", level : "private", uploadLocation : ""})

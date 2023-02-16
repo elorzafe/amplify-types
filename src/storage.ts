@@ -5,7 +5,8 @@ export const Storage = {
 }
 
 type PutOptions = {
-    fileName : string,
+    Name : string,
+    uploadObject: any
     uploadLocation : string
     level : StorageAccessLevels
 }
