@@ -23,5 +23,5 @@ const uploadTask = Storage.uploadFile({
   serverSideEncryptionOptions: {
     SSEKMSKeyId: "as132",
   },
-  resumable: true,
+  resumable: false,
 });

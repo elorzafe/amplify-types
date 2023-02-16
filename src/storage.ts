@@ -5,22 +5,15 @@ export const Storage = {
    * @PutOptions object to upload file information
    *
    */
-  uploadFile: function (
-    putOptions: PutOptions
+  uploadFile: function <Resumable extends boolean>(
+    putOptions: PutOptions<Resumable>
     //TODO: How to fix the UploadTask and get it to be returned if resumable is set to true
-  ): Promise<StorageUploadResult> | UploadTask {
+  ): GetUploadResult<Resumable> {
     throw new Error("Function not implemented.");
   },
 };
 
-export interface UploadTask {
-  resume(): any;
-  pause(): any;
-  percent: number;
-  isInProgress: boolean;
-}
-
-type PutOptions = {
+type PutOptions<Resumable extends boolean> = {
   //name
   name: string;
   uploadObject: any;
@@ -33,7 +26,7 @@ type PutOptions = {
   contentDisposition?: "attachment"; //TODO: What does this mean?
   expires?: Date; //TODO: Is data here right to use?
   metadata?: Record<string, string>; // (map<String>) A map of metadata to store with the object in S3.
-  resumable?: boolean;
+  resumable?: Resumable;
   useAccelerateEndpoint?: boolean;
 };
 
@@ -128,3 +121,14 @@ type AuthStandardAttributeKey =
 //     RESET_PASSWORD = "RESET_PASSWORD",
 //     DONE = "DONE",
 // }
+
+interface UploadTask {
+  resume(): any;
+  pause(): any;
+  percent: number;
+  isInProgress: boolean;
+}
+
+type GetUploadResult<Resumable extends boolean> = Resumable extends true
+  ? UploadTask
+  : Promise<StorageUploadResult>;
