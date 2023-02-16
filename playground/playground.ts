@@ -1,8 +1,5 @@
 import { Auth, AuthSignInStep } from './../src/auth';
-import { Storage } from './../src/storage';
 import { Amplify } from '../src/core';
-
-
 Amplify.configure({
     Auth: {
         userPoolId: "adsasd",
@@ -10,7 +7,20 @@ Amplify.configure({
     }
 });
 
-var test = Auth.signIn({username: "jjj",})
+async function testSignIn() {
 
+    const result = await Auth.signIn({
+        username: 'asdas',
+        password: 'asdasda',
+        metadata: {
+            a: 'asd'
+        },
+        validationData: {
+            b: 'asd'
+        }
+    });
 
-
+    if (!result.isSignedIn) {
+        if (result.nextStep.signInStep === AuthSignInStep.)
+    }
+}
