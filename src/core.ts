@@ -8,7 +8,10 @@ type AmplifyConfigure = {
     API?: APIConfig
 }
 
-export type StorageConfig = {};
+export type StorageConfig = {
+    bucket: string,
+    region: string, // or scope it down to actual regions
+};
 
 export type APIConfig = {};
 export type AuthConfig = StrictUnion<UserPoolConfig | IdentityPoolConfig | UserPoolAndIdentityPoolConfig>;
@@ -37,11 +40,23 @@ type IdentityPoolConfig = {
 type UserPoolAndIdentityPoolConfig =  UserPoolConfig & IdentityPoolConfig
 
 type AmplifyType = {
-    configure: (config: AmplifyConfigure) => void
+    configure: (config: AmplifyConfigure) => void,
+
 }
 
 export const Amplify: AmplifyType = {
     configure: function (config: AmplifyConfigure): void {
         throw new Error("Function not implemented.")
     }
+
+}
+
+export function httpClient(input: HTTPClientInput): Promise<Response> {
+    throw new Error("Function not impemented");
+}
+
+type HTTPClientMiddleware = () => {}
+
+type HTTPClientInput = {
+    middleware: []
 }
