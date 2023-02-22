@@ -80,11 +80,7 @@ export class AuthClass implements AuthInterface {
   }
   confirmSignIn<
     NextSignInStep extends
-      | AuthSignInStep.CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE
-      | AuthSignInStep.CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE
-      | AuthSignInStep.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED
-      | AuthSignInStep.CONFIRM_SIGN_IN_WITH_SOFTWARE_TOKEN_MFA_CODE
-      | AuthSignInStep.SELECT_MFA_TYPE
+       AuthSignInStep
   >(
     req: ConfirmSignInRequest<
       CognitoMFAType,
