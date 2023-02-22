@@ -25,20 +25,20 @@ enum ACLOption {
 }
 
 type TransferProgress = {
-  transferred: number;
-  total: number;
+  readonly transferred: number;
+  readonly total: number;
 };
 
 type AccessLevelConfig = {
-  accessLevel?: StorageAccessLevel;
-  identityId?: string;
+  readonly accessLevel?: StorageAccessLevel;
+  readonly identityId?: string;
 }
 
 type StorageObjectReference = {
-  key: string;
-  size?: number;
-  eTag?: string;
-  lastModified?: Date;
+  readonly key: string;
+  readonly size?: number;
+  readonly eTag?: string;
+  readonly lastModified?: Date;
 };
 
 declare class StorageError extends Error {};
@@ -101,7 +101,7 @@ type GetURLRequest = {
 
 type DownloadRequest = {
   file: StorageObjectReference;
-  progressCallback?: (progress: TransferProgress) => void;
+  onProgress?: (progress: TransferProgress) => void;
 } & CommonStorageParameters;
 
 type DownloadResponse = {
@@ -172,9 +172,9 @@ declare function list(request: ListFilesRequest): Promise<ListFilesResponse>;
 type PutRequest = {
   content: string | File | Blob;
   file: StorageObjectReference;
-  resumable?: boolean;
-  useAccelerateEndpoint?: boolean;
+  onProgress?: (progress: TransferProgress) => void;
   partSize?: number;
+  useAccelerateEndpoint?: boolean;
 } & StorageObjectParameters & CommonStorageParameters;
 
 type PutResponse = {
@@ -182,7 +182,6 @@ type PutResponse = {
   pause?: () => void;
   cancel?: () => void;
   getProgress?: () => TransferProgress;
-  isInProgress?: () => boolean;
   result: Promise<StorageObjectReference>;
 };
 
@@ -201,10 +200,10 @@ declare function put(request: PutRequest): PutResponse;
 
 // API Copy
 type CopyRequest = {
-  sourceFile: {
+  source: {
     file: StorageObjectReference;
   } & AccessLevelConfig;
-  destFile: { 
+  destination: { 
     file: StorageObjectReference;
   } & AccessLevelConfig;
 } & StorageObjectParameters & Omit<CommonStorageParameters, 'accessLevel' | 'identityId'>;
