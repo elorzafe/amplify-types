@@ -82,7 +82,7 @@ type CommonStorageParameters = {
  * @experimental
  * 
  * @param key - A file key that will be used to generate the reference.
- * @returns A FileReference for the file.
+ * @returns A StorageObjectReference for the file.
  */
 declare function getFileReference(key: string): StorageObjectReference;
 
