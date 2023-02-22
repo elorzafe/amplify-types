@@ -36,7 +36,6 @@ type AccessLevelConfig = {
 
 type StorageObjectReference = {
   key: string;
-  isFolder: boolean;
   size?: number;
   eTag?: string;
   lastModified?: Date;
