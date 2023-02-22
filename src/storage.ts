@@ -1,134 +1,268 @@
-export const Storage = {
-  //TODO: figure out how to get the storageuploadresult to show values
-  /**
-   * Allows you to upload objects.
-   * @PutOptions object to upload file information
-   *
-   */
-  uploadFile: function <Resumable extends boolean>(
-    putOptions: PutOptions<Resumable>
-    //TODO: How to fix the UploadTask and get it to be returned if resumable is set to true
-  ): GetUploadResult<Resumable> {
-    throw new Error("Function not implemented.");
-  },
+// Storage utility types
+enum StorageAccessLevel {
+  Public = 'public',
+  Private = 'private',
+  Protected = 'protected'
 };
 
-type PutOptions<Resumable extends boolean> = {
-  //name
-  name: string;
-  uploadObject: any;
-  uploadLocation: string;
-  progressIndicator?: (progress: number) => void;
-  level?: StorageAccessLevels;
-  serverSideEncryptionOptions?: ServerSideEncryptionOptions;
-  acl?: ACLOptions; // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/enums/objectcannedacl.html
-  cacheControl?: ACLOptions; // (String) Specifies caching behavior along the request/reply chain
-  contentDisposition?: "attachment"; //TODO: What does this mean?
-  expires?: Date; //TODO: Is data here right to use?
-  metadata?: Record<string, string>; // (map<String>) A map of metadata to store with the object in S3.
-  resumable?: Resumable;
-  useAccelerateEndpoint?: boolean;
+enum PageSize {
+  All = 'ALL'
 };
 
-type ACLOptions =
-  | "authenticated-read"
-  | "aws-exec-read"
-  | "bucket-owner-full-control"
-  | "bucket-owner-read"
-  | "private"
-  | "public-read"
-  | "public-read-write";
-
-type ServerSideEncryptionOptions = {
-  serverSideEncryption?: "AES256" | "aws:kms";
-  SSECustomerAlgorithm?: string;
-  SSECustomerKey?: string; //TODO: fix this type
-  SSECustomerKeyMD5?: string;
-  SSEKMSKeyId?: string;
-};
-
-type StorageUploadResult = {
-  objectName: boolean;
-  location: string;
-};
-
-type StorageAccessLevels = "public" | "private" | "protected";
-
-// type AuthSignInOptions = {
-//     username: string,
-//     password?: string,
-//     validationData?: Record<string, string>,
-//     metadata?: Record<string, string>
-// }
-
-type AuthStandardAttributeKey =
-  | "address"
-  | "birthDate"
-  | "email"
-  | "emailVerified"
-  | "familyName"
-  | "gender"
-  | "givenName"
-  | "locale"
-  | "middleName"
-  | "name"
-  | "nickname"
-  | "phoneNumber"
-  | "phoneNumberVerified"
-  | "picture"
-  | "preferredUsername"
-  | "profile"
-  | "sub"
-  | "updatedAt"
-  | "website"
-  | "zoneInfo";
-
-// type AuthUserAttributeKey = AuthStandardAttributeKey
-//     | string | Record<string, string>
-
-// const enum DeliveryMedium {
-//     EMAIL = "EMAIL",
-//     SMS = "SMS",
-//     PHONE = "PHONE",
-//     UNKNOWN = "UNKNOWN",
-// }
-
-// type AuthCodeDeliveryDetails<UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey> = {
-//     destination: string,
-//     deliveryMedium: DeliveryMedium,
-//     attributeName: UserAttributeKey
-// }
-
-// type AuthNextSignInStep<UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey> = {
-//     signInStep: AuthSignInStep,
-//     codeDeliveryDetails?: AuthCodeDeliveryDetails,
-//     additionalInfo?: AdditionalInfo,
-//     totpCode?: string,
-//     missingAttributes?: UserAttributeKey[],
-// }
-
-// type AdditionalInfo = {
-//     [key: string]: string;
-// }
-
-// export enum AuthSignInStep {
-//     CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE = "CONFIRM_SIGN_IN_SMS_MFA_CODE",
-//     CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE = "CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE",
-//     CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED = "NEW_PASSWORD_REQUIRED",
-//     CONFIRM_SIGN_IN_WITH_SOFTWARE_TOKEN_MFA_CODE = "CONFIRM_SIGN_IN_WITH_SOFTWARE_TOKEN_MFA_CODE",
-//     SELECT_MFA_TYPE = "SELECT_MFA_TYPE",
-//     CONFIRM_SIGN_UP = "CONFIRM_SIGN_UP",
-//     RESET_PASSWORD = "RESET_PASSWORD",
-//     DONE = "DONE",
-// }
-
-interface UploadTask {
-  resume(): any;
-  pause(): any;
-  percent: number;
-  isInProgress: boolean;
+enum EncryptionOption {
+  AES256 = 'AES256',
+  KMS = 'aws:kms'
 }
 
-type GetUploadResult<Resumable extends boolean> = Resumable extends true
-  ? UploadTask
-  : Promise<StorageUploadResult>;
+enum ACLOption {
+  AuthenticatedRead = 'authenticated-read',
+  AWSExecRead = 'aws-exec-read',
+  BucketOwnerFullControl = 'bucket-owner-full-control',
+  BucketOwnerRead = 'bucket-owner-read',
+  Private = 'private',
+  PublicRead = 'public-read',
+  PublicReadWrite = 'public-read-write'
+}
+
+type TransferProgress = {
+  transferred: number;
+  total: number;
+};
+
+type AccessLevelConfig = {
+  accessLevel?: StorageAccessLevel;
+  identityId?: string;
+}
+
+type StorageObjectReference = {
+  key: string;
+  isFolder: boolean;
+  size?: number;
+  eTag?: string;
+  lastModified?: Date;
+};
+
+declare class StorageError extends Error {};
+
+// Common request parameters
+type ServerSideEncryptionParameters = {
+  encryptionOptions: {
+    serverSideEncryption?: EncryptionOption;
+    SSECustomerAlgorithm?: string;
+    SSECustomerKey?: Buffer | string;
+    SSECustomerKeyMD5?: string;
+    SSEKMSKeyId?: string;
+  }
+};
+
+type ResponseHeaderParameters = {
+  headerOptions: {
+    cacheControl?: string;
+    contentDisposition?: string;
+    contentEncoding?: string;
+    contentLanguage?: string;
+    contentType?: string;
+    expires?: Date;
+  };
+};
+
+type StorageObjectParameters = {
+  acl?: ACLOption;
+  metadata?: {[key: string]: string};
+};
+
+type CommonStorageParameters = {
+  track?: boolean;
+} & ResponseHeaderParameters & ServerSideEncryptionParameters & AccessLevelConfig;
+
+// API Common
+/**
+ * Utility to generate a reference for the specified file for use with other Storage APIs.
+ * 
+ * @experimental
+ * 
+ * @param key - A file key that will be used to generate the reference.
+ * @returns A FileReference for the file.
+ */
+declare function getFileReference(key: string): StorageObjectReference;
+
+// API Get
+type DownloadMetadata = {
+  attempts: number;
+  headers: Array<Record<string, string>>;
+  totalRetryDelay: number;
+  statusCode: number;
+  requestId?: string;
+};
+
+type GetURLRequest = {
+  file: StorageObjectReference;
+  expiresIn?: number;
+} & CommonStorageParameters;
+
+type DownloadRequest = {
+  file: StorageObjectReference;
+  progressCallback?: (progress: TransferProgress) => void;
+} & CommonStorageParameters;
+
+type DownloadResponse = {
+  content: Blob;
+  contentLength: number;
+  contentType: string;
+  file: StorageObjectReference;
+  metadata: DownloadMetadata;
+};
+
+/**
+ * Generates a pre-signed URL for downloading the specified reference.
+ * 
+ * @remarks
+ * Pre-signed URLs are usable by anyone with the URL, regardless of their access level. This method will not attempt 
+ * to check if the file exists.
+ * 
+ * @throws {@link StorageError} If an error occurs while generating the pre-signed URL.
+ * 
+ * @experimental
+ * 
+ * @param {GetURLRequest} request - A GetURLRequest object.
+ * @returns A promise that will resolve with the pre-signed file URL.
+ */
+declare function getUrl(request: GetURLRequest): Promise<string>;
+
+/**
+ * Downloads the specified object from S3.
+ * 
+ * @throws {@link StorageError} If an error occurs while downloading the file from S3.
+ * 
+ * @experimental
+ * 
+ * @param {DownloadRequest} request - A DownloadFileRequest object.
+ * @returns A promise that will resolve with an object containing the file blob and other information.
+ */
+declare function download(request: DownloadRequest): Promise<DownloadResponse>;
+
+// API List
+type ListFilesRequest = {
+  key: string;
+  pageSize?: PageSize | number;
+  nextToken?: string;
+} & Pick<CommonStorageParameters, 'track' | 'accessLevel' | 'identityId'>;
+
+type ListFilesResponse = {
+  results: Array<StorageObjectReference>;
+  hasNextToken: boolean;
+  nextToken: string;
+};
+
+/**
+ * Lists objects for the specified prefix.
+ * 
+ * @remarks
+ * To list all objects at the specified access level, pass an empty string as the prefix with the request.
+ * 
+ * @throws {@link StorageError} If an error occurs while retrieving the file list.
+ * 
+ * @experimental
+ * 
+ * @param {ListFilesRequest} request - A ListFilesRequest object.
+ * @returns A promise that will resolve with an object containing a list of matching objects from S3.
+ */
+declare function list(request: ListFilesRequest): Promise<ListFilesResponse>;
+
+// API Put
+type PutRequest = {
+  content: string | File | Blob;
+  file: StorageObjectReference;
+  resumable?: boolean;
+  useAccelerateEndpoint?: boolean;
+  partSize?: number;
+} & StorageObjectParameters & CommonStorageParameters;
+
+type PutResponse = {
+  resume?: () => void;
+  pause?: () => void;
+  cancel?: () => void;
+  getProgress?: () => TransferProgress;
+  isInProgress?: () => boolean;
+  result: Promise<StorageObjectReference>;
+};
+
+/**
+ * Uploads a file to S3.
+ * 
+ * @remarks
+ * Reference the promise in the `result` field of the response to determine if the upload has completed or failed.
+ * 
+ * @experimental
+ * 
+ * @param {PutRequest} request - A PutFileRequest object.
+ * @returns A PutResponse object containing functions for managing the upload and checking results.
+ */
+declare function put(request: PutRequest): PutResponse;
+
+// API Copy
+type CopyRequest = {
+  sourceFile: {
+    file: StorageObjectReference;
+  } & AccessLevelConfig;
+  destFile: { 
+    file: StorageObjectReference;
+  } & AccessLevelConfig;
+} & StorageObjectParameters & Omit<CommonStorageParameters, 'accessLevel' | 'identityId'>;
+
+type CopyResponse = {
+  file: StorageObjectReference;
+};
+
+/**
+ * Copies files within your S3 bucket.
+ * 
+ * @remarks
+ * Copies objects up to 5 GB per operation.
+ * 
+ * @throws {@link StorageError} In the event of a copy error.
+ * 
+ * @experimental
+ * 
+ * @param {CopyRequest} request - A CopyFileRequest object.
+ * @returns A promise that will resolve with a reference for the copied file.
+ */
+declare function copy(request: CopyRequest): Promise<CopyResponse>;
+
+// API Remove
+type RemoveRequest = {
+  file: StorageObjectReference;
+} & AccessLevelConfig;
+
+type RemoveResponse = {
+  deleteMarker: boolean;
+  requestCharged: boolean;
+  versionId: string;
+};
+
+/**
+ * Removes files within your S3 bucket.
+ * 
+ * @throws {@link StorageError} In the event of an error removing the file.
+ * 
+ * @experimental
+ * 
+ * @param {RemoveRequest} request - A RemoveRequest object.
+ * @returns A promise that will resolve with 
+ */
+declare function remove(request: RemoveRequest): Promise<RemoveResponse>;
+
+// API Cancel
+type CancellableRequests = Promise<DownloadResponse | CopyResponse> | PutResponse;
+
+/**
+ * Cancels a pending Storage request.
+ * 
+ * @remarks
+ * This API can be used to cancel pending download, put, and copy requests.
+ * 
+ * @experimental
+ * 
+ * @param {CancellableRequests} request - The promise returned by a download, put, or copy operation.
+ */
+declare function cancel(request: CancellableRequests): void;
