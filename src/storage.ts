@@ -45,17 +45,17 @@ declare class StorageError extends Error {};
 
 // Common request parameters
 type ServerSideEncryptionParameters = {
-  encryptionOptions: {
+  encryptionOptions?: {
     serverSideEncryption?: EncryptionOption;
     SSECustomerAlgorithm?: string;
-    SSECustomerKey?: Buffer | string;
+    SSECustomerKey?: string;
     SSECustomerKeyMD5?: string;
     SSEKMSKeyId?: string;
   }
 };
 
 type ResponseHeaderParameters = {
-  headerOptions: {
+  headerOptions?: {
     cacheControl?: string;
     contentDisposition?: string;
     contentEncoding?: string;
@@ -78,8 +78,6 @@ type CommonStorageParameters = {
 /**
  * Utility to generate a reference for the specified file for use with other Storage APIs.
  * 
- * @experimental
- * 
  * @param key - A file key that will be used to generate the reference.
  * @returns A StorageObjectReference for the file.
  */
@@ -95,12 +93,12 @@ type DownloadMetadata = {
 };
 
 type GetURLRequest = {
-  file: StorageObjectReference;
+  key: StorageObjectReference | string;
   expiresIn?: number;
 } & CommonStorageParameters;
 
 type DownloadRequest = {
-  file: StorageObjectReference;
+  key: StorageObjectReference | string;
   onProgress?: (progress: TransferProgress) => void;
 } & CommonStorageParameters;
 
@@ -121,8 +119,6 @@ type DownloadResponse = {
  * 
  * @throws {@link StorageError} If an error occurs while generating the pre-signed URL.
  * 
- * @experimental
- * 
  * @param {GetURLRequest} request - A GetURLRequest object.
  * @returns A promise that will resolve with the pre-signed file URL.
  */
@@ -132,8 +128,6 @@ declare function getUrl(request: GetURLRequest): Promise<string>;
  * Downloads the specified object from S3.
  * 
  * @throws {@link StorageError} If an error occurs while downloading the file from S3.
- * 
- * @experimental
  * 
  * @param {DownloadRequest} request - A DownloadFileRequest object.
  * @returns A promise that will resolve with an object containing the file blob and other information.
@@ -148,7 +142,7 @@ type ListFilesRequest = {
 } & Pick<CommonStorageParameters, 'track' | 'accessLevel' | 'identityId'>;
 
 type ListFilesResponse = {
-  results: Array<StorageObjectReference>;
+  files: Array<StorageObjectReference>;
   hasNextToken: boolean;
   nextToken: string;
 };
@@ -161,23 +155,21 @@ type ListFilesResponse = {
  * 
  * @throws {@link StorageError} If an error occurs while retrieving the file list.
  * 
- * @experimental
- * 
  * @param {ListFilesRequest} request - A ListFilesRequest object.
  * @returns A promise that will resolve with an object containing a list of matching objects from S3.
  */
 declare function list(request: ListFilesRequest): Promise<ListFilesResponse>;
 
 // API Put
-type PutRequest = {
+type UploadRequest = {
   content: string | File | Blob;
-  file: StorageObjectReference;
+  key: StorageObjectReference | string;
   onProgress?: (progress: TransferProgress) => void;
   partSize?: number;
   useAccelerateEndpoint?: boolean;
 } & StorageObjectParameters & CommonStorageParameters;
 
-type PutResponse = {
+type UploadResponse = {
   resume?: () => void;
   pause?: () => void;
   cancel?: () => void;
@@ -191,20 +183,18 @@ type PutResponse = {
  * @remarks
  * Reference the promise in the `result` field of the response to determine if the upload has completed or failed.
  * 
- * @experimental
- * 
  * @param {PutRequest} request - A PutFileRequest object.
  * @returns A PutResponse object containing functions for managing the upload and checking results.
  */
-declare function put(request: PutRequest): PutResponse;
+declare function upload(request: UploadRequest): UploadResponse;
 
 // API Copy
 type CopyRequest = {
   source: {
-    file: StorageObjectReference;
+    key: StorageObjectReference | string;
   } & AccessLevelConfig;
   destination: { 
-    file: StorageObjectReference;
+    key: StorageObjectReference | string;
   } & AccessLevelConfig;
 } & StorageObjectParameters & Omit<CommonStorageParameters, 'accessLevel' | 'identityId'>;
 
@@ -220,8 +210,6 @@ type CopyResponse = {
  * 
  * @throws {@link StorageError} In the event of a copy error.
  * 
- * @experimental
- * 
  * @param {CopyRequest} request - A CopyFileRequest object.
  * @returns A promise that will resolve with a reference for the copied file.
  */
@@ -229,7 +217,7 @@ declare function copy(request: CopyRequest): Promise<CopyResponse>;
 
 // API Remove
 type RemoveRequest = {
-  file: StorageObjectReference;
+  key: StorageObjectReference | string;
 } & AccessLevelConfig;
 
 type RemoveResponse = {
@@ -243,23 +231,19 @@ type RemoveResponse = {
  * 
  * @throws {@link StorageError} In the event of an error removing the file.
  * 
- * @experimental
- * 
  * @param {RemoveRequest} request - A RemoveRequest object.
  * @returns A promise that will resolve with 
  */
 declare function remove(request: RemoveRequest): Promise<RemoveResponse>;
 
 // API Cancel
-type CancellableRequests = Promise<DownloadResponse | CopyResponse> | PutResponse;
+type CancellableRequests = Promise<DownloadResponse | CopyResponse> | UploadResponse;
 
 /**
  * Cancels a pending Storage request.
  * 
  * @remarks
  * This API can be used to cancel pending download, put, and copy requests.
- * 
- * @experimental
  * 
  * @param {CancellableRequests} request - The promise returned by a download, put, or copy operation.
  */
