@@ -1,28 +1,20 @@
 // Storage utility types
-enum StorageAccessLevel {
-  Public = 'public',
-  Private = 'private',
-  Protected = 'protected'
-};
-
-enum PageSize {
-  All = 'ALL'
-};
-
-enum EncryptionOption {
-  AES256 = 'AES256',
-  KMS = 'aws:kms'
-}
-
-enum ACLOption {
-  AuthenticatedRead = 'authenticated-read',
-  AWSExecRead = 'aws-exec-read',
-  BucketOwnerFullControl = 'bucket-owner-full-control',
-  BucketOwnerRead = 'bucket-owner-read',
-  Private = 'private',
-  PublicRead = 'public-read',
-  PublicReadWrite = 'public-read-write'
-}
+type StorageAccessLevel = 'public' | 'private' | 'protected';
+type PageSize = 'ALL';
+type EncryptionOption = 'AES256' | 'aws:kms';
+type ACLOption = 
+  'authenticated-read' |
+  'aws-exec-read' |
+  'bucket-owner-full-control' |
+  'bucket-owner-read' |
+  'private' |
+  'public-read' |
+  'public-read-write';
+type TransferStatus =
+  'IN_PROGRESS' |
+  'PAUSED' |
+  'CANCELLED' |
+  'COMPLETE';
 
 type TransferProgress = {
   readonly transferred: number;
@@ -32,14 +24,30 @@ type TransferProgress = {
 type AccessLevelConfig = {
   readonly accessLevel?: StorageAccessLevel;
   readonly identityId?: string;
-}
+};
 
-type StorageObjectReference = {
-  readonly key: string;
+type DownloadMetadata = {
+  readonly attempts: number;
+  readonly headers: Array<Record<string, string>>;
+  readonly totalRetryDelay: number;
+  readonly statusCode: number;
+  readonly requestId?: string;
+};
+
+type StorageObjectMetadata = {
   readonly size?: number;
   readonly eTag?: string;
   readonly lastModified?: Date;
 };
+
+type StorageObjectReference = {
+  readonly key: string;
+  readonly metadata?: StorageObjectMetadata;
+} & AccessLevelConfig;
+
+type StoragePrefixReference = {
+  readonly key: string;
+} & AccessLevelConfig;
 
 declare class StorageError extends Error {};
 
@@ -72,7 +80,7 @@ type StorageObjectParameters = {
 
 type CommonStorageParameters = {
   track?: boolean;
-} & ResponseHeaderParameters & ServerSideEncryptionParameters & AccessLevelConfig;
+} & ResponseHeaderParameters & ServerSideEncryptionParameters;
 
 // API Common
 /**
@@ -84,14 +92,6 @@ type CommonStorageParameters = {
 declare function getFileReference(key: string): StorageObjectReference;
 
 // API Get
-type DownloadMetadata = {
-  attempts: number;
-  headers: Array<Record<string, string>>;
-  totalRetryDelay: number;
-  statusCode: number;
-  requestId?: string;
-};
-
 type GetURLRequest = {
   key: StorageObjectReference | string;
   expiresIn?: number;
@@ -136,10 +136,10 @@ declare function download(request: DownloadRequest): Promise<DownloadResponse>;
 
 // API List
 type ListFilesRequest = {
-  key: string;
+  key: StoragePrefixReference | string;
   pageSize?: PageSize | number;
   nextToken?: string;
-} & Pick<CommonStorageParameters, 'track' | 'accessLevel' | 'identityId'>;
+} & Omit<CommonStorageParameters, 'encryptionOptions'>;
 
 type ListFilesResponse = {
   files: Array<StorageObjectReference>;
@@ -151,7 +151,8 @@ type ListFilesResponse = {
  * Lists objects for the specified prefix.
  * 
  * @remarks
- * To list all objects at the specified access level, pass an empty string as the prefix with the request.
+ * To specify a non-default access level, construct a `StoragePrefixReference` with the appropriate access level. The 
+ * specified access level will be applied to objects returned by the API.
  * 
  * @throws {@link StorageError} If an error occurs while retrieving the file list.
  * 
@@ -170,9 +171,9 @@ type UploadRequest = {
 } & StorageObjectParameters & CommonStorageParameters;
 
 type UploadResponse = {
-  resume?: () => void;
-  pause?: () => void;
-  cancel?: () => void;
+  resume?: () => TransferStatus;
+  pause?: () => TransferStatus;
+  cancel?: () => TransferStatus;
   getProgress?: () => TransferProgress;
   result: Promise<StorageObjectReference>;
 };
@@ -190,13 +191,9 @@ declare function upload(request: UploadRequest): UploadResponse;
 
 // API Copy
 type CopyRequest = {
-  source: {
-    key: StorageObjectReference | string;
-  } & AccessLevelConfig;
-  destination: { 
-    key: StorageObjectReference | string;
-  } & AccessLevelConfig;
-} & StorageObjectParameters & Omit<CommonStorageParameters, 'accessLevel' | 'identityId'>;
+  source: StorageObjectReference | string;
+  destination: StorageObjectReference | string;
+} & StorageObjectParameters;
 
 type CopyResponse = {
   file: StorageObjectReference;
@@ -218,7 +215,7 @@ declare function copy(request: CopyRequest): Promise<CopyResponse>;
 // API Remove
 type RemoveRequest = {
   key: StorageObjectReference | string;
-} & AccessLevelConfig;
+};
 
 type RemoveResponse = {
   deleteMarker: boolean;
