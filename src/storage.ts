@@ -89,7 +89,7 @@ type CommonStorageParameters = {
  * @param key - A file key that will be used to generate the reference.
  * @returns A StorageObjectReference for the file.
  */
-declare function getFileReference(key: string): StorageObjectReference;
+declare function getFileReference(key: string, accessLevel?: AccessLevelConfig): StorageObjectReference;
 
 // API Get
 type GetURLRequest = {
