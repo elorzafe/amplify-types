@@ -1,7 +1,7 @@
 /**
  * Attribute ref - {@link https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-attributes.html}
  */
-export type AuthStandardAtrributeKey =
+export type AuthStandardAtributeKey =
   | "address"
   | "birthDate"
   | "email"
@@ -23,7 +23,9 @@ export type AuthStandardAtrributeKey =
   | "website"
   | "zoneInfo";
 
+type AnyAttribute = {}&string
+
 export type AuthUserAttributeKey =
-  | AuthStandardAtrributeKey
-  | string
-  | Record<string, string>;
+  | AuthStandardAtributeKey
+  | AnyAttribute
+
