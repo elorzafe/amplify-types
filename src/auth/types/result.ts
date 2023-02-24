@@ -1,5 +1,14 @@
-import { AuthSignInDetails, AuthUserAttributeKey } from "./models";
-import { AuthNextResetPasswordStep, AuthNextSignInStep, AuthNextSignUpStep, AuthNextUpdateAttributeStep } from "./step";
+import {
+  AuthSignInDetails,
+  AuthUserAttributeKey,
+} from "./models";
+import {
+  AuthNextResetPasswordStep,
+  AuthNextSignInStep,
+  AuthNextSignUpStep,
+  AuthNextUpdateAttributeStep,
+} from "./step";
+import { GetAttributeKey } from "./utilts";
 
 export type AuthSignInResult<
   UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey
@@ -31,9 +40,9 @@ export type ResetPasswordResult<
 };
 
 export type SetupSoftwareTokenResult = {
-    secretCode: string;
-    getQRCodeLinkGenerator: (appName:string)=>string
-}
+  secretCode: string;
+  getQRCodeLinkGenerator: (appName: string) => string;
+};
 
 export interface SignOutResult {}
 
@@ -47,5 +56,7 @@ export type UpdateUserAttributeResult<
 export type UpdateUserAttributesResult<
   UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey
 > = {
-  [authKey: string]: UpdateUserAttributeResult<UserAttributeKey>;
+  [authKey in UserAttributeKey as `${GetAttributeKey<authKey>}`]?: UpdateUserAttributeResult<UserAttributeKey>;
 };
+
+

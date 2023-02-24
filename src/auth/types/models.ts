@@ -1,4 +1,5 @@
 import { AuthError } from "../authError";
+import { GetAttributeKey } from "./utilts";
 
 export type AdditionalInfo = { [key: string]: string };
 
@@ -12,7 +13,7 @@ export type AuthCodeDeliveryDetails<
 > = {
   destination: string;
   deliveryMedium: DeliveryMedium;
-  attributeName?: UserAttributeKey;
+  attributeName?: GetAttributeKey<UserAttributeKey>;
 };
 
 export type AuthMFAType = string;
