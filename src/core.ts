@@ -39,17 +39,12 @@ type IdentityPoolConfig = {
 
 type UserPoolAndIdentityPoolConfig =  UserPoolConfig & IdentityPoolConfig
 
-type AmplifyType = {
-    configure: (config: AmplifyConfigure) => void,
+declare class Amplify {
 
+    configure<AmplifyConf  extends AmplifyConfigure>(config: AmplifyConfigure):void
 }
 
-export const Amplify: AmplifyType = {
-    configure: function (config: AmplifyConfigure): void {
-        throw new Error("Function not implemented.")
-    }
 
-}
 
 export function httpClient(input: HTTPClientInput): Promise<Response> {
     throw new Error("Function not impemented");
