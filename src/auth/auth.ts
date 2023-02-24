@@ -1,15 +1,37 @@
-import { TOTPNamespace } from "./cognito/types/totpNameSpace";
-import { AuthDevice } from "./types/authDevice";
-import { AuthSession } from "./types/authSession";
-import { AuthCodeDeliveryDetails, AuthUserAttribute } from "./types/models";
+import {
+  CognitoMFAType,
+  CognitoUserAttributeKey,
+  CustomAttribute,
+} from "./cognito/types/models";
+import {
+  CognitoConfirmSignInOptions,
+  CognitoConfirmSignUpOptions,
+  CognitoResendSignUpCodeOptions,
+  CognitoResendUserAttributeConfirmationCodeOptions,
+  CognitoResetPasswordOptions,
+  CognitoSignInOptions,
+  CognitoSignInWithWebUIOptions,
+  CognitoSignUpOptions,
+  CognitoUpdateUserAttributeOptions,
+  CognitoUpdateUserAttributesOptions,
+} from "./cognito/types/options";
+import {
+  AuthCodeDeliveryDetails,
+  AuthDevice,
+  AuthSession,
+  AuthStandardAtributeKey,
+  AuthUserAttribute,
+} from "./types/models";
 import {
   ConfirmResetPasswordRequest,
   ConfirmSignInRequest,
   ConfirmSignUpRequest,
+  ConfirmSoftwareTokenRequest,
   ConfirmUserAttributeRequest,
   FetchAuthSessionRequest,
   FetchUserAttributesRequest,
   ForgetDeviceRequest,
+  GetCurrentUserRequest,
   ResendSignUpCodeRequest,
   ResendUserAttributeConfirmationCodeRequest,
   ResetPasswordRequest,
@@ -22,81 +44,114 @@ import {
   UpdateUserAttributeRequest,
   UpdateUserAttributesRequest,
 } from "./types/request";
-import { GetCurrentUserRequest } from "./types/request/getCurrentUserRequest";
 import {
   AuthSignInResult,
   AuthSignUpResult,
   AuthUser,
   ResetPasswordResult,
+  SetupSoftwareTokenResult,
   SignOutResult,
+  UpdateUserAttributeResult,
   UpdateUserAttributesResult,
 } from "./types/result";
-import { UpdateUserAttributeResult } from "./types/result/updateUserAttributeResult";
 import { AuthSignInStep } from "./types/step";
 
-export interface AuthInterface {
-  signUp(req: SignUpRequest): Promise<AuthSignUpResult>;
+declare function signUp(
+  req: SignUpRequest<CognitoUserAttributeKey, CognitoSignUpOptions>
+): Promise<AuthSignUpResult<AuthStandardAtributeKey | CustomAttribute>>;
 
-  confirmSignUp(req: ConfirmSignUpRequest): Promise<AuthSignUpResult>;
+declare function confirmSignUp(
+  req: ConfirmSignUpRequest<CognitoConfirmSignUpOptions>
+): Promise<AuthSignUpResult<AuthStandardAtributeKey | CustomAttribute>>;
 
-  resendSignUpCode(
-    req: ResendSignUpCodeRequest
-  ): Promise<AuthCodeDeliveryDetails>;
+declare function resendSignUpCode(
+  req: ResendSignUpCodeRequest<CognitoResendSignUpCodeOptions>
+): Promise<AuthCodeDeliveryDetails<AuthStandardAtributeKey | CustomAttribute>>;
 
-  signIn(req: SignInRequest): Promise<AuthSignInResult>;
+declare function signIn(
+  req: SignInRequest<CognitoSignInOptions>
+): Promise<AuthSignInResult<AuthStandardAtributeKey | CustomAttribute>>;
 
-  confirmSignIn<
-    NextSignInStep extends Exclude<
-      AuthSignInStep,
-      | AuthSignInStep.DONE
-      | AuthSignInStep.CONFIRM_SIGN_UP
-      | AuthSignInStep.RESET_PASSWORD
-    >
-  >(
-    req: ConfirmSignInRequest[NextSignInStep]
-  ): Promise<AuthSignInResult>;
+declare function confirmSignIn<NextSignInStep extends AuthSignInStep>(
+  req: ConfirmSignInRequest<
+    CognitoMFAType,
+    CognitoConfirmSignInOptions
+  >[NextSignInStep]
+): Promise<AuthSignInResult<AuthStandardAtributeKey | CustomAttribute>>;
 
-  signInWithWebUI(req: SignInWithWebUIRequest): Promise<AuthSignInResult>;
+declare function signInWithWebUI(
+  req: SignInWithWebUIRequest<CognitoSignInWithWebUIOptions>
+): Promise<AuthSignInResult>;
 
-  fetchAuthSession(req?: FetchAuthSessionRequest): Promise<AuthSession>;
+declare function fetchAuthSession(
+  req?: FetchAuthSessionRequest
+): Promise<AuthSession>;
 
-  rememberDevice(): Promise<void>;
+declare function rememberDevice(): Promise<void>;
 
-  forgetDevice(req?: ForgetDeviceRequest): Promise<void>;
+declare function forgetDevice(
+  req?: ForgetDeviceRequest | undefined
+): Promise<void>;
 
-  fetchDevices(): Promise<AuthDevice[]>;
-
-  readonly TOTP: TOTPNamespace;
-
-  fetchUserAttributes(
-    req?: FetchUserAttributesRequest
-  ): Promise<AuthUserAttribute[]>;
-
-  updateUserAttributes(
-    req: UpdateUserAttributesRequest
-  ): Promise<UpdateUserAttributesResult>;
-
-  updateUserAttribute(
-    req: UpdateUserAttributeRequest
-  ): Promise<UpdateUserAttributeResult>;
-
-  confirmUserAttribute(req: ConfirmUserAttributeRequest): Promise<void>;
-
-  resendUserAttributeConfirmationCode(
-    req: ResendUserAttributeConfirmationCodeRequest
-  ): Promise<AuthCodeDeliveryDetails>;
-
-  deleteUser(): Promise<void>;
-
-  getCurrentUser(req?: GetCurrentUserRequest): Promise<AuthUser>;
-
-  setPreferredMFA(req: SetPreferredMFARequest): Promise<void>;
-
-  updatePassword(req: UpdatePasswordRequest): Promise<void>;
-
-  resetPassword(req: ResetPasswordRequest): Promise<ResetPasswordResult>;
-
-  confirmResetPassword(req: ConfirmResetPasswordRequest): Promise<void>;
-
-  signOut(req?: SignOutRequest): Promise<SignOutResult>;
+declare function fetchDevices(): Promise<AuthDevice[]>;
+namespace TOTP {
+  export declare function setup(): Promise<SetupSoftwareTokenResult>;
+  export declare function confirmSoftwareToken(
+    req: ConfirmSoftwareTokenRequest
+  ): Promise<void>;
 }
+
+declare function fetchUserAttributes(
+  req?: FetchUserAttributesRequest | undefined
+): Promise<AuthUserAttribute<AuthStandardAtributeKey | CustomAttribute>[]>;
+
+declare function updateUserAttributes(
+  req: UpdateUserAttributesRequest<
+    AuthStandardAtributeKey | CustomAttribute,
+    CognitoUpdateUserAttributesOptions
+  >
+): Promise<
+  UpdateUserAttributesResult<AuthStandardAtributeKey | CustomAttribute>
+>;
+
+declare function updateUserAttribute(
+  req: UpdateUserAttributeRequest<
+    AuthStandardAtributeKey | CustomAttribute,
+    CognitoUpdateUserAttributeOptions
+  >
+): Promise<
+  UpdateUserAttributeResult<AuthStandardAtributeKey | CustomAttribute>
+>;
+
+declare function confirmUserAttribute(
+  req: ConfirmUserAttributeRequest<AuthStandardAtributeKey | CustomAttribute>
+): Promise<void>;
+
+declare function resendUserAttributeConfirmationCode(
+  req: ResendUserAttributeConfirmationCodeRequest<
+    AuthStandardAtributeKey | CustomAttribute,
+    CognitoResendUserAttributeConfirmationCodeOptions
+  >
+): Promise<AuthCodeDeliveryDetails<AuthStandardAtributeKey | CustomAttribute>>;
+
+declare function deleteUser(): Promise<void>;
+
+declare function getCurrentUser(
+  req?: GetCurrentUserRequest | undefined
+): Promise<AuthUser>;
+
+declare function setPreferredMFA(
+  req: SetPreferredMFARequest<CognitoMFAType>
+): Promise<void>;
+
+declare function updatePassword(req: UpdatePasswordRequest): Promise<void>;
+
+declare function resetPassword(
+  req: ResetPasswordRequest<CognitoResetPasswordOptions>
+): Promise<ResetPasswordResult<AuthStandardAtributeKey | CustomAttribute>>;
+
+declare function confirmResetPassword(
+  req: ConfirmResetPasswordRequest
+): Promise<void>;
+
+declare function signOut(req?: SignOutRequest): Promise<SignOutResult>;
