@@ -48,28 +48,34 @@ class CancelledError extends Error {
 }
 
 type FetchOptions = {
-    headers?: Record<string, string>,
     signerServiceInfo?: string,
     timeout?: number,
 }
 
-interface JSONArray extends Array<JSONValue> { }
-interface JSONObject {
+type GetFetchOptions = {
+    headers: Record<string,string>
+} | FetchOptions;
+
+type JSONArray = Array<JSONValue>
+
+type JSONObject = {
     [x: string]: JSONValue;
 }
-type JSONValue = boolean | number | string | null | JSONArray | JSONObject;
+type JSONValue = boolean | number | null | string | JSONArray | JSONObject;
 
 type UpdateOptionsJSON<BodyType extends JSONValue = JSONValue> = FetchOptions | {
     body: BodyType,
     headers: {
-        "Content-type": `application/json${string}`
-    } & Record<string, string>
+        "Content-type": 'application/json',
+        [x: string]: string
+    }
 }
 
 type UpdateOptionsString<BodyType extends string = string> = FetchOptions | {
     body: BodyType,
     headers: {
-        "Content-type": `text/plain${string}`;
+        "Content-type": 'text/plain',
+        [x: string]: string
     }
 }
 
@@ -96,33 +102,6 @@ type GraphqlResult<T extends JSONObject = JSONObject> = {
     extensions?: { [key: string]: unknown }
 }
 
-declare class API {
-    /** HTTP GET METHOD */
-    static get<ResponseBody extends unknown>(params: APIParam, init?: FetchOptions): Promise<APIResponse<ResponseBody>>;
-    /** HTTP HEAD METHOD */
-    static head<ResponseBody extends unknown>(params: APIParam, init?: FetchOptions): Promise<APIResponse<ResponseBody>>;
-    /** HTTP DELETE METHOD */
-    static delete<ResponseBody extends unknown>(params: APIParam, init?: FetchOptions): Promise<APIResponse<ResponseBody>>;
-    /** HTTP OPTIONS METHOD */
-    static options<ResponseBody extends unknown>(params: APIParam, init?: FetchOptions): Promise<APIResponse<ResponseBody>>;
-    /** HTTP PUT METHOD */
-    static put<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>
-    static put<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>
-    /** HTTP POST METHOD */
-    static post<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>
-    static post<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>
-    /** HTTP PATCH METHOD */
-    static patch<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>
-    static patch<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>
-    /** Cancel HTTP Request */
-    static cancel: (request: Promise<unknown>, message: string) => void
-    /** */
-    static query: <GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }) => Promise<GraphqlResult<GraphqlData>>
-    static mutation: <GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }) => Promise<GraphqlResult<GraphqlData>>
-
-    static subscription: <GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }) => Observable<GraphqlResult<GraphqlData>>;
-}
-
 type Observable<T = object> = {
     subscribe: (observer: Observer<T>) => {
         unsubscribe: () => void
@@ -135,23 +114,65 @@ type Observer<T = object> = {
     done?: () => void
 }
 
-export { API };
+type CANCEL_STATUS = 'CANCELLED' | 'ALREADY_RESOLVED'
+
+/** HTTP GET METHOD */
+export declare function get<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+/** HTTP HEAD METHOD */
+export declare function head<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+/** HTTP DELETE METHOD */
+export declare function del<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+/** HTTP OPTIONS METHOD */
+export declare function options<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+
+/** HTTP PUT METHOD */
+export declare function put<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
+export declare function put<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
+
+/** HTTP POST METHOD */
+export declare function post<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
+export declare function post<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
+
+/** HTTP PATCH METHOD */
+export declare function patch<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
+export declare function patch<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
+
+/** Cancel HTTP Request */
+export declare function cancel(request: Promise<unknown>): CANCEL_STATUS;
+
+/** GrapQL query */
+export declare function query<GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }): Promise<GraphqlResult<GraphqlData>>
+/** GraphQL mutation */
+export declare function mutation<GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }): Promise<GraphqlResult<GraphqlData>>
+
+//     /** GraphQL subscription */
+export declare function subscription<GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }): Observable<GraphqlResult<GraphqlData>>;
 
 // ------ EXAMPLES -----
 
-API.put<Array<number>, { data: Array<number> }>({
+put<string, { data: Array<number> }>({
     apiName: '',
     path: '/'
 }, {
     headers: {
-        "Content-type": "application/json",
+        "Content-type": "text/plain",
     },
-    body: [122]
+    body: "123"
 }).then(result => {
     result.body.data.forEach(value => console.log(value));
+}).catch((err: unknown) => {
+    if (err instanceof NetworkError) {
+        // Maybe I want to retry
+    } else if (err instanceof HTTPError) {
+
+    } else if (err instanceof CancelledError) {
+        // this is fine 
+    } else {
+        // other error
+    }
 });
 
-API.get<{ firstName: string, lastName: string }>({
+get<{ firstName: string, lastName: string }>({
     apiName: '',
     path: ''
 }, {
@@ -172,7 +193,7 @@ API.get<{ firstName: string, lastName: string }>({
     }
 });
 
-API.get<"SUCCESS" | "FAILED">({
+get<"SUCCESS" | "FAILED">({
     apiName: '',
     path: '/'
 }, {
@@ -205,12 +226,22 @@ type Todo = {
     done: boolean
 };
 
-API.query<Todo>({ document: `my graphql document`, variables: { input: { done: false } } })
+query<Todo>({ document: `my graphql document`, variables: { input: { done: false } } })
 .then(result => {
     console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+}).catch(err => {
+    if (err instanceof NetworkError) {
+        // Maybe I want to retry
+    } else if (err instanceof HTTPError) {
+
+    } else if (err instanceof CancelledError) {
+        // this is fine 
+    } else {
+        // other error
+    }
 });
 
-API.subscription<Todo>({ document: `my graphql document`, variables: { input: { test: 0 } } })
+subscription<Todo>({ document: `my graphql document`, variables: { input: { test: 0 } } })
 .subscribe({
     next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
 });
