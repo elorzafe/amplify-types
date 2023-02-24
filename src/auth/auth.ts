@@ -94,6 +94,7 @@ declare function forgetDevice(
 ): Promise<void>;
 
 declare function fetchDevices(): Promise<AuthDevice[]>;
+
 namespace TOTP {
   export declare function setup(): Promise<SetupSoftwareTokenResult>;
   export declare function confirmSoftwareToken(
