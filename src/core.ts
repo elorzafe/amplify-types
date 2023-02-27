@@ -159,7 +159,7 @@ declare class HubClass {
     EventWithOutData extends string = string
   >(
     channel: Channel | RegExp,
-    callback?: GetHubCallBack<Channel, Event, EventWithOutData, EventDataMap>,
+    callback: GetHubCallBack<Channel, Event, EventWithOutData, EventDataMap>,
     listenerName?: string
   ): void;
 
