@@ -1,5 +1,6 @@
-# Draft RFC
+# RFC: Amplify JS TypeScript Improvements
 
+# Introduction of Functional APIs
 # General TypeScript Improvements
 - Version upgrade
 - Strict mode
@@ -47,15 +48,28 @@ async function myConfirmSignInAmplifyV6({ code: string }) {
 }
 ```
 # Storage category changes
+=======
+# Utility Changes
+- Hub typing
+- Configuration
+
+# `Auth` Changes
+# `Storage` Changes
+Amplify is proposing the following changes for the `Storage` category.
+
 - Introduction of `StorageObjectReference`
   - Highlight interoperability between APIs
   - Examples of usage compared with current model
 - Updated pattern for resumable uploads via `upload`
   - Removed status callbacks in favor of `Promise` result
-- 
+## Introduction of `StorageObjectReference`
 
 # API category changes
+=======
+## Splitting up `get` API
+## Changes to `upload` Return Object
 
-# Core Utilities
-- Hub typing
-- Configuration
+Try out the new types here: TODO Playground Link
+# `API` & `Datastore` Changes
+
+Try out the new types here: TODO Playground Link
