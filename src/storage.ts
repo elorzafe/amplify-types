@@ -182,7 +182,7 @@ declare function list(request: ListFilesRequest): Promise<ListFilesResponse>;
 
 // API Put
 type UploadRequest = {
-  content: string | File | Blob;
+  content: string | Blob | Uint8Array | Buffer;
   key: StorageObjectReference | string;
   onProgress?: (progress: TransferProgress) => void;
   partSize?: number;

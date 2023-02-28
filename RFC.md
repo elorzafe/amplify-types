@@ -143,21 +143,48 @@ const downloadResult = await download({ key: firstPhoto });
 downloadBlob(downloadResult.content, 'download.jpg');
 ```
 
-## Changes to `put` Return Object
+## Changes to the `put` Return Object
 To better capture customer intent the `put` API will be renamed to `upload`. Additionally `upload` will enable resumability by default in order to simplify API usage and remove the need to provide callbacks for monitoring upload status in favor of a Promise.
 
 **Amplify v5 (`aws-amplify@5`)**
 ```TypeScript
-// Upload a file with resumability enabled
-const upload = Storage.put(file.name, file, {
+// Upload a public file with resumability enabled
+const uploadTask = Storage.put('movie.mp4', fileBlob, {
   resumable: true,
+  level: 'public',
+  progressCallback: (progress) => {
+    // Progress of upload
+  },
+  completeCallback: (event) => {
+    // Upload finished
+  },
+  errorCallback: (err) => {
+    // Upload failed
+  }
 });
 
+// Pause & resume upload
+uploadTask.pause();
+uploadTask.resume();
 ```
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 ```TypeScript
+// Upload a public file with resumability enabled by default
+const uploadTask = put({
+  key: getObjectReference('movie.mpg', { level: 'public' }),
+  content: fileBlob
+});
 
+// Pause & resume upload
+let currentTransferStatus = uploadTask.pause();
+currentTransferStatus = uploadTask.resume();
+
+// Get the current progress of the upload
+const currentTransferProgress = uploadTask.getProgress();
+
+// Wait for the upload to finish (or fail)
+const uploadedObjectReference = await uploadTask.result;
 ```
 
 Try out the new types here: TODO Playground Link
