@@ -87,9 +87,28 @@ type CommonStorageParameters = {
  * Utility to generate a reference for the specified file for use with other Storage APIs.
  * 
  * @param key - A file key that will be used to generate the reference.
+ * @param accessLevel - Access level configuration associated with the object reference.
  * @returns A StorageObjectReference for the file.
  */
-declare function getFileReference(key: string, accessLevel?: AccessLevelConfig): StorageObjectReference;
+declare function getObjectReference(key: string, accessLevel?: AccessLevelConfig): StorageObjectReference;
+
+/**
+ * Utility to generate a storage prefix reference.
+ * 
+ * @param key - A storage prefix that will be used to generate the reference.
+ * @param accessLevel - Access level configuration associated with the object reference.
+ * @returns A StoragePrefixReference for the prefix.
+ */
+declare function getPrefixReference(key: string, accessLevel?: AccessLevelConfig): StoragePrefixReference;
+
+/**
+ * Utility for copying an existing object reference.
+ * 
+ * @param reference - The object reference to copy.
+ * @param accessLevel - Optional updated access level associated with the copied reference.
+ * @returns A new StorageObjectReference.
+ */
+declare function copyObjectReference(reference: StorageObjectReference, accessLevel?: AccessLevelConfig): StorageObjectReference;
 
 // API Get
 type GetURLRequest = {
