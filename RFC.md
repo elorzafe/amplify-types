@@ -1,7 +1,5 @@
 # RFC: Amplify JS TypeScript Improvements
 
-# Introduction of Functional APIs
-- Merge with general improvements? Functional APIs will be used for v6 examples for each category
 # General TypeScript Improvements
 - Version upgrade
 - Strict mode
@@ -84,7 +82,7 @@ if (firstPhoto) {
 **Proposed Amplify v6 (`aws-amplify@6`)**
 ```TypeScript
 // List all public photos
-const listResponse = await list({
+const listResponse = await Storage.list({
   key: getPrefixReference('photos/', { level: 'public' })
 })
 const firstPhoto = listResponse.files?.[0];
@@ -93,7 +91,7 @@ const firstPhoto = listResponse.files?.[0];
 As a note, APIs will allow customers to specify keys by string if they do not need to override the access level. For 
 example, the following operation will list all files for the current user.
 */
-const listResponseDefault = await list({
+const listResponseDefault = await Storage.list({
   key: 'photos/'
 })
 
@@ -128,16 +126,16 @@ downloadBlob(downloadResult.Body, 'download.jpg');
 **Proposed Amplify v6 (`aws-amplify@6`)**
 ```TypeScript
 // List public photos
-const listResponse = await list({
+const listResponse = await Storage.list({
   key: getPrefixReference('photos/', { level: 'public' })
 })
 const firstPhoto = listResponse.files?.[0];
 
 // Generate a pre-signed URL for a file
-const presignedUrl = await getUrl({ key: firstPhoto });
+const presignedUrl = await Storage.getUrl({ key: firstPhoto });
 
 // Download a file
-const downloadResult = await download({ key: firstPhoto });
+const downloadResult = await Storage.download({ key: firstPhoto });
 
 // Customer provided utility for handling downloaded file
 downloadBlob(downloadResult.content, 'download.jpg');
@@ -171,7 +169,7 @@ uploadTask.resume();
 **Proposed Amplify v6 (`aws-amplify@6`)**
 ```TypeScript
 // Upload a public file with resumability enabled by default
-const uploadTask = put({
+const uploadTask = Storage.put({
   key: getObjectReference('movie.mpg', { level: 'public' }),
   content: fileBlob
 });

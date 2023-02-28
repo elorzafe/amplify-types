@@ -82,7 +82,7 @@ type CommonStorageParameters = {
   track?: boolean;
 } & ResponseHeaderParameters & ServerSideEncryptionParameters;
 
-// API Common
+// Utility functions
 /**
  * Utility to generate a reference for the specified file for use with other Storage APIs.
  * 
@@ -129,30 +129,6 @@ type DownloadResponse = {
   metadata: DownloadMetadata;
 };
 
-/**
- * Generates a pre-signed URL for downloading the specified reference.
- * 
- * @remarks
- * Pre-signed URLs are usable by anyone with the URL, regardless of their access level. This method will not attempt 
- * to check if the file exists.
- * 
- * @throws {@link StorageError} If an error occurs while generating the pre-signed URL.
- * 
- * @param {GetURLRequest} request - A GetURLRequest object.
- * @returns A promise that will resolve with the pre-signed file URL.
- */
-declare function getUrl(request: GetURLRequest): Promise<string>;
-
-/**
- * Downloads the specified object from S3.
- * 
- * @throws {@link StorageError} If an error occurs while downloading the file from S3.
- * 
- * @param {DownloadRequest} request - A DownloadFileRequest object.
- * @returns A promise that will resolve with an object containing the file blob and other information.
- */
-declare function download(request: DownloadRequest): Promise<DownloadResponse>;
-
 // API List
 type ListFilesRequest = {
   key: StoragePrefixReference | string;
@@ -165,20 +141,6 @@ type ListFilesResponse = {
   hasNextToken: boolean;
   nextToken: string;
 };
-
-/**
- * Lists objects for the specified prefix.
- * 
- * @remarks
- * To specify a non-default access level, construct a `StoragePrefixReference` with the appropriate access level. The 
- * specified access level will be applied to objects returned by the API.
- * 
- * @throws {@link StorageError} If an error occurs while retrieving the file list.
- * 
- * @param {ListFilesRequest} request - A ListFilesRequest object.
- * @returns A promise that will resolve with an object containing a list of matching objects from S3.
- */
-declare function list(request: ListFilesRequest): Promise<ListFilesResponse>;
 
 // API Put
 type UploadRequest = {
@@ -197,17 +159,6 @@ type UploadResponse = {
   result: Promise<StorageObjectReference>;
 };
 
-/**
- * Uploads a file to S3.
- * 
- * @remarks
- * Reference the promise in the `result` field of the response to determine if the upload has completed or failed.
- * 
- * @param {PutRequest} request - A PutFileRequest object.
- * @returns A PutResponse object containing functions for managing the upload and checking results.
- */
-declare function upload(request: UploadRequest): UploadResponse;
-
 // API Copy
 type CopyRequest = {
   source: StorageObjectReference | string;
@@ -217,19 +168,6 @@ type CopyRequest = {
 type CopyResponse = {
   file: StorageObjectReference;
 };
-
-/**
- * Copies files within your S3 bucket.
- * 
- * @remarks
- * Copies objects up to 5 GB per operation.
- * 
- * @throws {@link StorageError} In the event of a copy error.
- * 
- * @param {CopyRequest} request - A CopyFileRequest object.
- * @returns A promise that will resolve with a reference for the copied file.
- */
-declare function copy(request: CopyRequest): Promise<CopyResponse>;
 
 // API Remove
 type RemoveRequest = {
@@ -242,25 +180,89 @@ type RemoveResponse = {
   versionId: string;
 };
 
-/**
- * Removes files within your S3 bucket.
- * 
- * @throws {@link StorageError} In the event of an error removing the file.
- * 
- * @param {RemoveRequest} request - A RemoveRequest object.
- * @returns A promise that will resolve with 
- */
-declare function remove(request: RemoveRequest): Promise<RemoveResponse>;
-
 // API Cancel
 type CancellableRequests = Promise<DownloadResponse | CopyResponse> | UploadResponse;
 
-/**
- * Cancels a pending Storage request.
- * 
- * @remarks
- * This API can be used to cancel pending download, put, and copy requests.
- * 
- * @param {CancellableRequests} request - The promise returned by a download, put, or copy operation.
- */
-declare function cancel(request: CancellableRequests): void;
+declare namespace Storage {
+  /**
+   * Generates a pre-signed URL for downloading the specified reference.
+   * 
+   * @remarks
+   * Pre-signed URLs are usable by anyone with the URL, regardless of their access level. This method will not attempt 
+   * to check if the file exists.
+   * 
+   * @throws {@link StorageError} If an error occurs while generating the pre-signed URL.
+   * 
+   * @param {GetURLRequest} request - A GetURLRequest object.
+   * @returns A promise that will resolve with the pre-signed file URL.
+   */
+  function getUrl(request: GetURLRequest): Promise<string>;
+
+  /**
+   * Downloads the specified object from S3.
+   * 
+   * @throws {@link StorageError} If an error occurs while downloading the file from S3.
+   * 
+   * @param {DownloadRequest} request - A DownloadFileRequest object.
+   * @returns A promise that will resolve with an object containing the file blob and other information.
+   */
+  function download(request: DownloadRequest): Promise<DownloadResponse>;
+
+  /**
+   * Lists objects for the specified prefix.
+   * 
+   * @remarks
+   * To specify a non-default access level, construct a `StoragePrefixReference` with the appropriate access level. The 
+   * specified access level will be applied to objects returned by the API.
+   * 
+   * @throws {@link StorageError} If an error occurs while retrieving the file list.
+   * 
+   * @param {ListFilesRequest} request - A ListFilesRequest object.
+   * @returns A promise that will resolve with an object containing a list of matching objects from S3.
+   */
+  function list(request: ListFilesRequest): Promise<ListFilesResponse>;
+
+  /**
+   * Uploads a file to S3.
+   * 
+   * @remarks
+   * Reference the promise in the `result` field of the response to determine if the upload has completed or failed.
+   * 
+   * @param {PutRequest} request - A PutFileRequest object.
+   * @returns A PutResponse object containing functions for managing the upload and checking results.
+   */
+  function upload(request: UploadRequest): UploadResponse;
+
+  /**
+   * Copies files within your S3 bucket.
+   * 
+   * @remarks
+   * Copies objects up to 5 GB per operation.
+   * 
+   * @throws {@link StorageError} In the event of a copy error.
+   * 
+   * @param {CopyRequest} request - A CopyFileRequest object.
+   * @returns A promise that will resolve with a reference for the copied file.
+   */
+  function copy(request: CopyRequest): Promise<CopyResponse>;
+
+  /**
+   * Removes files within your S3 bucket.
+   * 
+   * @throws {@link StorageError} In the event of an error removing the file.
+   * 
+   * @param {RemoveRequest} request - A RemoveRequest object.
+   * @returns A promise that will resolve with 
+   */
+  function remove(request: RemoveRequest): Promise<RemoveResponse>;
+
+  /**
+   * Cancels a pending Storage request.
+   * 
+   * @remarks
+   * This API can be used to cancel pending download, put, and copy requests.
+   * 
+   * @param {CancellableRequests} request - The promise returned by a download, put, or copy operation.
+   */
+  function cancel(request: CancellableRequests): void;
+};
