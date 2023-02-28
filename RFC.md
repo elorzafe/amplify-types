@@ -1,11 +1,16 @@
 # RFC: Amplify JS TypeScript Improvements
 
 # Introduction of Functional APIs
+- Merge with general improvements? Functional APIs will be used for v6 examples for each category
 # General TypeScript Improvements
 - Version upgrade
 - Strict mode
 
-# Auth category changes
+# Utility Changes
+- Hub typing
+- Configuration
+
+# `Auth` Changes
 
 - CognitoUser object is no longer required
 
@@ -47,13 +52,6 @@ async function myConfirmSignInAmplifyV6({ code: string }) {
   // done
 }
 ```
-# Storage category changes
-=======
-# Utility Changes
-- Hub typing
-- Configuration
-
-# `Auth` Changes
 # `Storage` Changes
 Amplify is proposing the following changes for the `Storage` category.
 
@@ -64,8 +62,6 @@ Amplify is proposing the following changes for the `Storage` category.
   - Removed status callbacks in favor of `Promise` result
 ## Introduction of `StorageObjectReference`
 
-# API category changes
-=======
 ## Splitting up `get` API
 ## Changes to `upload` Return Object
 
