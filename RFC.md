@@ -23,9 +23,9 @@ In order to permit better inoperability between `storage` APIs and to enable fut
 ```TypeScript
 // List all public photos
 const listResponse = await Storage.list('photos/', { level: 'public' });
+const firstPhoto = listResponse.results?.[0];
 
 // Copy the first photo returned to the current user's private prefix
-const firstPhoto = listResponse.results?.[0];
 if (firstPhoto) {
   await Storage.copy({
     {
@@ -46,6 +46,7 @@ if (firstPhoto) {
 const listResponse = await list({
   key: getPrefixReference('photos/', { level: 'public' })
 })
+const firstPhoto = listResponse.files?.[0];
 
 /*
 As a note, APIs will allow customers to specify keys by string if they do not need to override the access level. For 
@@ -56,7 +57,6 @@ const listResponseDefault = await list({
 })
 
 // Copy the first photo returned to the current user's private prefix
-const firstPhoto = listResponse.files?.[0];
 if (firstPhoto) {
   await copy({
     source: firstPhoto,
@@ -65,28 +65,59 @@ if (firstPhoto) {
 }
 ```
 
-## Splitting up `get` API
-To better capture customer intent and simplify API types we will split up the `get` API into `getUrl` & `download`. An example for generating a pre-signed URL & downloading a file is highlighted below.
+## Splitting up the `get` API
+To better capture customer intent and simplify API types we will split up the `get` API into `getUrl` & `download`. An example for generating a pre-signed URL & downloading a file from the results of a `list` operation is highlighted below.
 
 **Amplify v5 (`aws-amplify@5`)**
 ```TypeScript
+// List public photos
+const listResponse = await Storage.list('photos/', { level: 'public' });
+const firstPhoto = listResponse.results?.[0];
+
 // Generate a pre-signed URL for a file
-const presignedUrl = await Storage.get('avatar.jpg', { level: 'public' });
+const presignedUrl = await Storage.get(firstPhoto.key, { level: 'public' });
 
 // Download a file
-const downloadResult = await Storage.get('avatar.jpg', { download: true, level: 'public' });
+const downloadResult = await Storage.get(firstPhoto.key, { download: true, level: 'public' });
 
-// Customer utility for surfacing downloaded file
-downloadBlob(downloadResult.Body, 'avatar.jpg');
+// Customer provided utility for handling downloaded file
+downloadBlob(downloadResult.Body, 'download.jpg');
 ```
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 ```TypeScript
+// List public photos
+const listResponse = await list({
+  key: getPrefixReference('photos/', { level: 'public' })
+})
+const firstPhoto = listResponse.files?.[0];
+
+// Generate a pre-signed URL for a file
+const presignedUrl = await getUrl({ key: firstPhoto });
+
+// Download a file
+const downloadResult = await download({ key: firstPhoto });
+
+// Customer provided utility for handling downloaded file
+downloadBlob(downloadResult.content, 'download.jpg');
 ```
 
-## Changes to `upload` Return Object
+## Changes to `put` Return Object
+To better capture customer intent the `put` API will be renamed to `upload`. Additionally `upload` will enable resumability by default in order to simplify API usage and remove the need to provide callbacks for monitoring upload status in favor of a Promise.
 
-?? Make default level private & remove `vault`? 
+**Amplify v5 (`aws-amplify@5`)**
+```TypeScript
+// Upload a file with resumability enabled
+const upload = Storage.put(file.name, file, {
+  resumable: true,
+});
+
+```
+
+**Proposed Amplify v6 (`aws-amplify@6`)**
+```TypeScript
+
+```
 
 Try out the new types here: TODO Playground Link
 # `API` & `Datastore` Changes
