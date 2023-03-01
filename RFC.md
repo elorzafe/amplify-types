@@ -7,7 +7,7 @@
 
 # Utility Changes
 
-Amplify is proposing the following changes for the `Core` category.
+Amplify is proposing the following changes for our core utilities.
 
 ## Typescript support for Amplify Hub channels
 
