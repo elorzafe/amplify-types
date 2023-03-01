@@ -142,9 +142,6 @@ This change provides IntelliSense on the configuration for each category. Exampl
 **Amplify v5 (`aws-amplify@5`)**
 
 ```Typescript
-
-import {Amplify} from "aws-amplify"
-
 const authConfig = {
   userPoolId: "us-east-1_aaaaaaa",
   userPoolClientId: "bbbbbbbbbbbbbbbbbb",
