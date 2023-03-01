@@ -185,7 +185,7 @@ const currentTransferProgress = uploadTask.getProgress();
 const uploadedObjectReference = await uploadTask.result;
 ```
 
-Try out the new types here: TODO Playground Link
+Try out the new types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
 # `API` & `Datastore` Changes
 
 Try out the new types here: TODO Playground Link

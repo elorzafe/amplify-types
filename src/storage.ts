@@ -22,7 +22,7 @@ type TransferProgress = {
 };
 
 type AccessLevelConfig = {
-  readonly accessLevel?: StorageAccessLevel;
+  readonly level?: StorageAccessLevel;
   readonly identityId?: string;
 };
 
@@ -144,7 +144,7 @@ type ListFilesResponse = {
 
 // API Put
 type UploadRequest = {
-  content: string | Blob | Uint8Array | Buffer;
+  content: string | Blob | Uint8Array;
   key: StorageObjectReference | string;
   onProgress?: (progress: TransferProgress) => void;
   partSize?: number;
