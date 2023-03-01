@@ -158,8 +158,8 @@ Amplify.configure({
 
 ```Typescript
 const authConfig:AuthConfig = {
-  userPoolId: "us-east-1_aaaaaaa",
-  userPoolClientId: "bbbbbbbbbbbbbbbbbb",
+  userPoolId: "us-east-1_0yqxxHm5q",
+  userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
   signUpVerificationMethod: "code"
 }
 
