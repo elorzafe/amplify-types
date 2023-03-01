@@ -11,8 +11,7 @@ Amplify is proposing the following changes for our core utilities.
 
 ## Typescript support for Amplify Hub channels
 
-We are improving **_DX_** by adding strong type inference on Hub events and payload data.
-We are adding a list of all supported Amplify channels and providing events and data types on the payload object. Bellow is an example with the `Auth` category.
+We are improving **_DX_** by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
 
 **Amplify v5 (`aws-amplify@5`)**
 
