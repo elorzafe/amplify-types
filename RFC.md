@@ -91,8 +91,6 @@ Hub.listen(channel, ({ payload }) => {
 **Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
-import {Hub} from "aws-amplify"
-
 // name of the channel
 type channel = "custom"
 
