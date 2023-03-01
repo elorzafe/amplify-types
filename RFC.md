@@ -176,7 +176,7 @@ User attributes inference on the `signUp` API.
 
 Todo: add screen shoots
 
-**Amplify v6 (`aws-amplify@6`)**
+**Proposed Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
 
@@ -190,7 +190,7 @@ Todo: add screen shoots
 
 ```
 
-**Amplify v6 DX**
+**Proposed Amplify v6 DX**
 
 Todo: add screen shoots
 
@@ -210,7 +210,7 @@ const resp = Auth.confirmSignUp("username", "112233")
 
 Todo: add screen shoots
 
-**Amplify v6 (`aws-amplify@6`)**
+**Proposed Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
 
@@ -225,7 +225,7 @@ Todo: add screen shoots
 
 ```
 
-**Amplify v6 DX**
+**Proposed Amplify v6 DX**
 
 Todo: add screen shoots
 
