@@ -148,7 +148,6 @@ const authConfig = {
   signUpVerificationMethod: "code"
 }
 
-// configure type is any
 Amplify.configure({
   Auth: authConfig
 })
