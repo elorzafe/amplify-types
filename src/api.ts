@@ -1,3 +1,5 @@
+import { StrictUnion } from "./core";
+
 type httpStatusSuccessful = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
 type httpStatusClientError = 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451;
 type httpStatusServerError = 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
@@ -81,8 +83,8 @@ type UpdateOptionsString<BodyType extends string = string> = FetchOptions | {
 
 type APIParam = {
     apiName: string,
-    path: string
-}
+    path: string,
+} & AuthMode;
 
 type Location = {
     line: number,
@@ -140,19 +142,40 @@ export declare function patch<RequestBody extends string = string, ResponseBody 
 /** Cancel HTTP Request */
 export declare function cancel(request: Promise<unknown>): CANCEL_STATUS;
 
+type GraphQLData = {
+    variables?: JSONObject,
+    result: JSONObject
+}
+
+type SimpleAuthMode = { 
+    authMode?: 'AMAZON_COGNITO_USERPOOLS' | 'API_KEY' | 'AWS_IAM' 
+};
+
+type LambdaAuthMode = {
+    authMode: 'AWS_LAMBDA',
+    authToken: string
+}
+
+type AuthMode = StrictUnion<SimpleAuthMode | LambdaAuthMode>;
+
+type GraphqlQueryParams<T> = { document: string, variables?: T } & AuthMode;
+type GraphqlMutationParams<T> = { document: string, variables: T } & AuthMode;
+type GraphqlSubscriptionParams<T> = GraphqlQueryParams<T>;
+
 /** GrapQL query */
-export declare function query<GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }): Promise<GraphqlResult<GraphqlData>>
+export declare function query<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlQueryParams<GraphQLInfo["variables"]>): Promise<GraphqlResult<GraphQLInfo["result"]>>
 /** GraphQL mutation */
-export declare function mutation<GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }): Promise<GraphqlResult<GraphqlData>>
+export declare function mutation<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlMutationParams<GraphQLInfo["variables"]>): Promise<GraphqlResult<GraphQLInfo["result"]>>
 
 //     /** GraphQL subscription */
-export declare function subscription<GraphqlData extends JSONObject = JSONObject>({ document, variables }: { document: string, variables?: JSONObject }): Observable<GraphqlResult<GraphqlData>>;
+export declare function subscription<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlSubscriptionParams<GraphQLInfo["variables"]>): Observable<GraphqlResult<GraphQLInfo["result"]>>;
 
 // ------ EXAMPLES -----
 
 put<string, { data: Array<number> }>({
     apiName: '',
-    path: '/'
+    path: '/',
+    authMode: "API_KEY"
 }, {
     headers: {
         "Content-type": "text/plain",
@@ -226,7 +249,17 @@ type Todo = {
     done: boolean
 };
 
-query<Todo>({ document: `my graphql document`, variables: { input: { done: false } } })
+type myQueryType = {
+    result: {
+        id: string,
+        name: string,
+        description: string
+    }
+}
+
+query<myQueryType>({
+    document: `my graphql document`,
+})
 .then(result => {
     console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
 }).catch(err => {
@@ -241,7 +274,38 @@ query<Todo>({ document: `my graphql document`, variables: { input: { done: false
     }
 });
 
-subscription<Todo>({ document: `my graphql document`, variables: { input: { test: 0 } } })
+type myMutationType = {
+    variables: {
+        id: number,
+        name: string,
+        description: string
+    },
+    result: Todo
+}
+
+mutation<myMutationType>({
+    document: `mutation createPost....`,
+    variables: {
+        id: 123,
+        name: 'My Todo',
+        description: 'This is a todo'
+    }
+})
+.then(result => {
+    console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+}).catch(err => {
+    if (err instanceof NetworkError) {
+        // Maybe I want to retry
+    } else if (err instanceof HTTPError) {
+
+    } else if (err instanceof CancelledError) {
+        // this is fine 
+    } else {
+        // other error
+    }
+});
+
+subscription({ document: `my graphql document`, variables: { input: { test: 0 } } })
 .subscribe({
     next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
 });
