@@ -75,8 +75,7 @@ type AuthEvent =
   | "signUp"
   | "signUpFailure"
   | "confirmSignUp"
-  | "tokenRefresh"
- 
+  | "tokenRefresh";
 
 type AuthEventsWithOutData = Extract<"tokenRefresh", AuthEvent>;
 
@@ -95,7 +94,7 @@ type AuthEventDataMap = {
 type HubCapsule<
   Channel extends string,
   EventMap extends AmplifyEventDataMap,
-  EventsWithOutData extends keyof EventMap  = keyof EventMap 
+  EventsWithOutData extends keyof EventMap = keyof EventMap
 > = {
   channel: Channel;
   payload: GetPayload<EventMap, keyof EventMap, EventsWithOutData>;
@@ -106,7 +105,7 @@ type HubCapsule<
 type GetPayload<
   EventMap extends AmplifyEventDataMap,
   Event extends keyof EventMap = keyof EventMap,
-  EventsWithOutData extends keyof EventMap  = never
+  EventsWithOutData extends keyof EventMap = never
 > = Event extends EventsWithOutData
   ? HubPayloadWithOutData<EventsWithOutData>
   : HubPayload<EventMap, Event>;
@@ -114,7 +113,7 @@ type GetPayload<
 type HubCallback<
   Channel extends string,
   EventMap extends AmplifyEventDataMap = AmplifyEventDataMap,
-  EventsWithOutData extends keyof EventMap = keyof EventMap 
+  EventsWithOutData extends keyof EventMap = keyof EventMap
 > = (capsule: HubCapsule<Channel, EventMap, EventsWithOutData>) => void;
 
 type HubPayloadWithOutData<Event> = {
@@ -152,6 +151,11 @@ type GetHubCallBack<
 
 type AnyChannel = string & {};
 
+type PayloadFromCallback<T> = T extends (
+  arg: infer A extends Record<string, any>
+) => void
+  ? A["payload"]
+  : never;
 declare class HubClass {
   listen<
     Channel extends AmplifyChannel | AnyChannel,
@@ -169,12 +173,10 @@ declare class HubClass {
     EventWithOutData extends keyof EventDataMap = never
   >(
     channel: Channel,
-    payload: GetHubCallBack<Channel, EventDataMap, EventWithOutData> extends (
-      arg: infer A extends Record<string, any>
-    ) => void
-      ? A["payload"]
-      : never,
-    source: string,
+    payload: PayloadFromCallback<
+      GetHubCallBack<Channel, EventDataMap, EventWithOutData>
+    >,
+    source?: string,
     ampSymbol?: Symbol
   ): void;
 }
