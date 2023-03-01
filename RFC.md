@@ -23,10 +23,10 @@ const signInFailureEvent = "signInFailure"
 const signInFailureData = new AuthError("sign-in failed")
 
 // It doesn't show a list of all supported channels, and it is not able to infer the right data given an event.
-Hub.dispatch(channel,{
-  event: signInFailureEvent,
-  data: signInFailureData
-  })
+Hub.dispatch("auth", {
+  event: "signInFailure",
+  data: new AuthError("Sign-in failed"),
+})
 
 // Events and payload data are not inferred.
 Hub.listen(channel, ({ payload }) => {
