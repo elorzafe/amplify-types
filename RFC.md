@@ -78,10 +78,10 @@ const channel = "custom"
 const customEvent = "custom_event"
 const customData = "custom_data"
 
-Hub.dispatch(channel,{
+Hub.dispatch(channel, {
   event: customEvent,
   data: customData
-  })
+})
 
 Hub.listen(channel, ({ payload }) => {
 	switch (payload.event) { // event - string
