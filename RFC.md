@@ -107,8 +107,7 @@ Hub.dispatch<customChannel, customEventDataMap >("custom_channel", {
   data: 42
 })
 
-Hub.listen<channel, customEventDataMap>("custom", ({payload})=>{
-
+Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
   switch(payload.event) // Union type of all possible events A | B | C | D
   {
     case "A":
