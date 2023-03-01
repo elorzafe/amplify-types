@@ -84,11 +84,11 @@ Hub.dispatch(channel, {
 })
 
 Hub.listen(channel, ({ payload }) => {
-	switch (payload.event) { // event - string
-		case customEvent:
-			const data = payload.data; // data - any
-			break;
-	}
+  switch (payload.event) {
+    case customEvent:
+      const data = payload.data;
+      break;
+  }
 });
 ```
 
