@@ -16,11 +16,7 @@ We are improving **_DX_** by adding strict type support to Hub channels, events,
 **Amplify v5 & v6 (`aws-amplify@^5`)**
 
 ```Typescript
-const channel = "auth"
-const signInFailureEvent = "signInFailure"
-const signInFailureData = new AuthError("sign-in failed")
 
-// It doesn't show a list of all supported channels, and it is not able to infer the right data given an event.
 Hub.dispatch("auth", {
   event: "signInFailure",
   data: new AuthError("Sign-in failed"),
@@ -36,32 +32,13 @@ Hub.listen(channel, ({ payload }) => {
 });
 ```
 
-**Amplify v6 (`aws-amplify@6`)**
+**Amplify v5 DX**
 
-```Typescript
-import {Hub} from "aws-amplify"
+Todo: add screen shoots
 
-const channel = "auth"
-const signInFailureEvent = "signInFailure"
-const signInFailureData = new AuthError("sign-in failed")
+**Amplify v6 DX**
 
-// By default, the dispatch API will provide a list of all Amplify supported channels.
-// Addionally, it shows all the events and data associated to a given channel.
-Hub.dispatch(channel,
- {
-  event: signInFailureEvent ,
-  data: "string" // it errors as "string" is not AuthError
-} )
-
-// It listens for events associated to a channel and infers the right payload data on the switch statement.
-Hub.listen(channel, ({ payload }) => {
-	switch (payload.event) { // event - signIn | signInFailure | signUp | signUpFailure | ...etc
-		case "signInFailure":
-			const data = payload.data; // data - AuthError
-			break;
-	}
-});
-```
+Todo: add screen shoots
 
 ## TypeScript support for custom Hub channels
 
@@ -88,6 +65,10 @@ Hub.listen(channel, ({ payload }) => {
 });
 ```
 
+**Amplify v5 DX**
+
+Todo: add screenshoots
+
 **Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
@@ -103,27 +84,31 @@ type customEventDataMap = {
 }
 
 Hub.dispatch<customChannel, customEventDataMap >("custom_channel", {
-  event: "A" , // Union type of all possible events A | B | C | D
+  event: "A" ,
   data: 42
 })
 
 Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
   switch(payload.event) {
     case "A":
-      payload.data; // data - number
+      payload.data;
       break
     case "B":
-      payload.data // data - string
+      payload.data
       break
     case "C":
-      payload.data // it errors, there is no a data key on the payload object
+      payload.data
       break
     case "D":
-      payload.data // data - Object
+      payload.data
       break
   }
 })
 ```
+
+**Amplify v6 DX**
+
+Todo: add screenshoots
 
 ## TypeScript support for Amplify Configuration
 
