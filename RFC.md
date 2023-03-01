@@ -65,7 +65,7 @@ Hub.listen(channel, ({ payload }) => {
 });
 ```
 
-## Typescript support for custom Hub channels
+## TypeScript support for custom Hub channels
 
 We are improving **_DX_** by adding strict type support to custom Hub channels, events, and payloads.
 
