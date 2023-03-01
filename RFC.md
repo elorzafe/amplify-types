@@ -125,7 +125,7 @@ Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
 })
 ```
 
-## Typescript support Configuration
+## TypeScript support for Amplify Configuration
 
 In order to help developers to configure Amplify categories, we are introducing type support for the `Amplify.configure` API.
 This change provides IntelliSense on the configuration for each category. Example bellow shows an `Auth` configuration.
