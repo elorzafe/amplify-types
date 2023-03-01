@@ -1,8 +1,18 @@
 # RFC: Amplify JS TypeScript Improvements
+Amplify JS is looking to improve our TypeScript support across the library to better serve our customers and provide a more intuitive & idiomatic developer experience. To this end we are requesting community feedback on a variety of changes and improvements that will be available to customers in the near future.
 
-# General TypeScript Improvements
-- Version upgrade
-- Strict mode
+This RFC is broken down into sections covering:
+- Library-wide TypeScript improvements
+- Changes to some of our core utilities such as `Hub` and Amplify configuration
+- Specific improvements to the `Auth`, `Storage`, and `API` categories and associated APIs 
+
+
+# Library-wide TypeScript Improvements
+Amplify JS will be making the following improvements to our TypeScript support. These improvements will be applied across the entire library, not just the categories highlighted below.
+
+- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types.
+- Better runtime error typing — We will provide utilities for asserting type information of runtime errors emitted by Amplify.
+- Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for customers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
 # Utility Changes
 - Hub typing
@@ -185,7 +195,7 @@ const currentTransferProgress = uploadTask.getProgress();
 const uploadedObjectReference = await uploadTask.result;
 ```
 
-Try out the new types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
+Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
 # `API` & `Datastore` Changes
 
 Try out the new types here: TODO Playground Link
