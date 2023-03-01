@@ -143,8 +143,8 @@ This change provides IntelliSense on the configuration for each category. Exampl
 
 ```Typescript
 const authConfig = {
-  userPoolId: "us-east-1_aaaaaaa",
-  userPoolClientId: "bbbbbbbbbbbbbbbbbb",
+  userPoolId: "us-east-1_0yqxxHm5q",
+  userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
   signUpVerificationMethod: "code"
 }
 
