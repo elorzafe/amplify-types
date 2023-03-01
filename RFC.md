@@ -16,8 +16,6 @@ We are improving **_DX_** by adding strict type support to Hub channels, events,
 **Amplify v5 & v6 (`aws-amplify@^5`)**
 
 ```Typescript
-import {Hub} from "aws-amplify"
-
 const channel = "auth"
 const signInFailureEvent = "signInFailure"
 const signInFailureData = new AuthError("sign-in failed")
