@@ -183,7 +183,7 @@ type RemoveResponse = {
 // API Cancel
 type CancellableRequests = Promise<DownloadResponse | CopyResponse> | UploadResponse;
 
-declare namespace Storage {
+declare namespace S3 {
   /**
    * Generates a pre-signed URL for downloading the specified reference.
    * 
