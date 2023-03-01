@@ -4,8 +4,9 @@ Amplify JS is looking to improve our TypeScript support across the library to be
 This RFC is broken down into sections covering:
 - Library-wide TypeScript improvements
 - Changes to some of our core utilities such as `Hub` and Amplify configuration
-- Specific improvements to the `Auth`, `Storage`, and `API` categories and associated APIs 
+- Specific improvements to the `Auth`, `Storage`, and `API` categories and associated APIs
 
+We're also requesting feedback on any other TypeScript issues or pain points that you may have encountered not explicitly covered in this RFC.
 
 # Library-wide TypeScript Improvements
 Amplify JS will be making the following improvements to our TypeScript support. These improvements will be applied across the entire library, not just the categories highlighted below.
@@ -20,16 +21,15 @@ Amplify is proposing the following changes for our core utilities.
 
 ## TypeScript support for Amplify Hub channels
 
-We are improving **_DX_** by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
+We are improving developer experience by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
 
 **Amplify v5 & v6 (`aws-amplify@^5`)**
 
 ```Typescript
-
 Hub.dispatch("auth", {
   event: "signInFailure",
   data: new AuthError("Sign-in failed"),
-})
+});
 
 // Events and payload data are not inferred.
 Hub.listen(channel, ({ payload }) => {
@@ -45,25 +45,24 @@ Hub.listen(channel, ({ payload }) => {
 
 Todo: add screen shoots
 
-**Amplify v6 DX**
+**Proposed Amplify v6 DX**
 
 Todo: add screen shoots
 
 ## TypeScript support for custom Hub channels
 
-We are improving **_DX_** by adding strict type support to custom Hub channels, events, and payloads.
+We are improving developer experience by adding strict type support to custom Hub channels, events, and payloads.
 
 **Amplify v5 (`aws-amplify@5`)**
-
 ```Typescript
-const customChannel = "custom_channel"
-const customEvent = "custom_event"
-const customData = "custom_data"
+const customChannel = "custom_channel";
+const customEvent = "custom_event";
+const customData = "custom_data";
 
 Hub.dispatch(channel, {
   event: customEvent,
   data: customData
-})
+});
 
 Hub.listen(channel, ({ payload }) => {
   switch (payload.event) {
@@ -75,13 +74,12 @@ Hub.listen(channel, ({ payload }) => {
 ```
 
 **Amplify v5 DX**
-
 Todo: add screenshoots
 
-**Amplify v6 (`aws-amplify@6`)**
+**Proposed Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
-type customChannel = "custom_channel"
+type customChannel = "custom_channel";
 
 // Each key in the map represents a payload event and the key value is the data type for that event.
 // Note: If an event is assigned the null type, the payload object will not contain a data key.
@@ -90,32 +88,32 @@ type customEventDataMap = {
   B: string;
   C: null;
   D: Object
-}
+};
 
 Hub.dispatch<customChannel, customEventDataMap >("custom_channel", {
-  event: "A" ,
+  event: "A",
   data: 42
-})
+});
 
 Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
   switch(payload.event) {
     case "A":
       payload.data;
-      break
+      break;
     case "B":
-      payload.data
-      break
+      payload.data;
+      break;
     case "C":
-      payload.data
-      break
+      payload.data;
+      break;
     case "D":
-      payload.data
-      break
+      payload.data;
+      break;
   }
-})
+});
 ```
 
-**Amplify v6 DX**
+**Proposed Amplify v6 DX**
 
 Todo: add screenshoots
 
@@ -130,26 +128,25 @@ const authConfig = {
   userPoolId: "us-east-1_0yqxxHm5q",
   userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
   signUpVerificationMethod: "code"
-}
+};
 
 Amplify.configure({
   Auth: authConfig
-})
-
+});
 ```
 
-**Amplify v6 (`aws-amplify@6`)**
+**Proposed Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
-const authConfig:AuthConfig = {
+const authConfig : AuthConfig = {
   userPoolId: "us-east-1_0yqxxHm5q",
   userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
   signUpVerificationMethod: "code"
-}
+};
 
 Amplify.configure({
   Auth: authConfig
-})
+});
 ```
 
 Try out the new types here: TODO Playground Link
