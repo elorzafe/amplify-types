@@ -1,5 +1,5 @@
 # RFC: Amplify JS TypeScript Improvements
-Amplify JS is looking to improve our TypeScript support across the library to better serve our customers and provide a more intuitive & idiomatic developer experience. To this end we are requesting community feedback on a variety of changes and improvements that will be available to customers in the near future.
+Amplify JS is looking to improve our TypeScript support across the library to better serve our customers and provide a more intuitive & idiomatic developer experience. To this end, we are requesting your feedback on a variety of changes and improvements that will be available to you in our next major version release.
 
 This RFC is broken down into sections covering:
 - Library-wide TypeScript improvements
