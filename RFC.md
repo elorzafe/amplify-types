@@ -157,9 +157,6 @@ Amplify.configure({
 **Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
-import {Amplify} from "aws-amplify"
-
-// Provides different auth configurations
 const authConfig:AuthConfig = {
   userPoolId: "us-east-1_aaaaaaa",
   userPoolClientId: "bbbbbbbbbbbbbbbbbb",
