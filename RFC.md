@@ -74,7 +74,7 @@ We are improving **_DX_** by adding strict type support to custom Hub channels, 
 ```Typescript
 import {Hub} from "aws-amplify"
 
-const channel = "custom"
+const customChannel = "custom_channel"
 const customEvent = "custom_event"
 const customData = "custom_data"
 
