@@ -30,11 +30,11 @@ Hub.dispatch("auth", {
 
 // Events and payload data are not inferred.
 Hub.listen(channel, ({ payload }) => {
-	switch (payload.event) { // event - string
-		case "signInFailure":
-			const data = payload.data; // data - any
-			break;
-	}
+  switch (payload.event) {
+    case "signInFailure":
+      const data = payload.data;
+      break;
+  }
 });
 ```
 
