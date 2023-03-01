@@ -5,7 +5,7 @@ type UnionKeys<T> = T extends T ? keyof T : never;
 type StrictUnionHelper<T, TAll> = T extends any
   ? T & Partial<Record<Exclude<UnionKeys<TAll>, keyof T>, undefined>>
   : never;
-type StrictUnion<T> = StrictUnionHelper<T, T>;
+export type StrictUnion<T> = StrictUnionHelper<T, T>;
 
 type AmplifyConfigure = {
   Auth?: AuthConfig;
@@ -185,4 +185,17 @@ type HTTPClientMiddleware = () => {};
 
 type HTTPClientInput = {
   middleware: [];
+<<<<<<< HEAD
 };
+=======
+};
+
+const Hub = new HubClass();
+
+Hub.listen('auth', (hubMessage) => {
+  if (hubMessage.payload.event === 'signUp') {
+    hubMessage.payload.data
+  }
+})
+
+>>>>>>> 12a8a78 (Adding auth modes to API category)
