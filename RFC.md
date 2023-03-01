@@ -104,7 +104,7 @@ type customEventDataMap = {
 
 Hub.dispatch<customChannel, customEventDataMap >("custom_channel", {
   event: "A" , // Union type of all possible events A | B | C | D
-  data: "string" // It errors as "string" is not a number
+  data: 42
 })
 
 Hub.listen<channel, customEventDataMap>("custom", ({payload})=>{
