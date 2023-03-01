@@ -91,8 +91,7 @@ Hub.listen(channel, ({ payload }) => {
 **Amplify v6 (`aws-amplify@6`)**
 
 ```Typescript
-// name of the channel
-type channel = "custom"
+type customChannel = "custom_channel"
 
 // Each key in the map represents a payload event and the key value is the data type for that event.
 // Note: If an event is assigned the null type, the payload object will not contain a data key.
