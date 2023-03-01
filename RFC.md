@@ -67,7 +67,7 @@ Hub.listen(channel, ({ payload }) => {
 
 ## Typescript support for custom Hub channels
 
-We are introduccing strong type inference for custom hub channels and payload.
+We are improving **_DX_** by adding strict type support to custom Hub channels, events, and payloads.
 
 **Amplify v5 (`aws-amplify@5`)**
 
