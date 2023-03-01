@@ -17,7 +17,7 @@ Amplify JS will be making the following improvements to our TypeScript support. 
 
 # Utility Changes
 
-Amplify is proposing the following changes for our core utilities.
+Amplify is proposing the following changes to our core utilities.
 
 ## TypeScript support for Amplify Hub channels
 
