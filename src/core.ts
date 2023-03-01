@@ -77,8 +77,6 @@ type AuthEvent =
   | "confirmSignUp"
   | "tokenRefresh";
 
-type AuthEventsWithOutData = Extract<"tokenRefresh", AuthEvent>;
-
 type GetAuthData<T extends AuthEvent> = T extends `${string}Failure`
   ? AuthError
   : T extends "signIn"
@@ -158,7 +156,6 @@ type PayloadFromCallback<T> = T extends (
   ? A["payload"]
   : never;
 
-
   declare class HubClass {
   listen<
     Channel extends AmplifyChannel | AnyChannel,
@@ -181,7 +178,6 @@ type PayloadFromCallback<T> = T extends (
     ampSymbol?: Symbol
   ): void;
 }
-
 
 declare function httpClient(input: HTTPClientInput): Promise<Response>;
 
