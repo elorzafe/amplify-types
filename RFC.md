@@ -13,7 +13,7 @@ Amplify is proposing the following changes for our core utilities.
 
 We are improving **_DX_** by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Amplify v5 & v6 (`aws-amplify@^5`)**
 
 ```Typescript
 import {Hub} from "aws-amplify"
