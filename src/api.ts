@@ -119,28 +119,28 @@ type Observer<T = object> = {
 type CANCEL_STATUS = 'CANCELLED' | 'ALREADY_RESOLVED'
 
 /** HTTP GET METHOD */
-export declare function get<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+declare function get<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
 /** HTTP HEAD METHOD */
-export declare function head<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+declare function head<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
 /** HTTP DELETE METHOD */
-export declare function del<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+declare function del<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
 /** HTTP OPTIONS METHOD */
-export declare function options<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
+declare function options<ResponseBody extends unknown>(params: APIParam, init?: GetFetchOptions): Promise<APIResponse<ResponseBody>>;
 
 /** HTTP PUT METHOD */
-export declare function put<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
-export declare function put<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
+declare function put<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
+declare function put<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
 
 /** HTTP POST METHOD */
-export declare function post<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
-export declare function post<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
+declare function post<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
+declare function post<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
 
 /** HTTP PATCH METHOD */
-export declare function patch<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
-export declare function patch<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
+declare function patch<RequestBody extends JSONValue = JSONValue, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsJSON<RequestBody>): Promise<APIResponse<ResponseBody>>;
+declare function patch<RequestBody extends string = string, ResponseBody extends unknown = unknown>(params: APIParam, init: UpdateOptionsString<RequestBody>): Promise<APIResponse<ResponseBody>>;
 
 /** Cancel HTTP Request */
-export declare function cancel(request: Promise<unknown>): CANCEL_STATUS;
+declare function cancel(request: Promise<unknown>): CANCEL_STATUS;
 
 type GraphQLData = {
     variables?: JSONObject,
@@ -163,16 +163,30 @@ type GraphqlMutationParams<T> = { document: string, variables: T } & AuthMode;
 type GraphqlSubscriptionParams<T> = GraphqlQueryParams<T>;
 
 /** GrapQL query */
-export declare function query<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlQueryParams<GraphQLInfo["variables"]>): Promise<GraphqlResult<GraphQLInfo["result"]>>
+declare function graphqlQuery<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlQueryParams<GraphQLInfo["variables"]>): Promise<GraphqlResult<GraphQLInfo["result"]>>
 /** GraphQL mutation */
-export declare function mutation<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlMutationParams<GraphQLInfo["variables"]>): Promise<GraphqlResult<GraphQLInfo["result"]>>
+declare function graphqlMutation<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlMutationParams<GraphQLInfo["variables"]>): Promise<GraphqlResult<GraphQLInfo["result"]>>
 
 //     /** GraphQL subscription */
-export declare function subscription<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlSubscriptionParams<GraphQLInfo["variables"]>): Observable<GraphqlResult<GraphQLInfo["result"]>>;
+declare function graphqlSubscription<GraphQLInfo extends GraphQLData = GraphQLData>(params: GraphqlSubscriptionParams<GraphQLInfo["variables"]>): Observable<GraphqlResult<GraphQLInfo["result"]>>;
 
 // ------ EXAMPLES -----
 
-put<string, { data: Array<number> }>({
+export const API = {
+    get,
+    head,
+    options,
+    del,
+    post,
+    put,
+    patch,
+    cancel,
+    graphqlQuery,
+    graphqlMutation,
+    graphqlSubscription
+}
+
+API.put<string, { data: Array<number> }>({
     apiName: '',
     path: '/',
     authMode: "API_KEY"
@@ -195,7 +209,7 @@ put<string, { data: Array<number> }>({
     }
 });
 
-get<{ firstName: string, lastName: string }>({
+API.get<{ firstName: string, lastName: string }>({
     apiName: '',
     path: ''
 }, {
@@ -216,7 +230,7 @@ get<{ firstName: string, lastName: string }>({
     }
 });
 
-get<"SUCCESS" | "FAILED">({
+API.get<"SUCCESS" | "FAILED">({
     apiName: '',
     path: '/'
 }, {
@@ -257,7 +271,7 @@ type myQueryType = {
     }
 }
 
-query<myQueryType>({
+API.graphqlQuery<myQueryType>({
     document: `my graphql document`,
 })
 .then(result => {
@@ -283,7 +297,7 @@ type myMutationType = {
     result: Todo
 }
 
-mutation<myMutationType>({
+API.graphqlMutation<myMutationType>({
     document: `mutation createPost....`,
     variables: {
         id: 123,
@@ -305,7 +319,7 @@ mutation<myMutationType>({
     }
 });
 
-subscription({ document: `my graphql document`, variables: { input: { test: 0 } } })
+API.graphqlSubscription({ document: `my graphql document`, variables: { input: { test: 0 } } })
 .subscribe({
     next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
 });
