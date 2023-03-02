@@ -151,7 +151,7 @@ Amplify.configure({
 
 Try out the new types here: TODO Playground Link
 
-# `Auth` Changes
+# `Auth` Category Changes
 
 Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
 
@@ -236,7 +236,7 @@ if (resp.isSignUpComplete) {
 
 Try out the new types here: TODO Playground Link
 
-# `Storage` Changes
+# `Storage` Category Changes
 
 Amplify is proposing the following changes for the `Storage` category.
 
