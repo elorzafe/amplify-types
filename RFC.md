@@ -158,7 +158,7 @@ Amplify.configure({
 });
 ```
 
-Try out the new types here: TODO Playground Link
+Try out the new types here: https://www.typescriptlang.org/play#gist/7332e86effa3b0d627eebfc71fad1aca
 
 # `Auth` Category Changes
 
