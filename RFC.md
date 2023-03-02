@@ -462,40 +462,40 @@ API.graphqlQuery<MyQueryType>({
 });
 
 type MyMutationType = {
-    variables: {
-        id: number,
-        name: string,
-        description: string
-    },
-    result: {
-      id: number, 
-      name: string, 
-      description: string
-    }
+  variables: {
+    id: number,
+    name: string,
+    description: string
+  },
+  result: {
+    id: number, 
+    name: string, 
+    description: string
+  }
 }
 
 API.graphqlMutation<MyMutationType>({
-    document: `mutation createTodo....`,
-    variables: {
-        id: 123,
-        name: 'My Todo',
-        description: 'This is a todo'
-    }
+  document: `mutation createTodo....`,
+  variables: {
+    id: 123,
+    name: 'My Todo',
+    description: 'This is a todo'
+  }
 })
-.then(result => {
-    console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+.then((result) => {
+  console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
 });
 
 API.graphqlSubscription<MyQueryType>({ document: `subscription OnCreateTodo...`})
 .subscribe({
-    next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
+  next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
 });
 ```
 
 ## Errors can be narrowed down 
 
 **Amplify v5 (`aws-amplify@5`)**
-Errors cannot be narrowed down
+Amplify v5 does not support narrowing down errors.
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
@@ -503,10 +503,10 @@ Errors cannot be narrowed down
 import { HTTPError, NetworkError, BlockedError, CancelledError}
 
 API.get({
-    apiName: 'myApi',
-    path: '/'
-}).then(result => {
-    // do something with result
+  apiName: 'myApi',
+  path: '/'
+}).then((result) => {
+  // do something with result
 }).catch((err: unknown) => {
   if (err instanceof NetworkError) {
     // Consider retrying
