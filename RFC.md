@@ -500,7 +500,7 @@ Amplify v5 does not support narrowing down errors.
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
 ```typescript
-import { HTTPError, NetworkError, BlockedError, CancelledError}
+import { HTTPError, NetworkError, BlockedError, CancelledError } from '@aws-amplify/api';
 
 API.get({
   apiName: 'myApi',
