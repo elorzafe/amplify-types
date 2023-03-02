@@ -243,7 +243,7 @@ if (resp.isSignUpComplete) {
 
 <img width="594" alt="confirmSignUp-v6" src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png">
 
-Try out the new types here: TODO Playground Link
+Try out the new types here: https://stackblitz.com/edit/rfc-auth?file=auth.ts
 
 # `Storage` Category Changes
 
