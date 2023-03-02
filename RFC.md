@@ -508,17 +508,17 @@ API.get({
 }).then(result => {
     // do something with result
 }).catch((err: unknown) => {
-    if (err instanceof NetworkError) {
-        // Maybe I want to retry
-    } else if (err instanceof HTTPError) {
-        // Check if something is going with my request parameters
-    } else if (err instanceof CancelledError) {
-        // this is fine I trigger the cancellation
-    } else if (err instanceof BlockedError) {
-        // This is CORS stuff
-    } else {
-        // other error
-    }
+  if (err instanceof NetworkError) {
+    // Consider retrying
+  } else if (err instanceof HTTPError) {
+    // Check request parameters for mistakes
+  } else if (err instanceof CancelledError) {
+    // Request was cancelled
+  } else if (err instanceof BlockedError) {
+    // CORS related error
+  } else {
+    // Other error
+  }
 });
 ```
 
