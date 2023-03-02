@@ -341,7 +341,8 @@ const uploadedObjectReference = await uploadTask.result;
 
 Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
 
-# `API` category Changes
+# `API` Category Changes
+Amplify is proposing the following changes for the `API` category.
 
 ## First param is an object with named parameters
 
