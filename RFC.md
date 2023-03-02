@@ -1,7 +1,9 @@
 # RFC: Amplify JS TypeScript Improvements
+
 Amplify JS is looking to improve our TypeScript support across the library to better serve our customers and provide a more intuitive & idiomatic developer experience. To this end, we are requesting your feedback on a variety of changes and improvements that will be available to you in our next major version release.
 
 This RFC is broken down into sections covering:
+
 - Library-wide TypeScript improvements
 - Changes to some of our core utilities such as `Hub` and Amplify configuration
 - Specific improvements to the `Auth`, `Storage`, and `API` categories and associated APIs
@@ -9,6 +11,7 @@ This RFC is broken down into sections covering:
 We're also requesting feedback on any other TypeScript issues or pain points that you may have encountered not explicitly covered in this RFC.
 
 # Library-wide TypeScript Improvements
+
 Amplify JS will be making the following improvements to our TypeScript support. These improvements will be applied across the entire library, not just the categories highlighted below.
 
 - `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types.
@@ -56,6 +59,7 @@ https://user-images.githubusercontent.com/70438514/222475328-1f682ead-a750-4ea6-
 We are improving developer experience by adding strict type support to custom Hub channels, events, and payloads.
 
 **Amplify v5 (`aws-amplify@5`)**
+
 ```Typescript
 const customChannel = "custom_channel";
 const customEvent = "custom_event";
@@ -156,7 +160,7 @@ Amplify.configure({
 
 Try out the new types here: TODO Playground Link
 
-# `Auth` Changes
+# `Auth` Category Changes
 
 Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
 
@@ -241,7 +245,7 @@ if (resp.isSignUpComplete) {
 
 Try out the new types here: TODO Playground Link
 
-# `Storage` Changes
+# `Storage` Category Changes
 
 Amplify is proposing the following changes for the `Storage` category.
 
