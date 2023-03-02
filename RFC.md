@@ -572,4 +572,4 @@ API.get({
 });
 ```
 
-Try out the new types here: https://www.typescriptlang.org/play#gist/17515490cdb131be210d60e840166b4b
+Try out the new types here: https://www.typescriptlang.org/play#gist/30759a4799f751df85945e73e9657695
