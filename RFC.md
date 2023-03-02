@@ -390,6 +390,185 @@ const uploadedObjectReference = await uploadTask.result;
 
 Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
 
-# `API` & `Datastore` Changes
+# `API` Category Changes
+Amplify is proposing the following changes for the `API` category.
 
-Try out the new types here: TODO Playground Link
+## First param is an object with named parameters
+To improve the readability of our APIs we will be introducing an object parameter to capture request parameters.
+**Amplify v5 (`aws-amplify@5`)**
+
+```typescript
+const apiName = 'MyApiName';
+const path = '/path';
+const myInit = {
+  headers: {}, // OPTIONAL
+  response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+  queryStringParameters: {
+    name: 'param' // OPTIONAL
+  }
+};
+
+API.get(apiName, path, myInit)
+  .then((response) => {
+    // Add your code here
+  })
+  .catch((error) => {
+    console.log(error.response);
+  });
+```
+**Proposed Amplify v6 (`aws-amplify@6`)**
+```typescript
+API.get({
+  apiName: 'MyApi',
+  path: '/items',
+  authMode: 'AWS_IAM'
+}, myInit)
+  .then((result) => {
+    // Add your code here
+  }).catch((error) => {
+    console.log(error.response);
+  });
+```
+
+## Adding TypeScript generics to request body and response
+To improve developer experience and permit more strict typing we will be adding generic support to our `API` category APIs.
+
+**Amplify v5 (`aws-amplify@5`)**
+
+Amplify v5 does not support using generics for the request body or response.
+
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```typescript
+type MyApiResponse = { firstName: string, lastName: string };
+
+API.get<MyApiResponse>({
+    apiName: 'MyApi',
+    path: '/getName'
+}).then(result => {
+    console.log(`The name is ${result.body.firstName} ${result.body.lastName}`)
+});
+
+API.put<string, { data: Array<number> }>({
+    apiName: '',
+    path: '/',
+    authMode: "API_KEY"
+}, {
+    headers: {
+        "Content-type": "text/plain",
+    },
+    body: "this is my content"
+}).then((result) => {
+    result.body.data.forEach((value) => console.log(value));
+});
+```
+
+## GraphQL operations have been split into query, mutation, and subscription
+To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
+
+**Amplify v5 (`aws-amplify@5`)**
+
+```typescript
+import { API } from "aws-amplify";
+import * as mutations from './graphql/mutations';
+import { GraphQLQuery, GraphQLSubscription } from '@aws-amplify/api';
+import { CreateTodoInput, CreateTodoMutation, OnCreateTodoSubscription } from './API';
+import * as subscriptions from './graphql/subscriptions';
+
+const todoDetails: CreateTodoInput = {
+  name: 'Todo 1',
+  description: 'Learn AWS AppSync'
+};
+
+const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({ 
+  query: mutations.createTodo, 
+  variables: { input: todoDetails }
+});
+
+const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
+  graphqlOperation(subscriptions.onCreateTodo)
+).subscribe({
+  next: ({ provider, value }) => console.log({ provider, value }),
+  error: (error) => console.warn(error)
+});
+```
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```typescript
+type MyQueryType = {
+  result: {
+    id: string,
+    name: string,
+    description: string
+  }
+}
+
+API.graphqlQuery<MyQueryType>({
+  document: `query getTodo...`,
+})
+.then((result) => {
+  console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+});
+
+type MyMutationType = {
+  variables: {
+    id: number,
+    name: string,
+    description: string
+  },
+  result: {
+    id: number, 
+    name: string, 
+    description: string
+  }
+}
+
+API.graphqlMutation<MyMutationType>({
+  document: `mutation createTodo....`,
+  variables: {
+    id: 123,
+    name: 'My Todo',
+    description: 'This is a todo'
+  }
+})
+.then((result) => {
+  console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+});
+
+API.graphqlSubscription<MyQueryType>({ document: `subscription OnCreateTodo...`})
+.subscribe({
+  next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
+});
+```
+
+## Errors can be narrowed down 
+
+**Amplify v5 (`aws-amplify@5`)**
+Amplify v5 does not support narrowing down errors.
+
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```typescript
+import { HTTPError, NetworkError, BlockedError, CancelledError } from '@aws-amplify/api';
+
+API.get({
+  apiName: 'myApi',
+  path: '/'
+}).then((result) => {
+  // do something with result
+}).catch((err: unknown) => {
+  if (err instanceof NetworkError) {
+    // Consider retrying
+  } else if (err instanceof HTTPError) {
+    // Check request parameters for mistakes
+  } else if (err instanceof CancelledError) {
+    // Request was cancelled
+  } else if (err instanceof BlockedError) {
+    // CORS related error
+  } else {
+    // Other error
+  }
+});
+```
+
+Try out the new types here: https://www.typescriptlang.org/play#gist/30759a4799f751df85945e73e9657695
