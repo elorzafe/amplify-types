@@ -143,6 +143,9 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
+**Amplify v5 DX**
+
+<img width="494" alt="configure-v5" src="https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png">
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
@@ -157,6 +160,11 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
+**Proposed Amplify v6 DX**
+
+https://user-images.githubusercontent.com/70438514/222543618-d5c42798-28c5-41e9-9ff6-c9061b86ef43.mov
+
+<br />
 
 Try out the new types here: https://www.typescriptlang.org/play#gist/7332e86effa3b0d627eebfc71fad1aca
 
