@@ -341,6 +341,183 @@ const uploadedObjectReference = await uploadTask.result;
 
 Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
 
-# `API` & `Datastore` Changes
+# `API` category Changes
+
+## First param is an object with named parameters
+
+**Amplify v5 (`aws-amplify@5`)**
+
+```typescript
+const apiName = 'MyApiName';
+const path = '/path';
+const myInit = {
+  headers: {}, // OPTIONAL
+  response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+  queryStringParameters: {
+    name: 'param' // OPTIONAL
+  }
+};
+
+API.get(apiName, path, myInit)
+  .then((response) => {
+    // Add your code here
+  })
+  .catch((error) => {
+    console.log(error.response);
+  });
+```
+
+```typescript
+API.get({
+    apiName: 'MyApi',
+    path: '/items',
+    authMode: 'AWS_IAM'
+}, myInit)
+  .then(result => {
+    // Add your code here
+  }).catch((error) => {
+    console.log(error.response);
+  });
+```
+
+## Adding TypeScript generics to request body and request response
+
+**Amplify v5 (`aws-amplify@5`)**
+
+Not possible to use generics for request body or response body
+
+
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```typescript
+type MyApiResponse = { firstName: string, lastName: string };
+
+API.get<MyApiResponse>({
+    apiName: 'MyApi',
+    path: '/getName'
+}).then(result => {
+    console.log(`The name is ${result.body.firstName} ${result.body.lastName}`)
+});
+
+API.put<string, { data: Array<number> }>({
+    apiName: '',
+    path: '/',
+    authMode: "API_KEY"
+}, {
+    headers: {
+        "Content-type": "text/plain",
+    },
+    body: "this is my content"
+}).then(result => {
+    result.body.data.forEach(value => console.log(value));
+});
+```
+
+## GraphQL operations are splitted between query, mutation and subscription
+
+**Amplify v5 (`aws-amplify@5`)**
+
+```typescript
+import { API } from "aws-amplify";
+import * as mutations from './graphql/mutations';
+import { GraphQLQuery, GraphQLSubscription } from '@aws-amplify/api';
+import { CreateTodoInput, CreateTodoMutation, OnCreateTodoSubscription } from './API';
+import * as subscriptions from './graphql/subscriptions';
+
+const todoDetails: CreateTodoInput = {
+  name: 'Todo 1',
+  description: 'Learn AWS AppSync'
+};
+
+const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({ 
+  query: mutations.createTodo, 
+  variables: { input: todoDetails }
+});
+
+const sub = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
+  graphqlOperation(subscriptions.onCreateTodo)
+).subscribe({
+  next: ({ provider, value }) => console.log({ provider, value }),
+  error: (error) => console.warn(error)
+});
+```
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```typescript
+type MyQueryType = {
+    result: {
+        id: string,
+        name: string,
+        description: string
+    }
+}
+
+API.graphqlQuery<MyQueryType>({
+    document: `query getTodo...`,
+})
+.then(result => {
+    console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+});
+
+type MyMutationType = {
+    variables: {
+        id: number,
+        name: string,
+        description: string
+    },
+    result: {
+      id: number, 
+      name: string, 
+      description: string
+    }
+}
+
+API.graphqlMutation<MyMutationType>({
+    document: `mutation createTodo....`,
+    variables: {
+        id: 123,
+        name: 'My Todo',
+        description: 'This is a todo'
+    }
+})
+.then(result => {
+    console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+});
+
+API.graphqlSubscription<MyQueryType>({ document: `subscription OnCreateTodo...`})
+.subscribe({
+    next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
+});
+```
+
+## Errors can be narrowed down 
+
+**Amplify v5 (`aws-amplify@5`)**
+Errors cannot be narrowed down
+
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```typescript
+import { HTTPError, NetworkError, BlockedError, CancelledError}
+
+API.get({
+    apiName: 'myApi',
+    path: '/'
+}).then(result => {
+    // do something with result
+}).catch((err: unknown) => {
+    if (err instanceof NetworkError) {
+        // Maybe I want to retry
+    } else if (err instanceof HTTPError) {
+        // Check if something is going with my request parameters
+    } else if (err instanceof CancelledError) {
+        // this is fine I trigger the cancellation
+    } else if (err instanceof BlockedError) {
+        // This is CORS stuff
+    } else {
+        // other error
+    }
+});
+```
 
 Try out the new types here: TODO Playground Link
