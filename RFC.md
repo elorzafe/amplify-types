@@ -367,12 +367,12 @@ API.get(apiName, path, myInit)
     console.log(error.response);
   });
 ```
-
+**Proposed Amplify v6 (`aws-amplify@6`)**
 ```typescript
 API.get({
-    apiName: 'MyApi',
-    path: '/items',
-    authMode: 'AWS_IAM'
+  apiName: 'MyApi',
+  path: '/items',
+  authMode: 'AWS_IAM'
 }, myInit)
   .then((result) => {
     // Add your code here
@@ -386,8 +386,7 @@ To improve developer experience and permit more strict typing we will be adding 
 
 **Amplify v5 (`aws-amplify@5`)**
 
-Not possible to use generics for request body or response body
-
+Amplify v5 does not support using generics for the request body or response.
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
@@ -410,12 +409,13 @@ API.put<string, { data: Array<number> }>({
         "Content-type": "text/plain",
     },
     body: "this is my content"
-}).then(result => {
-    result.body.data.forEach(value => console.log(value));
+}).then((result) => {
+    result.body.data.forEach((value) => console.log(value));
 });
 ```
 
-## GraphQL operations are splitted between query, mutation and subscription
+## GraphQL operations have been split into query, mutation, and subscription
+To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
 
 **Amplify v5 (`aws-amplify@5`)**
 
@@ -436,7 +436,7 @@ const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({
   variables: { input: todoDetails }
 });
 
-const sub = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
+const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
   graphqlOperation(subscriptions.onCreateTodo)
 ).subscribe({
   next: ({ provider, value }) => console.log({ provider, value }),
@@ -447,18 +447,18 @@ const sub = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
 
 ```typescript
 type MyQueryType = {
-    result: {
-        id: string,
-        name: string,
-        description: string
-    }
+  result: {
+    id: string,
+    name: string,
+    description: string
+  }
 }
 
 API.graphqlQuery<MyQueryType>({
-    document: `query getTodo...`,
+  document: `query getTodo...`,
 })
-.then(result => {
-    console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+.then((result) => {
+  console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
 });
 
 type MyMutationType = {
