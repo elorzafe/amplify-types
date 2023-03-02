@@ -175,7 +175,7 @@ Auth.signUp({
 
 **Amplify v5 DX**
 
-Todo: add screen shoots
+![signup-v5](https://user-images.githubusercontent.com/70438514/222456624-b4af7349-db9d-4304-9cdc-08cf649e2d31.png)
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
@@ -193,7 +193,7 @@ signUp({
 
 **Proposed Amplify v6 DX**
 
-Todo: add screen shoots
+<img width="556" alt="signup-v6" src="https://user-images.githubusercontent.com/70438514/222456627-f196eedf-90e5-4bb0-81a7-78e11d88b09b.png">
 
 ## Predictable API responses
 
@@ -213,7 +213,7 @@ if (resp === "SUCCESS"){
 
 **Amplify v5 DX**
 
-Todo: add screen shoots
+![confirmSignUp-v5](https://user-images.githubusercontent.com/70438514/222456621-fca2d313-3d39-4a1e-8bcb-a1e86235bd06.png)
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
@@ -232,7 +232,7 @@ if (resp.isSignUpComplete) {
 
 **Proposed Amplify v6 DX**
 
-Todo: add screen shoots
+<img width="594" alt="confirmSignUp-v6" src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png">
 
 Try out the new types here: TODO Playground Link
 
