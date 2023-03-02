@@ -374,7 +374,7 @@ API.get({
     path: '/items',
     authMode: 'AWS_IAM'
 }, myInit)
-  .then(result => {
+  .then((result) => {
     // Add your code here
   }).catch((error) => {
     console.log(error.response);
