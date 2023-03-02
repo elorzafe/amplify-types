@@ -52,7 +52,7 @@ https://user-images.githubusercontent.com/70438514/222475294-9cf9f535-b717-4725-
 
 **Proposed Amplify v6 DX**
 
-https://user-images.githubusercontent.com/70438514/222475328-1f682ead-a750-4ea6-9004-d8738de5e3a1.mov
+https://user-images.githubusercontent.com/70438514/222512918-ea72b2c4-9568-45e6-86c6-3c5226820e7d.mov
 
 ## TypeScript support for custom Hub channels
 
