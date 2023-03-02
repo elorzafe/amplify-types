@@ -541,9 +541,10 @@ API.graphqlSubscription<MyQueryType>({ document: `subscription OnCreateTodo...`}
 });
 ```
 
-## Errors can be narrowed down 
+## Type narrowing on runtime errors
 
 **Amplify v5 (`aws-amplify@5`)**
+
 Amplify v5 does not support narrowing down errors.
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
