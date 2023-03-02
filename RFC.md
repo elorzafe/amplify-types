@@ -345,7 +345,7 @@ Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/2
 Amplify is proposing the following changes for the `API` category.
 
 ## First param is an object with named parameters
-
+To improve the readability of our APIs we will be introducing an object parameter to capture request parameters.
 **Amplify v5 (`aws-amplify@5`)**
 
 ```typescript
