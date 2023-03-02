@@ -153,48 +153,88 @@ Try out the new types here: TODO Playground Link
 
 # `Auth` Changes
 
-- CognitoUser object is no longer required
+Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
 
-Code sample for Amplify V5 (`aws-amplify@5`)
+## TypeScript support for user attributes
 
-```TypeScript
-async function mySignInAmplifyV5({ username, password}: {username: string, password: string}) {
-  const user = await Auth.signIn({
-    username,
-    password
-  });
+User attributes inference on the `signUp` API.
 
-  if (user.challengeName === 'SMS_MFA') {
-    // persist reference of user and the MFA type on app state in case you have multiple options
-    // display a component or prompt to ask for code
+**Amplify v5 (`aws-amplify@5`)**
+
+```Typescript
+
+Auth.signUp({
+  username: "username",
+  password: "*******",
+  attributes: {
+    email: "email@domain.com"
   }
-  // ...
-}
+});
 
-async function myConfirmSignAmplifyV5({user, code}: {user: CognitoUser, code: string, mfaType: 'SMS_MFA' | 'SOFTWARE_TOKEN_MFA' }) {
-  const loggedInUser = await Auth.confirmSignIn(user, code, mfaType);
-  // done
+```
+
+**Amplify v5 DX**
+
+Todo: add screen shoots
+
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```Typescript
+
+signUp({
+  username: "username",
+  password: "********",
+  options: {
+    userAttributes: [{ userAttributeKey: "email", value: "email@domain.com" }],
+  },
+});
+
+```
+
+**Proposed Amplify v6 DX**
+
+Todo: add screen shoots
+
+## Predictable API responses
+
+We are improving **_DX_** by providing descriptive API responses to help customers complete auth flows. An example for the `confirmSignUp` API is highlighted below.
+
+**Amplify v5 (`aws-amplify@5`)**
+
+```Typescript
+
+const resp = await Auth.confirmSignUp("username", "112233")
+
+if (resp === "SUCCESS"){
+  // Show login component
 }
 
 ```
 
-Code sample of proposal for Amplify V6 (`aws-amplify@6`)
+**Amplify v5 DX**
 
-```TypeScript
-async function mySignInAmplifyV6({ username, password }: { username: string, password: string }) {
-  const signInResult = await Auth.signIn({ username, password });
+Todo: add screen shoots
 
-  if (signInResult.nextStep.signInStep === AuthSignInStep.CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE) {
-    // display a component or prompt to ask for code
-  }
+**Proposed Amplify v6 (`aws-amplify@6`)**
+
+```Typescript
+
+const resp = await confirmSignUp({
+  username: "username",
+  confirmationCode: "112233",
+});
+
+if (resp.isSignUpComplete) {
+  // Show login component
 }
 
-async function myConfirmSignInAmplifyV6({ code: string }) {
-  const signInResult = await Auth.confirmSignIn({ code });
-
-  // done
-}
 ```
+
+**Proposed Amplify v6 DX**
+
+Todo: add screen shoots
+
+Try out the new types here: TODO Playground Link
 
 # `Storage` Changes
 
