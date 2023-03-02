@@ -43,11 +43,13 @@ Hub.listen(channel, ({ payload }) => {
 
 **Amplify v5 DX**
 
-Todo: add screen shoots
+https://user-images.githubusercontent.com/70438514/222475294-9cf9f535-b717-4725-9e5a-7c362e74a054.mov
+
+<br />
 
 **Proposed Amplify v6 DX**
 
-Todo: add screen shoots
+https://user-images.githubusercontent.com/70438514/222475328-1f682ead-a750-4ea6-9004-d8738de5e3a1.mov
 
 ## TypeScript support for custom Hub channels
 
@@ -74,7 +76,10 @@ Hub.listen(channel, ({ payload }) => {
 ```
 
 **Amplify v5 DX**
-Todo: add screenshoots
+
+https://user-images.githubusercontent.com/70438514/222475304-128de96a-9a06-4fcc-8f0d-8f19592ae9eb.mov
+
+<br />
 
 **Proposed Amplify v6 (`aws-amplify@6`)**
 
@@ -115,7 +120,7 @@ Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
 
 **Proposed Amplify v6 DX**
 
-Todo: add screenshoots
+https://user-images.githubusercontent.com/70438514/222475311-36b4f8bc-d338-4ad1-9910-5d3518fb71c0.mov
 
 ## TypeScript support for Amplify Configuration
 
@@ -151,7 +156,7 @@ Amplify.configure({
 
 Try out the new types here: TODO Playground Link
 
-# `Auth` Category Changes
+# `Auth` Changes
 
 Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
 
@@ -236,7 +241,7 @@ if (resp.isSignUpComplete) {
 
 Try out the new types here: TODO Playground Link
 
-# `Storage` Category Changes
+# `Storage` Changes
 
 Amplify is proposing the following changes for the `Storage` category.
 
