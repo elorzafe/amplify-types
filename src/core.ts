@@ -1,11 +1,22 @@
 import { AuthError } from "./auth/authError";
 import { AuthSignInResult, AuthSignUpResult } from "./auth/types/result";
 
+// Utilities
+declare function httpClient(input: HTTPClientInput): Promise<Response>;
+
+type HTTPClientMiddleware = () => {};
+
+type HTTPClientInput = {
+  middleware: [];
+};
+
 type UnionKeys<T> = T extends T ? keyof T : never;
+
 type StrictUnionHelper<T, TAll> = T extends any
   ? T & Partial<Record<Exclude<UnionKeys<TAll>, keyof T>, undefined>>
   : never;
-export type StrictUnion<T> = StrictUnionHelper<T, T>;
+
+type StrictUnion<T> = StrictUnionHelper<T, T>;
 
 type AmplifyConfigure = {
   Auth?: AuthConfig;
@@ -13,13 +24,13 @@ type AmplifyConfigure = {
   API?: APIConfig;
 };
 
-export type StorageConfig = {
+type StorageConfig = {
   bucket: string;
   region: string; // or scope it down to actual regions
 };
 
-export type APIConfig = {};
-export type AuthConfig = StrictUnion<
+type APIConfig = {};
+type AuthConfig = StrictUnion<
   UserPoolConfig | IdentityPoolConfig | UserPoolAndIdentityPoolConfig
 >;
 
@@ -50,12 +61,6 @@ type IdentityPoolConfig = {
 };
 
 type UserPoolAndIdentityPoolConfig = UserPoolConfig & IdentityPoolConfig;
-
-declare class Amplify {
-  configure<AmplifyConf extends AmplifyConfigure>(
-    config: AmplifyConfigure
-  ): void;
-}
 
 type AmplifyChannel =
   | "auth"
@@ -156,6 +161,7 @@ type PayloadFromCallback<T> = T extends (
   ? A["payload"]
   : never;
 
+  // Hub
   declare class HubClass {
   listen<
     Channel extends AmplifyChannel | AnyChannel,
@@ -179,23 +185,9 @@ type PayloadFromCallback<T> = T extends (
   ): void;
 }
 
-declare function httpClient(input: HTTPClientInput): Promise<Response>;
-
-type HTTPClientMiddleware = () => {};
-
-type HTTPClientInput = {
-  middleware: [];
-<<<<<<< HEAD
-};
-=======
-};
-
-const Hub = new HubClass();
-
-Hub.listen('auth', (hubMessage) => {
-  if (hubMessage.payload.event === 'signUp') {
-    hubMessage.payload.data
-  }
-})
-
->>>>>>> 12a8a78 (Adding auth modes to API category)
+// Amplify
+declare class Amplify {
+  configure<AmplifyConf extends AmplifyConfigure>(
+    config: AmplifyConfigure
+  ): void;
+}
