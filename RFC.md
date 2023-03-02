@@ -153,9 +153,9 @@ Try out the new types here: TODO Playground Link
 
 # `Auth` Changes
 
-Amplify is proposing the following changes for the `Auth` category.
+Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
 
-## Typescript support for user attributes
+## TypeScript support for user attributes
 
 User attributes inference on the `signUp` API.
 
@@ -163,12 +163,13 @@ User attributes inference on the `signUp` API.
 
 ```Typescript
 
-  Auth.signUp({
-	  username:"username",
-      password:"*******",
-	  attributes:{
-		email: "email@email"
-	 }})
+Auth.signUp({
+  username: "username",
+  password: "*******",
+  attributes: {
+    email: "email@domain.com"
+  }
+});
 
 ```
 
@@ -180,13 +181,13 @@ Todo: add screen shoots
 
 ```Typescript
 
-  signUp({
-    username: "username",
-    password: "********",
-    options: {
-      userAttributes: [{ userAttributeKey: "email", value: "email@email.com" }],
-    },
-  })
+signUp({
+  username: "username",
+  password: "********",
+  options: {
+    userAttributes: [{ userAttributeKey: "email", value: "email@domain.com" }],
+  },
+});
 
 ```
 
@@ -196,13 +197,17 @@ Todo: add screen shoots
 
 ## Predictable API responses
 
-We are improving **_DX_** by providing descriptive API responses that help customers to complete auth flows.
+We are improving **_DX_** by providing descriptive API responses to help customers complete auth flows. An example for the `confirmSignUp` API is highlighted below.
 
 **Amplify v5 (`aws-amplify@5`)**
 
 ```Typescript
 
-const resp = Auth.confirmSignUp("username", "112233")
+const resp = await Auth.confirmSignUp("username", "112233")
+
+if (resp === "SUCCESS"){
+  // Show login component
+}
 
 ```
 
@@ -214,14 +219,14 @@ Todo: add screen shoots
 
 ```Typescript
 
-  const resp = await confirmSignUp({
-    username: "username",
-    confirmationCode: "112233",
-  });
+const resp = await confirmSignUp({
+  username: "username",
+  confirmationCode: "112233",
+});
 
-  if (resp.isSignUpComplete) {
-    // Show login component
-  }
+if (resp.isSignUpComplete) {
+  // Show login component
+}
 
 ```
 
