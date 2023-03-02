@@ -200,7 +200,7 @@ async function myConfirmSignInAmplifyV6({ code: string }) {
 
 Amplify is proposing the following changes for the `Storage` category.
 
-## Introduction of Object Reference Types
+## Introduction of object reference types
 
 In order to permit better inoperability between `storage` APIs and to enable future improvements such as more granular bucket management, we will introduce `StorageObjectReference` & `StoragePrefixReference` types to represent items in cloud storage. An example for copying an object from one access level to another is highlighted below.
 
@@ -292,7 +292,7 @@ const downloadResult = await Storage.download({ key: firstPhoto });
 downloadBlob(downloadResult.content, 'download.jpg');
 ```
 
-## Changes to the `put` Return Object
+## Changes to the `put` return object
 
 To better capture customer intent the `put` API will be renamed to `upload`. Additionally `upload` will enable resumability by default in order to simplify API usage and remove the need to provide callbacks for monitoring upload status in favor of a Promise.
 
