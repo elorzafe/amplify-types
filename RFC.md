@@ -381,7 +381,8 @@ API.get({
   });
 ```
 
-## Adding TypeScript generics to request body and request response
+## Adding TypeScript generics to request body and response
+To improve developer experience and permit more strict typing we will be adding generic support to our `API` category APIs.
 
 **Amplify v5 (`aws-amplify@5`)**
 
