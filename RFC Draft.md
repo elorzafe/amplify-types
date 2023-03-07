@@ -46,13 +46,13 @@ Hub.listen(channel, ({ payload }) => {
 
 **Current DX (v5)**
 
-https://user-images.githubusercontent.com/70438514/222475294-9cf9f535-b717-4725-9e5a-7c362e74a054.mov
+![auth-hub-v5](https://user-images.githubusercontent.com/70438514/222809592-ee475b84-f290-4215-bed5-27055a8a91ec.gif)
 
 <br />
 
 **Proposed DX (v6)**
 
-https://user-images.githubusercontent.com/70438514/222512918-ea72b2c4-9568-45e6-86c6-3c5226820e7d.mov
+![auth-hub-v6](https://user-images.githubusercontent.com/70438514/222809593-98fa7bba-96f9-4a45-8cf5-c71a78a34637.gif)
 
 ## TypeScript support for custom Hub channels
 
@@ -81,7 +81,7 @@ Hub.listen(channel, ({ payload }) => {
 
 **Current DX (v5)**
 
-https://user-images.githubusercontent.com/70438514/222475304-128de96a-9a06-4fcc-8f0d-8f19592ae9eb.mov
+![custom-hub-v5](https://user-images.githubusercontent.com/70438514/222809595-1181fe84-f375-4d30-a866-c654b1c97024.gif)
 
 <br />
 
@@ -124,7 +124,7 @@ Hub.listen<CustomChannel, CustomEventDataMap>("custom_channel", ({payload}) => {
 
 **Proposed DX (v6)**
 
-https://user-images.githubusercontent.com/70438514/222475311-36b4f8bc-d338-4ad1-9910-5d3518fb71c0.mov
+![custom-hub-v6](https://user-images.githubusercontent.com/70438514/222813252-19c4e4e7-b56c-46ed-82e7-1cde6293d19e.gif)
 
 ## TypeScript support for Amplify Configuration
 
@@ -143,6 +143,7 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
+
 **Current DX (v5)**
 
 ![configure-v5](https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png)
@@ -160,9 +161,10 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
+
 **Proposed DX (v6)**
 
-https://user-images.githubusercontent.com/70438514/222543618-d5c42798-28c5-41e9-9ff6-c9061b86ef43.mov
+![configure-v6](https://user-images.githubusercontent.com/70438514/222813249-f2782358-27c5-4d16-b5d4-9f4fd6d1b594.gif)
 
 <br />
 
@@ -393,22 +395,24 @@ const uploadedObjectReference = await uploadTask.result;
 Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
 
 # `API` Category Changes
+
 Amplify is proposing the following changes for the `API` category.
 
 ## First param is an object with named parameters
+
 To improve the readability of our APIs we will be introducing an object parameter to capture request parameters.
 
 **Current Usage (v5)**
 
 ```typescript
-const apiName = 'MyApiName';
-const path = '/path';
+const apiName = "MyApiName";
+const path = "/path";
 const myInit = {
   headers: {}, // OPTIONAL
   response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
   queryStringParameters: {
-    name: 'param' // OPTIONAL
-  }
+    name: "param", // OPTIONAL
+  },
 };
 
 API.get(apiName, path, myInit)
@@ -419,21 +423,28 @@ API.get(apiName, path, myInit)
     console.log(error.response);
   });
 ```
+
 **Proposed Usage (v6)**
+
 ```typescript
-API.get({
-  apiName: 'MyApi',
-  path: '/items',
-  authMode: 'AWS_IAM'
-}, myInit)
+API.get(
+  {
+    apiName: "MyApi",
+    path: "/items",
+    authMode: "AWS_IAM",
+  },
+  myInit
+)
   .then((result) => {
     // Add your code here
-  }).catch((error) => {
+  })
+  .catch((error) => {
     console.log(error.response);
   });
 ```
 
 ## Adding TypeScript generics to request body and response
+
 To improve developer experience and permit more strict typing we will be adding generic support to our `API` category APIs.
 
 **Current Usage (v5)**
@@ -443,104 +454,119 @@ Amplify v5 does not support using generics for the request body or response.
 **Proposed Usage (v6)**
 
 ```typescript
-type MyApiResponse = { firstName: string, lastName: string };
+type MyApiResponse = { firstName: string; lastName: string };
 
 API.get<MyApiResponse>({
-    apiName: 'MyApi',
-    path: '/getName'
-}).then(result => {
-    console.log(`The name is ${result.body.firstName} ${result.body.lastName}`)
+  apiName: "MyApi",
+  path: "/getName",
+}).then((result) => {
+  console.log(`The name is ${result.body.firstName} ${result.body.lastName}`);
 });
 
-API.put<string, { data: Array<number> }>({
-    apiName: '',
-    path: '/',
-    authMode: "API_KEY"
-}, {
+API.put<string, { data: Array<number> }>(
+  {
+    apiName: "",
+    path: "/",
+    authMode: "API_KEY",
+  },
+  {
     headers: {
-        "Content-type": "text/plain",
+      "Content-type": "text/plain",
     },
-    body: "this is my content"
-}).then((result) => {
-    result.body.data.forEach((value) => console.log(value));
+    body: "this is my content",
+  }
+).then((result) => {
+  result.body.data.forEach((value) => console.log(value));
 });
 ```
 
 ## GraphQL operations have been split into query, mutation, and subscription
+
 To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
 
 **Current Usage (v5)**
 
 ```typescript
 import { API } from "aws-amplify";
-import * as mutations from './graphql/mutations';
-import { GraphQLQuery, GraphQLSubscription } from '@aws-amplify/api';
-import { CreateTodoInput, CreateTodoMutation, OnCreateTodoSubscription } from './API';
-import * as subscriptions from './graphql/subscriptions';
+import * as mutations from "./graphql/mutations";
+import { GraphQLQuery, GraphQLSubscription } from "@aws-amplify/api";
+import {
+  CreateTodoInput,
+  CreateTodoMutation,
+  OnCreateTodoSubscription,
+} from "./API";
+import * as subscriptions from "./graphql/subscriptions";
 
 const todoDetails: CreateTodoInput = {
-  name: 'Todo 1',
-  description: 'Learn AWS AppSync'
+  name: "Todo 1",
+  description: "Learn AWS AppSync",
 };
 
-const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({ 
-  query: mutations.createTodo, 
-  variables: { input: todoDetails }
+const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({
+  query: mutations.createTodo,
+  variables: { input: todoDetails },
 });
 
 const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
   graphqlOperation(subscriptions.onCreateTodo)
 ).subscribe({
   next: ({ provider, value }) => console.log({ provider, value }),
-  error: (error) => console.warn(error)
+  error: (error) => console.warn(error),
 });
 ```
+
 **Proposed Usage (v6)**
 
 ```typescript
 type MyQueryType = {
   result: {
-    id: string,
-    name: string,
-    description: string
-  }
-}
+    id: string;
+    name: string;
+    description: string;
+  };
+};
 
 API.graphqlQuery<MyQueryType>({
   document: `query getTodo...`,
-})
-.then((result) => {
-  console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+}).then((result) => {
+  console.log(
+    `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+  );
 });
 
 type MyMutationType = {
   variables: {
-    id: number,
-    name: string,
-    description: string
-  },
+    id: number;
+    name: string;
+    description: string;
+  };
   result: {
-    id: number, 
-    name: string, 
-    description: string
-  }
-}
+    id: number;
+    name: string;
+    description: string;
+  };
+};
 
 API.graphqlMutation<MyMutationType>({
   document: `mutation createTodo....`,
   variables: {
     id: 123,
-    name: 'My Todo',
-    description: 'This is a todo'
-  }
-})
-.then((result) => {
-  console.log(`Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`);
+    name: "My Todo",
+    description: "This is a todo",
+  },
+}).then((result) => {
+  console.log(
+    `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+  );
 });
 
-API.graphqlSubscription<MyQueryType>({ document: `subscription OnCreateTodo...`})
-.subscribe({
-  next: (result) => console.log(`Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`),
+API.graphqlSubscription<MyQueryType>({
+  document: `subscription OnCreateTodo...`,
+}).subscribe({
+  next: (result) =>
+    console.log(
+      `Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+    ),
 });
 ```
 
@@ -553,26 +579,33 @@ Amplify v5 does not support narrowing down errors.
 **Proposed Usage (v6)**
 
 ```typescript
-import { HTTPError, NetworkError, BlockedError, CancelledError } from '@aws-amplify/api';
+import {
+  HTTPError,
+  NetworkError,
+  BlockedError,
+  CancelledError,
+} from "@aws-amplify/api";
 
 API.get({
-  apiName: 'myApi',
-  path: '/'
-}).then((result) => {
-  // do something with result
-}).catch((err: unknown) => {
-  if (err instanceof NetworkError) {
-    // Consider retrying
-  } else if (err instanceof HTTPError) {
-    // Check request parameters for mistakes
-  } else if (err instanceof CancelledError) {
-    // Request was cancelled
-  } else if (err instanceof BlockedError) {
-    // CORS related error
-  } else {
-    // Other error
-  }
-});
+  apiName: "myApi",
+  path: "/",
+})
+  .then((result) => {
+    // do something with result
+  })
+  .catch((err: unknown) => {
+    if (err instanceof NetworkError) {
+      // Consider retrying
+    } else if (err instanceof HTTPError) {
+      // Check request parameters for mistakes
+    } else if (err instanceof CancelledError) {
+      // Request was cancelled
+    } else if (err instanceof BlockedError) {
+      // CORS related error
+    } else {
+      // Other error
+    }
+  });
 ```
 
 Try out the new `api` types here: https://www.typescriptlang.org/play#gist/30759a4799f751df85945e73e9657695
