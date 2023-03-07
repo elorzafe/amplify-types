@@ -16,7 +16,7 @@ Amplify JS will be making the following improvements to our TypeScript support. 
 
 - `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types.
 - Better runtime error typing — We will provide utilities for asserting type information of runtime errors emitted by Amplify.
-- Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for customers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
+- Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for developers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
 # Utility Changes
 
@@ -26,7 +26,7 @@ Amplify is proposing the following changes to our core utilities.
 
 We are improving developer experience by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
 
-**Amplify v5 & v6 (`aws-amplify@^5`)**
+**Current Usage**
 
 ```Typescript
 Hub.dispatch("auth", {
@@ -44,13 +44,13 @@ Hub.listen(channel, ({ payload }) => {
 });
 ```
 
-**Amplify v5 DX**
+**Current DX (v5)**
 
 https://user-images.githubusercontent.com/70438514/222475294-9cf9f535-b717-4725-9e5a-7c362e74a054.mov
 
 <br />
 
-**Proposed Amplify v6 DX**
+**Proposed DX (v6)**
 
 https://user-images.githubusercontent.com/70438514/222512918-ea72b2c4-9568-45e6-86c6-3c5226820e7d.mov
 
@@ -58,7 +58,7 @@ https://user-images.githubusercontent.com/70438514/222512918-ea72b2c4-9568-45e6-
 
 We are improving developer experience by adding strict type support to custom Hub channels, events, and payloads.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```Typescript
 const customChannel = "custom_channel";
@@ -79,32 +79,32 @@ Hub.listen(channel, ({ payload }) => {
 });
 ```
 
-**Amplify v5 DX**
+**Current DX (v5)**
 
 https://user-images.githubusercontent.com/70438514/222475304-128de96a-9a06-4fcc-8f0d-8f19592ae9eb.mov
 
 <br />
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```Typescript
-type customChannel = "custom_channel";
+type CustomChannel = "custom_channel";
 
 // Each key in the map represents a payload event and the key value is the data type for that event.
 // Note: If an event is assigned the null type, the payload object will not contain a data key.
-type customEventDataMap = {
+type CustomEventDataMap = {
   A: number;
   B: string;
   C: null;
   D: Object
 };
 
-Hub.dispatch<customChannel, customEventDataMap >("custom_channel", {
+Hub.dispatch<CustomChannel, CustomEventDataMap >("custom_channel", {
   event: "A",
   data: 42
 });
 
-Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
+Hub.listen<CustomChannel, CustomEventDataMap>("custom_channel", ({payload}) => {
   switch(payload.event) {
     case "A":
       payload.data;
@@ -122,15 +122,15 @@ Hub.listen<customChannel, customEventDataMap>("custom_channel", ({payload}) => {
 });
 ```
 
-**Proposed Amplify v6 DX**
+**Proposed DX (v6)**
 
 https://user-images.githubusercontent.com/70438514/222475311-36b4f8bc-d338-4ad1-9910-5d3518fb71c0.mov
 
 ## TypeScript support for Amplify Configuration
 
-To help customers configure Amplify categories, we are introducing type support for the `Amplify.configure` API. The examples below demonstrate an `Auth` configuration.
+To help developers configure Amplify categories, we are introducing type support for the `Amplify.configure` API. This will allow you to easily setup your AWS resources if you are connecting Amplify JS to resources you have not created directly with the Amplify CLI. The examples below demonstrate an `Auth` configuration.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```Typescript
 const authConfig = {
@@ -143,11 +143,11 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
-**Amplify v5 DX**
+**Current DX (v5)**
 
-<img width="494" alt="configure-v5" src="https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png">
+![configure-v5](https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png)
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```Typescript
 const authConfig : AuthConfig = {
@@ -160,13 +160,13 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
-**Proposed Amplify v6 DX**
+**Proposed DX (v6)**
 
 https://user-images.githubusercontent.com/70438514/222543618-d5c42798-28c5-41e9-9ff6-c9061b86ef43.mov
 
 <br />
 
-Try out the new types here: https://www.typescriptlang.org/play#gist/7332e86effa3b0d627eebfc71fad1aca
+Try out the proposed types here: https://www.typescriptlang.org/play#gist/7332e86effa3b0d627eebfc71fad1aca
 
 # `Auth` Category Changes
 
@@ -176,7 +176,7 @@ Amplify is proposing the following changes for the `Auth` category. Similar chan
 
 User attributes inference on the `signUp` API.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```Typescript
 
@@ -190,11 +190,11 @@ Auth.signUp({
 
 ```
 
-**Amplify v5 DX**
+**Current DX (v5)**
 
 ![signup-v5](https://user-images.githubusercontent.com/70438514/222456624-b4af7349-db9d-4304-9cdc-08cf649e2d31.png)
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```Typescript
 
@@ -208,15 +208,15 @@ signUp({
 
 ```
 
-**Proposed Amplify v6 DX**
+**Proposed DX (v6)**
 
-<img width="556" alt="signup-v6" src="https://user-images.githubusercontent.com/70438514/222456627-f196eedf-90e5-4bb0-81a7-78e11d88b09b.png">
+![signup-v6](https://user-images.githubusercontent.com/70438514/222456627-f196eedf-90e5-4bb0-81a7-78e11d88b09b.png)
 
 ## Predictable API responses
 
-We are improving **_DX_** by providing descriptive API responses to help customers complete auth flows. An example for the `confirmSignUp` API is highlighted below.
+We are improving **_DX_** by providing descriptive API responses to help developers complete auth flows. An example for the `confirmSignUp` API is highlighted below.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```Typescript
 
@@ -228,11 +228,11 @@ if (resp === "SUCCESS"){
 
 ```
 
-**Amplify v5 DX**
+**Current DX (v5)**
 
 ![confirmSignUp-v5](https://user-images.githubusercontent.com/70438514/222456621-fca2d313-3d39-4a1e-8bcb-a1e86235bd06.png)
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```Typescript
 
@@ -247,11 +247,11 @@ if (resp.isSignUpComplete) {
 
 ```
 
-**Proposed Amplify v6 DX**
+**Proposed DX (v6)**
 
-<img width="594" alt="confirmSignUp-v6" src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png">
+![confirmSignUp-v6](https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png)
 
-Try out the new types here: https://stackblitz.com/edit/rfc-auth?file=auth.ts
+Try out the proposed types here: https://stackblitz.com/edit/rfc-auth?file=auth.ts
 
 # `Storage` Category Changes
 
@@ -259,9 +259,9 @@ Amplify is proposing the following changes for the `Storage` category.
 
 ## Introduction of object reference types
 
-In order to permit better inoperability between `storage` APIs and to enable future improvements such as more granular bucket management, we will introduce `StorageObjectReference` & `StoragePrefixReference` types to represent items in cloud storage. An example for copying an object from one access level to another is highlighted below.
+In order to permit better interoperability between `storage` APIs we will introduce `StorageObjectReference` & `StoragePrefixReference` types to represent items in cloud storage. An example for copying an object from one access level to another is highlighted below.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```TypeScript
 // List all public photos
@@ -283,7 +283,7 @@ if (firstPhoto) {
 }
 ```
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```TypeScript
 // List all public photos
@@ -293,7 +293,7 @@ const listResponse = await Storage.list({
 const firstPhoto = listResponse.files?.[0];
 
 /*
-As a note, APIs will allow customers to specify keys by string if they do not need to override the access level. For
+As a note, APIs will allow developers to specify keys by string if they do not need to override the access level. For
 example, the following operation will list all files for the current user.
 */
 const listResponseDefault = await Storage.list({
@@ -313,7 +313,7 @@ if (firstPhoto) {
 
 To better capture customer intent and simplify API types we will split up the `get` API into `getUrl` & `download`. An example for generating a pre-signed URL & downloading a file from the results of a `list` operation is highlighted below.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```TypeScript
 // List public photos
@@ -325,12 +325,9 @@ const presignedUrl = await Storage.get(firstPhoto.key, { level: 'public' });
 
 // Download a file
 const downloadResult = await Storage.get(firstPhoto.key, { download: true, level: 'public' });
-
-// Customer provided utility for handling downloaded file
-downloadBlob(downloadResult.Body, 'download.jpg');
 ```
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```TypeScript
 // List public photos
@@ -344,16 +341,13 @@ const presignedUrl = await Storage.getUrl({ key: firstPhoto });
 
 // Download a file
 const downloadResult = await Storage.download({ key: firstPhoto });
-
-// Customer provided utility for handling downloaded file
-downloadBlob(downloadResult.content, 'download.jpg');
 ```
 
 ## Changes to the `put` return object
 
 To better capture customer intent the `put` API will be renamed to `upload`. Additionally `upload` will enable resumability by default in order to simplify API usage and remove the need to provide callbacks for monitoring upload status in favor of a Promise.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```TypeScript
 // Upload a public file with resumability enabled
@@ -376,7 +370,7 @@ uploadTask.pause();
 uploadTask.resume();
 ```
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```TypeScript
 // Upload a public file with resumability enabled by default
@@ -403,7 +397,8 @@ Amplify is proposing the following changes for the `API` category.
 
 ## First param is an object with named parameters
 To improve the readability of our APIs we will be introducing an object parameter to capture request parameters.
-**Amplify v5 (`aws-amplify@5`)**
+
+**Current Usage (v5)**
 
 ```typescript
 const apiName = 'MyApiName';
@@ -424,7 +419,7 @@ API.get(apiName, path, myInit)
     console.log(error.response);
   });
 ```
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 ```typescript
 API.get({
   apiName: 'MyApi',
@@ -441,11 +436,11 @@ API.get({
 ## Adding TypeScript generics to request body and response
 To improve developer experience and permit more strict typing we will be adding generic support to our `API` category APIs.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 Amplify v5 does not support using generics for the request body or response.
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```typescript
 type MyApiResponse = { firstName: string, lastName: string };
@@ -474,7 +469,7 @@ API.put<string, { data: Array<number> }>({
 ## GraphQL operations have been split into query, mutation, and subscription
 To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 ```typescript
 import { API } from "aws-amplify";
@@ -500,7 +495,7 @@ const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
   error: (error) => console.warn(error)
 });
 ```
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```typescript
 type MyQueryType = {
@@ -551,11 +546,11 @@ API.graphqlSubscription<MyQueryType>({ document: `subscription OnCreateTodo...`}
 
 ## Type narrowing on runtime errors
 
-**Amplify v5 (`aws-amplify@5`)**
+**Current Usage (v5)**
 
 Amplify v5 does not support narrowing down errors.
 
-**Proposed Amplify v6 (`aws-amplify@6`)**
+**Proposed Usage (v6)**
 
 ```typescript
 import { HTTPError, NetworkError, BlockedError, CancelledError } from '@aws-amplify/api';
