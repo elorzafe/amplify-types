@@ -39,7 +39,7 @@ export type AuthUserAttribute<
 /**
  * Attribute ref - {@link https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-attributes.html}
  */
-export type AuthStandardAtributeKey =
+export type AuthStandardAttributeKey =
   | "address"
   | "birthDate"
   | "email"
@@ -63,7 +63,7 @@ export type AuthStandardAtributeKey =
 
 type AnyAttribute = (string & {}) | Record<string, string>;
 
-export type AuthUserAttributeKey = AuthStandardAtributeKey | AnyAttribute;
+export type AuthUserAttributeKey = AuthStandardAttributeKey | AnyAttribute;
 
 export const enum DeliveryMedium {
   /** Code was sent via email. */

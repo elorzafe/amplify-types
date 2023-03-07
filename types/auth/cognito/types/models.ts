@@ -3,7 +3,7 @@ import {
   AuthDevice,
   AuthProvider,
   AuthSignInDetails,
-  AuthStandardAtributeKey,
+  AuthStandardAttributeKey,
 } from "../../types/models";
 
 export type AuthFlowType =
@@ -29,7 +29,7 @@ export type CognitoMFAType = "SMS" | "NOMFA" | "TOTP";
 
 export type CustomAttribute = { custom: string };
 
-export type CognitoUserAttributeKey = AuthStandardAtributeKey | CustomAttribute;
+export type CognitoUserAttributeKey = AuthStandardAttributeKey | CustomAttribute;
 
 export type CognitoUserPoolTokens = {
   refreshToken: string;
