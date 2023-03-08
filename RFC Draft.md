@@ -278,7 +278,7 @@ if (firstPhoto) {
 ```TypeScript
 // List all public photos
 const listResponse = await Storage.list({
-  key: getPrefixReference('photos/', { level: 'public' })
+  path: getPathReference('photos/', { level: 'public' })
 })
 const firstPhoto = listResponse.files?.[0];
 
@@ -287,7 +287,7 @@ As a note, APIs will allow developers to specify keys by string if they do not n
 example, the following operation will list all files for the current user.
 */
 const listResponseDefault = await Storage.list({
-  key: 'photos/'
+  path: 'photos/'
 })
 
 // Copy the first photo returned to the current user's private prefix
@@ -322,7 +322,7 @@ const downloadResult = await Storage.get(firstPhoto.key, { download: true, level
 ```TypeScript
 // List public photos
 const listResponse = await Storage.list({
-  key: getPrefixReference('photos/', { level: 'public' })
+  path: getPathReference('photos/', { level: 'public' })
 })
 const firstPhoto = listResponse.files?.[0];
 
