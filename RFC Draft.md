@@ -40,11 +40,11 @@ Hub.listen('auth', ({ payload }) => {
 
 **Current DX (v5)**
 
-![auth-hub-v5](https://user-images.githubusercontent.com/70438514/222809592-ee475b84-f290-4215-bed5-27055a8a91ec.gif)
+<img src="https://user-images.githubusercontent.com/70438514/222809592-ee475b84-f290-4215-bed5-27055a8a91ec.gif" width="450" alt="auth-hub-v5">
 
 **Proposed DX (v6)**
 
-![auth-hub-v6](https://user-images.githubusercontent.com/70438514/222809593-98fa7bba-96f9-4a45-8cf5-c71a78a34637.gif)
+<img src="https://user-images.githubusercontent.com/70438514/222809593-98fa7bba-96f9-4a45-8cf5-c71a78a34637.gif" width="450" alt="auth-hub-v6">
 
 ## TypeScript support for custom Hub channels
 
@@ -73,7 +73,7 @@ Hub.listen(channel, ({ payload }) => {
 
 **Current DX (v5)**
 
-![custom-hub-v5](https://user-images.githubusercontent.com/70438514/222809595-1181fe84-f375-4d30-a866-c654b1c97024.gif)
+<img src="https://user-images.githubusercontent.com/70438514/222809595-1181fe84-f375-4d30-a866-c654b1c97024.gif" width="450" alt="custom-hub-v5">
 
 **Proposed Usage (v6)**
 
@@ -120,7 +120,7 @@ Hub.listen<CustomChannel, CustomEventDataMap>(
 
 **Proposed DX (v6)**
 
-![custom-hub-v6](https://user-images.githubusercontent.com/70438514/222813252-19c4e4e7-b56c-46ed-82e7-1cde6293d19e.gif)
+<img src="https://user-images.githubusercontent.com/70438514/222813252-19c4e4e7-b56c-46ed-82e7-1cde6293d19e.gif" width="600" alt="custom-hub-v6">
 
 ## TypeScript support for Amplify Configuration
 
@@ -142,7 +142,7 @@ Amplify.configure({
 
 **Current DX (v5)**
 
-![configure-v5](https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png)
+<img src="https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png" width="600" alt="configure-v5">
 
 **Proposed Usage (v6)**
 
@@ -202,7 +202,7 @@ Auth.signUp({
 
 **Proposed DX (v6)**
 
-![signup-v6](https://user-images.githubusercontent.com/70438514/222456627-f196eedf-90e5-4bb0-81a7-78e11d88b09b.png)
+<img src="https://user-images.githubusercontent.com/70438514/222456627-f196eedf-90e5-4bb0-81a7-78e11d88b09b.png" width="600" alt="signup-v6">
 
 ## Predictable API responses
 
@@ -239,7 +239,7 @@ if (resp.isSignUpComplete) {
 
 **Proposed DX (v6)**
 
-![confirmSignUp-v6](https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png)
+<img src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png" width="650" alt="confirmSignUp-v6">
 
 Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-auth.ts
 
