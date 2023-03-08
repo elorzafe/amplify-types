@@ -376,7 +376,7 @@ uploadTask.resume();
 
 ```TypeScript
 // Upload a public file with resumability enabled by default
-const uploadTask = Storage.put({
+const uploadTask = Storage.upload({
   key: getObjectReference('movie.mpg', { level: 'public' }),
   content: fileBlob
 });
@@ -487,16 +487,6 @@ To better capture customer intent and simplify API types we will split up the `g
 **Current Usage (v5)**
 
 ```typescript
-import { API } from "aws-amplify";
-import * as mutations from "./graphql/mutations";
-import { GraphQLQuery, GraphQLSubscription } from "@aws-amplify/api";
-import {
-  CreateTodoInput,
-  CreateTodoMutation,
-  OnCreateTodoSubscription,
-} from "./API";
-import * as subscriptions from "./graphql/subscriptions";
-
 const todoDetails: CreateTodoInput = {
   name: "Todo 1",
   description: "Learn AWS AppSync",
