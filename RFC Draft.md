@@ -14,7 +14,7 @@ We're also requesting feedback on any other TypeScript issues or pain points tha
 
 Amplify JS will be making the following improvements to our TypeScript support. These improvements will be applied across the entire library, not just the categories highlighted below.
 
-- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types.
+- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types. This will allow you to more easily construct API requests, avoid errors, and have higher confidence when handling API responses. Amplify JS will just work with your application without any additional configurations if you have strict mode on.
 - Better runtime error typing — We will provide utilities for asserting type information of runtime errors emitted by Amplify.
 - Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for developers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
@@ -26,18 +26,12 @@ Amplify is proposing the following changes to our core utilities.
 
 We are improving developer experience by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
 
-**Current Usage**
+**Amplify Channel Usage**
 
 ```Typescript
-Hub.dispatch("auth", {
-  event: "signInFailure",
-  data: new AuthError("Sign-in failed"),
-});
-
-// Events and payload data are not inferred.
-Hub.listen(channel, ({ payload }) => {
+Hub.listen('auth', ({ payload }) => {
   switch (payload.event) {
-    case "signInFailure":
+    case 'signInFailure':
       const data = payload.data;
       break;
   }
@@ -47,8 +41,6 @@ Hub.listen(channel, ({ payload }) => {
 **Current DX (v5)**
 
 ![auth-hub-v5](https://user-images.githubusercontent.com/70438514/222809592-ee475b84-f290-4215-bed5-27055a8a91ec.gif)
-
-<br />
 
 **Proposed DX (v6)**
 
@@ -83,12 +75,10 @@ Hub.listen(channel, ({ payload }) => {
 
 ![custom-hub-v5](https://user-images.githubusercontent.com/70438514/222809595-1181fe84-f375-4d30-a866-c654b1c97024.gif)
 
-<br />
-
 **Proposed Usage (v6)**
 
 ```Typescript
-type CustomChannel = "custom_channel";
+type CustomChannel = 'custom_channel';
 
 // Each key in the map represents a payload event and the key value is the data type for that event.
 // Note: If an event is assigned the null type, the payload object will not contain a data key.
@@ -99,27 +89,33 @@ type CustomEventDataMap = {
   D: Object
 };
 
-Hub.dispatch<CustomChannel, CustomEventDataMap >("custom_channel", {
-  event: "A",
+Hub.dispatch<CustomChannel, CustomEventDataMap >('custom_channel', {
+  event: 'A',
   data: 42
 });
 
-Hub.listen<CustomChannel, CustomEventDataMap>("custom_channel", ({payload}) => {
-  switch(payload.event) {
-    case "A":
-      payload.data;
-      break;
-    case "B":
-      payload.data;
-      break;
-    case "C":
-      payload.data;
-      break;
-    case "D":
-      payload.data;
-      break;
+Hub.listen<CustomChannel, CustomEventDataMap>(
+  'custom_channel',
+  ({ payload }) => {
+    let data;
+
+    switch (payload.event) {
+      case 'A':
+        data = payload.data;
+        break;
+      case 'B':
+        data = payload.data;
+        break;
+      case 'C':
+        // Type C doesn't have any associated event data
+        data = payload.data;
+        break;
+      case 'D':
+        data = payload.data;
+        break;
+    }
   }
-});
+);
 ```
 
 **Proposed DX (v6)**
@@ -134,9 +130,9 @@ To help developers configure Amplify categories, we are introducing type support
 
 ```Typescript
 const authConfig = {
-  userPoolId: "us-east-1_0yqxxHm5q",
-  userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
-  signUpVerificationMethod: "code"
+  userPoolId: 'us-east-1_0yqxxHm5q',
+  userPoolClientId: '3keodiqtm52nhh2ls0vQfs5v1q',
+  signUpVerificationMethod: 'code'
 };
 
 Amplify.configure({
@@ -152,9 +148,9 @@ Amplify.configure({
 
 ```Typescript
 const authConfig : AuthConfig = {
-  userPoolId: "us-east-1_0yqxxHm5q",
-  userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
-  signUpVerificationMethod: "code"
+  userPoolId: 'us-east-1_0yqxxHm5q',
+  userPoolClientId: '3keodiqtm52nhh2ls0vQfs5v1q',
+  signUpVerificationMethod: 'code'
 };
 
 Amplify.configure({
@@ -166,9 +162,7 @@ Amplify.configure({
 
 ![configure-v6](https://user-images.githubusercontent.com/70438514/222813249-f2782358-27c5-4d16-b5d4-9f4fd6d1b594.gif)
 
-<br />
-
-Try out the proposed types here: https://www.typescriptlang.org/play#gist/7332e86effa3b0d627eebfc71fad1aca
+Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-core.ts
 
 # `Auth` Category Changes
 
@@ -181,15 +175,13 @@ User attributes inference on the `signUp` API.
 **Current Usage (v5)**
 
 ```Typescript
-
 Auth.signUp({
-  username: "username",
-  password: "*******",
+  username: 'username',
+  password: '*******',
   attributes: {
-    email: "email@domain.com"
+    email: 'email@domain.com'
   }
 });
-
 ```
 
 **Current DX (v5)**
@@ -199,15 +191,13 @@ Auth.signUp({
 **Proposed Usage (v6)**
 
 ```Typescript
-
-signUp({
-  username: "username",
-  password: "********",
+Auth.signUp({
+  username: 'username',
+  password: '********',
   options: {
-    userAttributes: [{ userAttributeKey: "email", value: "email@domain.com" }],
+    userAttributes: [{ userAttributeKey: 'email', value: 'email@domain.com' }],
   },
 });
-
 ```
 
 **Proposed DX (v6)**
@@ -221,13 +211,11 @@ We are improving **_DX_** by providing descriptive API responses to help develop
 **Current Usage (v5)**
 
 ```Typescript
+const resp = await Auth.confirmSignUp('username', '112233')
 
-const resp = await Auth.confirmSignUp("username", "112233")
-
-if (resp === "SUCCESS"){
+if (resp === 'SUCCESS'){
   // Show login component
 }
-
 ```
 
 **Current DX (v5)**
@@ -239,8 +227,8 @@ if (resp === "SUCCESS"){
 ```Typescript
 
 const resp = await confirmSignUp({
-  username: "username",
-  confirmationCode: "112233",
+  username: 'username',
+  confirmationCode: '112233',
 });
 
 if (resp.isSignUpComplete) {
@@ -253,7 +241,7 @@ if (resp.isSignUpComplete) {
 
 ![confirmSignUp-v6](https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png)
 
-Try out the proposed types here: https://stackblitz.com/edit/rfc-auth?file=auth.ts
+Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-auth.ts
 
 # `Storage` Category Changes
 
@@ -392,7 +380,7 @@ const currentTransferProgress = uploadTask.getProgress();
 const uploadedObjectReference = await uploadTask.result;
 ```
 
-Try out the new `storage` types here: https://www.typescriptlang.org/play#gist/292f4e24178bfca5881aa20961b930dc
+Try out the proposed `storage` types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-storage.ts
 
 # `API` Category Changes
 
@@ -415,32 +403,24 @@ const myInit = {
   },
 };
 
-API.get(apiName, path, myInit)
-  .then((response) => {
-    // Add your code here
-  })
-  .catch((error) => {
-    console.log(error.response);
-  });
+const result = await API.get(apiName, path, myInit);
 ```
 
 **Proposed Usage (v6)**
 
 ```typescript
-API.get(
+await API.get(
   {
-    apiName: "MyApi",
-    path: "/items",
-    authMode: "AWS_IAM",
+    apiName: 'MyApi',
+    path: '/items',
+    authMode: 'AWS_IAM',
   },
-  myInit
-)
-  .then((result) => {
-    // Add your code here
-  })
-  .catch((error) => {
-    console.log(error.response);
-  });
+  {
+    headers: {
+      'custom-header': 'x',
+    },
+  }
+);
 ```
 
 ## Adding TypeScript generics to request body and response
@@ -456,28 +436,28 @@ Amplify v5 does not support using generics for the request body or response.
 ```typescript
 type MyApiResponse = { firstName: string; lastName: string };
 
-API.get<MyApiResponse>({
-  apiName: "MyApi",
-  path: "/getName",
-}).then((result) => {
-  console.log(`The name is ${result.body.firstName} ${result.body.lastName}`);
+const result = await API.get<MyApiResponse>({
+  apiName: 'MyApi',
+  path: '/getName',
 });
 
-API.put<string, { data: Array<number> }>(
+console.log(`The name is ${result.body.firstName} ${result.body.lastName}`);
+
+const result = await API.put<string, { data: Array<number> }>(
   {
-    apiName: "",
-    path: "/",
-    authMode: "API_KEY",
+    apiName: '',
+    path: '/',
+    authMode: 'API_KEY',
   },
   {
     headers: {
-      "Content-type": "text/plain",
+      'Content-type': 'text/plain',
     },
-    body: "this is my content",
+    body: 'this is my content',
   }
-).then((result) => {
-  result.body.data.forEach((value) => console.log(value));
-});
+);
+
+result.body.data.forEach((value) => console.log(value));
 ```
 
 ## GraphQL operations have been split into query, mutation, and subscription
@@ -488,8 +468,8 @@ To better capture customer intent and simplify API types we will split up the `g
 
 ```typescript
 const todoDetails: CreateTodoInput = {
-  name: "Todo 1",
-  description: "Learn AWS AppSync",
+  name: 'Todo 1',
+  description: 'Learn AWS AppSync',
 };
 
 const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({
@@ -516,13 +496,13 @@ type MyQueryType = {
   };
 };
 
-API.graphqlQuery<MyQueryType>({
-  document: `query getTodo...`,
-}).then((result) => {
-  console.log(
-    `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-  );
+const result = await API.graphqlQuery<MyQueryType>({
+  document: 'query getTodo...',
 });
+
+console.log(
+  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+);
 
 type MyMutationType = {
   variables: {
@@ -537,21 +517,21 @@ type MyMutationType = {
   };
 };
 
-API.graphqlMutation<MyMutationType>({
-  document: `mutation createTodo....`,
+const result = await API.graphqlMutation<MyMutationType>({
+  document: 'mutation createTodo....',
   variables: {
     id: 123,
-    name: "My Todo",
-    description: "This is a todo",
+    name: 'My Todo',
+    description: 'This is a todo',
   },
-}).then((result) => {
-  console.log(
-    `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-  );
 });
 
+console.log(
+  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+);
+
 API.graphqlSubscription<MyQueryType>({
-  document: `subscription OnCreateTodo...`,
+  document: 'subscription OnCreateTodo...',
 }).subscribe({
   next: (result) =>
     console.log(
@@ -569,33 +549,24 @@ Amplify v5 does not support narrowing down errors.
 **Proposed Usage (v6)**
 
 ```typescript
-import {
-  HTTPError,
-  NetworkError,
-  BlockedError,
-  CancelledError,
-} from "@aws-amplify/api";
-
-API.get({
-  apiName: "myApi",
-  path: "/",
-})
-  .then((result) => {
-    // do something with result
-  })
-  .catch((err: unknown) => {
-    if (err instanceof NetworkError) {
-      // Consider retrying
-    } else if (err instanceof HTTPError) {
-      // Check request parameters for mistakes
-    } else if (err instanceof CancelledError) {
-      // Request was cancelled
-    } else if (err instanceof BlockedError) {
-      // CORS related error
-    } else {
-      // Other error
-    }
+try {
+  await API.get({
+    apiName: 'myApi',
+    path: '/',
   });
+} catch (err: unknown) {
+  if (err instanceof API.NetworkError) {
+    // Consider retrying
+  } else if (err instanceof API.HTTPError) {
+    // Check request parameters for mistakes
+  } else if (err instanceof API.CancelledError) {
+    // Request was cancelled
+  } else if (err instanceof API.BlockedError) {
+    // CORS related error
+  } else {
+    // Other error
+  }
+}
 ```
 
-Try out the new `api` types here: https://www.typescriptlang.org/play#gist/30759a4799f751df85945e73e9657695
+Try out the proposed `api` types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-api.ts
