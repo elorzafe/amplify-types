@@ -19,7 +19,7 @@ import {
   AuthCodeDeliveryDetails,
   AuthDevice,
   AuthSession,
-  AuthStandardAtributeKey,
+  AuthStandardAttributeKey,
   AuthUserAttribute,
 } from "./types/models";
 import {
@@ -58,26 +58,26 @@ import { AuthSignInStep } from "./types/step";
 
 declare function signUp(
   req: SignUpRequest<CognitoUserAttributeKey, CognitoSignUpOptions>
-): Promise<AuthSignUpResult<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<AuthSignUpResult<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function confirmSignUp(
   req: ConfirmSignUpRequest<CognitoConfirmSignUpOptions>
-): Promise<AuthSignUpResult<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<AuthSignUpResult<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function resendSignUpCode(
   req: ResendSignUpCodeRequest<CognitoResendSignUpCodeOptions>
-): Promise<AuthCodeDeliveryDetails<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<AuthCodeDeliveryDetails<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function signIn(
   req: SignInRequest<CognitoSignInOptions>
-): Promise<AuthSignInResult<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<AuthSignInResult<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function confirmSignIn<NextSignInStep extends AuthSignInStep>(
   req: ConfirmSignInRequest<
     CognitoMFAType,
     CognitoConfirmSignInOptions
   >[NextSignInStep]
-): Promise<AuthSignInResult<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<AuthSignInResult<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function signInWithWebUI(
   req: SignInWithWebUIRequest<CognitoSignInWithWebUIOptions>
@@ -104,36 +104,36 @@ namespace TOTP {
 
 declare function fetchUserAttributes(
   req?: FetchUserAttributesRequest | undefined
-): Promise<AuthUserAttribute<AuthStandardAtributeKey | CustomAttribute>[]>;
+): Promise<AuthUserAttribute<AuthStandardAttributeKey | CustomAttribute>[]>;
 
 declare function updateUserAttributes(
   req: UpdateUserAttributesRequest<
-    AuthStandardAtributeKey | CustomAttribute,
+    AuthStandardAttributeKey | CustomAttribute,
     CognitoUpdateUserAttributesOptions
   >
 ): Promise<
-  UpdateUserAttributesResult<AuthStandardAtributeKey | CustomAttribute>
+  UpdateUserAttributesResult<AuthStandardAttributeKey | CustomAttribute>
 >;
 
 declare function updateUserAttribute(
   req: UpdateUserAttributeRequest<
-    AuthStandardAtributeKey | CustomAttribute,
+    AuthStandardAttributeKey | CustomAttribute,
     CognitoUpdateUserAttributeOptions
   >
 ): Promise<
-  UpdateUserAttributeResult<AuthStandardAtributeKey | CustomAttribute>
+  UpdateUserAttributeResult<AuthStandardAttributeKey | CustomAttribute>
 >;
 
 declare function confirmUserAttribute(
-  req: ConfirmUserAttributeRequest<AuthStandardAtributeKey | CustomAttribute>
+  req: ConfirmUserAttributeRequest<AuthStandardAttributeKey | CustomAttribute>
 ): Promise<void>;
 
 declare function resendUserAttributeConfirmationCode(
   req: ResendUserAttributeConfirmationCodeRequest<
-    AuthStandardAtributeKey | CustomAttribute,
+    AuthStandardAttributeKey | CustomAttribute,
     CognitoResendUserAttributeConfirmationCodeOptions
   >
-): Promise<AuthCodeDeliveryDetails<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<AuthCodeDeliveryDetails<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function deleteUser(): Promise<void>;
 
@@ -149,7 +149,7 @@ declare function updatePassword(req: UpdatePasswordRequest): Promise<void>;
 
 declare function resetPassword(
   req: ResetPasswordRequest<CognitoResetPasswordOptions>
-): Promise<ResetPasswordResult<AuthStandardAtributeKey | CustomAttribute>>;
+): Promise<ResetPasswordResult<AuthStandardAttributeKey | CustomAttribute>>;
 
 declare function confirmResetPassword(
   req: ConfirmResetPasswordRequest
