@@ -42,8 +42,6 @@ Hub.listen('auth', ({ payload }) => {
 
 ![auth-hub-v5](https://user-images.githubusercontent.com/70438514/222809592-ee475b84-f290-4215-bed5-27055a8a91ec.gif)
 
-<br />
-
 **Proposed DX (v6)**
 
 ![auth-hub-v6](https://user-images.githubusercontent.com/70438514/222809593-98fa7bba-96f9-4a45-8cf5-c71a78a34637.gif)
@@ -76,8 +74,6 @@ Hub.listen(channel, ({ payload }) => {
 **Current DX (v5)**
 
 ![custom-hub-v5](https://user-images.githubusercontent.com/70438514/222809595-1181fe84-f375-4d30-a866-c654b1c97024.gif)
-
-<br />
 
 **Proposed Usage (v6)**
 
@@ -165,8 +161,6 @@ Amplify.configure({
 **Proposed DX (v6)**
 
 ![configure-v6](https://user-images.githubusercontent.com/70438514/222813249-f2782358-27c5-4d16-b5d4-9f4fd6d1b594.gif)
-
-<br />
 
 Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-core.ts
 
