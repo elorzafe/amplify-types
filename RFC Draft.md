@@ -14,7 +14,7 @@ We're also requesting feedback on any other TypeScript issues or pain points tha
 
 Amplify JS will be making the following improvements to our TypeScript support. These improvements will be applied across the entire library, not just the categories highlighted below.
 
-- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types.
+- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types. This will allow you to more easily construct API requests, avoid errors, and have higher confidence when handling API responses.
 - Better runtime error typing — We will provide utilities for asserting type information of runtime errors emitted by Amplify.
 - Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for developers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
@@ -26,18 +26,12 @@ Amplify is proposing the following changes to our core utilities.
 
 We are improving developer experience by adding strict type support to Hub channels, events, and payloads. An example of the developer experience when listening for `auth` events is highlighted below.
 
-**Current Usage**
+**Amplify Channel Usage**
 
 ```Typescript
-Hub.dispatch("auth", {
-  event: "signInFailure",
-  data: new AuthError("Sign-in failed"),
-});
-
-// Events and payload data are not inferred.
-Hub.listen(channel, ({ payload }) => {
+Hub.listen('auth', ({ payload }) => {
   switch (payload.event) {
-    case "signInFailure":
+    case 'signInFailure':
       const data = payload.data;
       break;
   }
@@ -88,7 +82,7 @@ Hub.listen(channel, ({ payload }) => {
 **Proposed Usage (v6)**
 
 ```Typescript
-type CustomChannel = "custom_channel";
+type CustomChannel = 'custom_channel';
 
 // Each key in the map represents a payload event and the key value is the data type for that event.
 // Note: If an event is assigned the null type, the payload object will not contain a data key.
@@ -99,8 +93,8 @@ type CustomEventDataMap = {
   D: Object
 };
 
-Hub.dispatch<CustomChannel, CustomEventDataMap >("custom_channel", {
-  event: "A",
+Hub.dispatch<CustomChannel, CustomEventDataMap >('custom_channel', {
+  event: 'A',
   data: 42
 });
 
@@ -140,9 +134,9 @@ To help developers configure Amplify categories, we are introducing type support
 
 ```Typescript
 const authConfig = {
-  userPoolId: "us-east-1_0yqxxHm5q",
-  userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
-  signUpVerificationMethod: "code"
+  userPoolId: 'us-east-1_0yqxxHm5q',
+  userPoolClientId: '3keodiqtm52nhh2ls0vQfs5v1q',
+  signUpVerificationMethod: 'code'
 };
 
 Amplify.configure({
@@ -158,9 +152,9 @@ Amplify.configure({
 
 ```Typescript
 const authConfig : AuthConfig = {
-  userPoolId: "us-east-1_0yqxxHm5q",
-  userPoolClientId: "3keodiqtm52nhh2ls0vQfs5v1q",
-  signUpVerificationMethod: "code"
+  userPoolId: 'us-east-1_0yqxxHm5q',
+  userPoolClientId: '3keodiqtm52nhh2ls0vQfs5v1q',
+  signUpVerificationMethod: 'code'
 };
 
 Amplify.configure({
@@ -188,10 +182,10 @@ User attributes inference on the `signUp` API.
 
 ```Typescript
 Auth.signUp({
-  username: "username",
-  password: "*******",
+  username: 'username',
+  password: '*******',
   attributes: {
-    email: "email@domain.com"
+    email: 'email@domain.com'
   }
 });
 ```
@@ -204,10 +198,10 @@ Auth.signUp({
 
 ```Typescript
 Auth.signUp({
-  username: "username",
-  password: "********",
+  username: 'username',
+  password: '********',
   options: {
-    userAttributes: [{ userAttributeKey: "email", value: "email@domain.com" }],
+    userAttributes: [{ userAttributeKey: 'email', value: 'email@domain.com' }],
   },
 });
 ```
@@ -223,9 +217,9 @@ We are improving **_DX_** by providing descriptive API responses to help develop
 **Current Usage (v5)**
 
 ```Typescript
-const resp = await Auth.confirmSignUp("username", "112233")
+const resp = await Auth.confirmSignUp('username', '112233')
 
-if (resp === "SUCCESS"){
+if (resp === 'SUCCESS'){
   // Show login component
 }
 ```
@@ -239,8 +233,8 @@ if (resp === "SUCCESS"){
 ```Typescript
 
 const resp = await confirmSignUp({
-  username: "username",
-  confirmationCode: "112233",
+  username: 'username',
+  confirmationCode: '112233',
 });
 
 if (resp.isSignUpComplete) {
@@ -480,8 +474,8 @@ To better capture customer intent and simplify API types we will split up the `g
 
 ```typescript
 const todoDetails: CreateTodoInput = {
-  name: "Todo 1",
-  description: "Learn AWS AppSync",
+  name: 'Todo 1',
+  description: 'Learn AWS AppSync',
 };
 
 const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({
@@ -509,7 +503,7 @@ type MyQueryType = {
 };
 
 const result = await API.graphqlQuery<MyQueryType>({
-  document: `query getTodo...`,
+  document: 'query getTodo...',
 });
 
 console.log(
@@ -530,7 +524,7 @@ type MyMutationType = {
 };
 
 const result = await API.graphqlMutation<MyMutationType>({
-  document: `mutation createTodo....`,
+  document: 'mutation createTodo....',
   variables: {
     id: 123,
     name: 'My Todo',
@@ -543,7 +537,7 @@ console.log(
 );
 
 API.graphqlSubscription<MyQueryType>({
-  document: `subscription OnCreateTodo...`,
+  document: 'subscription OnCreateTodo...',
 }).subscribe({
   next: (result) =>
     console.log(
