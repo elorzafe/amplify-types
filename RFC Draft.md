@@ -14,7 +14,7 @@ We're also requesting feedback on any other TypeScript issues or pain points tha
 
 Amplify JS will be making the following improvements to our TypeScript support. These improvements will be applied across the entire library, not just the categories highlighted below.
 
-- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types. This will allow you to more easily construct API requests, avoid errors, and have higher confidence when handling API responses.
+- `strict` typings — We will be applying `strict` mode to the entire library to improve the usability of our types. This will allow you to more easily construct API requests, avoid errors, and have higher confidence when handling API responses. Amplify JS will just work with your application without any additional configurations if you have strict mode on.
 - Better runtime error typing — We will provide utilities for asserting type information of runtime errors emitted by Amplify.
 - Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for developers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
