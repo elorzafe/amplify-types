@@ -382,9 +382,249 @@ const uploadedObjectReference = await uploadTask.result;
 
 Try out the proposed `storage` types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-storage.ts
 
-# `API` Category Changes
+# GraphQL `API` Category Changes
 
-Amplify is proposing the following changes for the `API` category.
+Amplify is proposing the following changes for the GraphQL `API` category to improve type safety and readability.
+
+## Split GraphQL operations into `query()`, `mutation()`, and `subscription()` APIs
+
+To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
+
+**Current Usage (v5)**
+
+```typescript
+const todoDetails: CreateTodoInput = {
+  name: 'Todo 1',
+  description: 'Learn AWS AppSync',
+};
+
+const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({
+  query: mutations.createTodo,
+  variables: { input: todoDetails },
+});
+
+const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
+  graphqlOperation(subscriptions.onCreateTodo)
+).subscribe({
+  next: ({ provider, value }) => console.log({ provider, value }),
+  error: (error) => console.warn(error),
+});
+```
+
+**Proposed Usage (v6)**
+
+```typescript
+type MyQueryType = {
+  result: {
+    id: string;
+    name: string;
+    description: string;
+  };
+};
+
+const result = await API.query<MyQueryType>('query getTodo...', {
+  variables: { ... }
+});
+
+console.log(
+  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+);
+
+type MyMutationType = {
+  variables: {
+    id: number;
+    name: string;
+    description: string;
+  };
+  result: {
+    id: number;
+    name: string;
+    description: string;
+  };
+};
+
+const result = await API.mutate<MyMutationType>('mutation createTodo....', {
+  variables: {
+    id: 123,
+    name: 'My Todo',
+    description: 'This is a todo',
+  },
+});
+
+console.log(
+  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+);
+
+API.subscribe<MyQueryType>('subscription OnCreateTodo...').on({
+  next: (result) =>
+    console.log(
+      `Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
+    ),
+});
+```
+
+## Less verbose type definitions for generated queries, mutations, and subscriptions
+In v6, we want to reduce the verbosity of the typings for the code-generated queries, mutations, and subscriptions by inferring their types from the generated code.
+
+**Current Usage (v5)**
+```ts
+import { API, graphqlOperation } from 'aws-amplify';
+import { GraphQLQuery, GraphQLSubscription } from '@aws-amplify/api';
+import { createTodo } from './graphql/mutations';
+import { onCreateTodo } from './graphql/subscriptions';
+import {
+  CreateTodoInput,
+  CreateTodoMutation,
+  OnCreateTodoSubscription,
+} from './API';
+// so many imports from disparate modules 
+
+function createMutation() {
+  const createInput: CreateTodoInput = {
+    name: 'Improve API TS support ',
+  };
+
+  // Verbose explicit type definition when the information could be available in `createTodo`'s type
+  const res = await API.graphql<GraphQLQuery<CreateTodoMutation>>(
+    graphqlOperation(createTodo, {
+      input: createInput,
+    })
+  );
+
+  // the returned data is nested 2 levels deep and could be upleveled when the GraphQL document
+  // only includes one query or mutation
+  const newTodo = res.data?.createTodo;
+
+  console.log('new todo created', newTodo);
+}
+
+function subscribeToCreate() {
+  const sub = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
+    graphqlOperation(onCreateTodo)
+  ).subscribe({
+    next: (message) => {
+      // once again, we could "sift up" the return value instead of providing it in two levels of depth
+      const newTodo = message.value?.data?.onCreateTodo;
+      
+      console.log('new todo created', newTodo);
+    }
+  });
+}
+```
+
+**Proposed Usage (v6)**
+```ts
+import { API, graphqlOperation } from 'aws-amplify';
+import { GraphQLQuery, GraphQLSubscription } from '@aws-amplify/api';
+import { createTodo } from './graphql/mutations';
+import { onCreateTodo } from './graphql/subscriptions';
+import {
+  CreateTodoInput,
+  CreateTodoMutation,
+  OnCreateTodoSubscription,
+} from './API';
+// so many imports from disparate modules 
+
+function createMutation() {
+  const createInput: CreateTodoInput = {
+    name: 'Improve API TS support ',
+  };
+
+  const res = await API.mutate(createTodo, {
+      input: createInput,
+  });
+
+  // The returned data is the result of the request. If there are more than one queries/mutations in a request,
+  // then the return value stays the same as v5. i.e. res.createTodo.data
+  const newTodo = res;
+
+  console.log('new todo created', newTodo);
+}
+
+function subscribeToCreate() {
+  const sub = API.subscribe(onCreateTodo).on({
+    next: (message) => {
+      // Return value immediately available instead of `value?.data?.onCreateTodo`
+      const newTodo = message;
+      console.log('new todo created', newTodo);
+    }
+  });
+}
+```
+
+## Type safety for GraphQL query, mutation, subscription inputs
+
+In v6, we want to ensure type safety on GraphQL inputs if you use one of the generated GraphQL query, mutation, or subscription.
+
+**Current Usage (v5)**
+```ts
+import { updateTodo } from './graphql/mutations';
+import { CreateTodoInput } from './API';
+
+const createInput: CreateTodoInput = {
+  name: todoName,
+  description,
+};
+
+const res = await API.graphql<GraphQLQuery<UpdateTodoMutation>>(
+  graphqlOperation(updateTodo, {
+    // passing an object of type CreateTodoInput (that's missing
+    // a required field for updates `id`) into an update mutation's input
+    // does not surface a type error. This will only throw a runtime error after
+    // the mutation request gets rejected by AppSync
+    input: createInput,
+  })
+);
+```
+
+**Proposed Usage (v6)**
+```ts
+import { updateTodo } from './graphql/mutations';
+import { CreateTodoInput } from './API';
+
+const createInput: CreateTodoInput = {
+  name: todoName,
+  description,
+};
+
+const res = await API.graphql<GraphQLQuery<UpdateTodoMutation>>(
+  graphqlOperation(updateTodo, {
+    input: createInput,
+    //^? Throws a type error. `input` must be of type `UpdateTodoInput`
+  })
+);
+```
+
+
+
+## [Bug fix: Remove `any` cast needed for subscriptions](https://github.com/aws-amplify/amplify-js/issues/7589#issuecomment-1258596131)
+
+In v5, there's a type mismatch bug for GraphQL subscriptions that forces the developer to cast to `any` to unsubscribe. We plan on fixing this for v6.
+
+**Current Usage (v5)**
+```ts
+  subscription.value = (API.graphql(graphqlOperation(
+    SUBSCRIBE_USER,
+    { id: userId }
+  )) as any).subscribe({ next: onSubscribe })
+// . . .
+  (subscription.value as any).unsubscribe()
+```
+
+**Proposed Usage (v6)**
+```ts
+  subscription = API.subscribe(
+    SUBSCRIBE_USER,
+    { id: userId }
+  ).on({ next: onSubscribe })
+// . . .
+  subscription.unsubscribe()
+```
+
+
+# REST `API` Category Changes
+
+Amplify is proposing the following changes for the REST `API` category.
 
 ## First param is an object with named parameters
 
@@ -458,86 +698,6 @@ const result = await API.put<string, { data: Array<number> }>(
 );
 
 result.body.data.forEach((value) => console.log(value));
-```
-
-## GraphQL operations have been split into query, mutation, and subscription
-
-To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
-
-**Current Usage (v5)**
-
-```typescript
-const todoDetails: CreateTodoInput = {
-  name: 'Todo 1',
-  description: 'Learn AWS AppSync',
-};
-
-const newTodo = await API.graphql<GraphQLQuery<CreateTodoMutation>>({
-  query: mutations.createTodo,
-  variables: { input: todoDetails },
-});
-
-const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
-  graphqlOperation(subscriptions.onCreateTodo)
-).subscribe({
-  next: ({ provider, value }) => console.log({ provider, value }),
-  error: (error) => console.warn(error),
-});
-```
-
-**Proposed Usage (v6)**
-
-```typescript
-type MyQueryType = {
-  result: {
-    id: string;
-    name: string;
-    description: string;
-  };
-};
-
-const result = await API.graphqlQuery<MyQueryType>({
-  document: 'query getTodo...',
-});
-
-console.log(
-  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-);
-
-type MyMutationType = {
-  variables: {
-    id: number;
-    name: string;
-    description: string;
-  };
-  result: {
-    id: number;
-    name: string;
-    description: string;
-  };
-};
-
-const result = await API.graphqlMutation<MyMutationType>({
-  document: 'mutation createTodo....',
-  variables: {
-    id: 123,
-    name: 'My Todo',
-    description: 'This is a todo',
-  },
-});
-
-console.log(
-  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-);
-
-API.graphqlSubscription<MyQueryType>({
-  document: 'subscription OnCreateTodo...',
-}).subscribe({
-  next: (result) =>
-    console.log(
-      `Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-    ),
-});
 ```
 
 ## Type narrowing on runtime errors
