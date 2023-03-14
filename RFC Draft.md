@@ -599,7 +599,7 @@ const res = await API.graphql<GraphQLQuery<UpdateTodoMutation>>(
 
 ## [Bug fix: Remove `any` cast needed for subscriptions](https://github.com/aws-amplify/amplify-js/issues/7589#issuecomment-1258596131)
 
-In v5, there's a type mismatch bug for GraphQL subscriptions that forces the developer to cast to `any` to unsubscribe. We plan on fixing this for v6.
+In v5, there's a type mismatch bug for GraphQL subscriptions that forces the developer to cast to `any` to subscribe or unsubscribe. We plan on fixing this for v6.
 
 **Current Usage (v5)**
 ```ts
