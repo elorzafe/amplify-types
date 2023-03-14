@@ -554,7 +554,7 @@ function subscribeToCreate() {
 
 ## Type safety for GraphQL query, mutation, subscription inputs
 
-In v6, we want to ensure type safety on GraphQL inputs if you use one of the generated GraphQL query, mutation, or subscription.
+In v6, we want to ensure type safety on GraphQL inputs if you use one of the generated GraphQL queries, mutations, or subscriptions.
 
 **Current Usage (v5)**
 ```ts
