@@ -481,7 +481,7 @@ import {
 
 function createMutation() {
   const createInput: CreateTodoInput = {
-    name: 'Improve API TS support ',
+    name: 'Improve API TS support',
   };
 
   // Verbose explicit type definition when the information could be available in `createTodo`'s type
