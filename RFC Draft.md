@@ -603,12 +603,12 @@ In v5, there's a type mismatch bug for GraphQL subscriptions that forces the dev
 
 **Current Usage (v5)**
 ```ts
-  subscription.value = (API.graphql(graphqlOperation(
-    SUBSCRIBE_USER,
-    { id: userId }
-  )) as any).subscribe({ next: onSubscribe })
-// . . .
-  (subscription.value as any).unsubscribe()
+subscription.value = (API.graphql(graphqlOperation(
+  SUBSCRIBE_USER,
+  { id: userId }
+)) as any).subscribe({ next: onSubscribe })
+
+(subscription.value as any).unsubscribe()
 ```
 
 **Proposed Usage (v6)**
