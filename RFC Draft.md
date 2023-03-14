@@ -531,7 +531,7 @@ function createMutation() {
   };
 
   const res = await API.mutate(createTodo, {
-      input: createInput,
+    input: createInput,
   });
 
   // The returned data is the result of the request. If there are more than one queries/mutations in a request,
