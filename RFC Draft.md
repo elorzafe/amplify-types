@@ -494,8 +494,6 @@ function createMutation() {
   // the returned data is nested 2 levels deep and could be upleveled when the GraphQL document
   // only includes one query or mutation
   const newTodo = res.data?.createTodo;
-
-  console.log('new todo created', newTodo);
 }
 
 function subscribeToCreate() {
@@ -505,8 +503,6 @@ function subscribeToCreate() {
     next: (message) => {
       // once again, we could "sift up" the return value instead of providing it in two levels of depth
       const newTodo = message.value?.data?.onCreateTodo;
-      
-      console.log('new todo created', newTodo);
     }
   });
 }
@@ -537,7 +533,6 @@ function createMutation() {
   // The returned data is the result of the request. If there are more than one queries/mutations in a request,
   // then the return value stays the same as v5. i.e. res.createTodo.data
   const newTodo = res;
-
   console.log('new todo created', newTodo);
 }
 
