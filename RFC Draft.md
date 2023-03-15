@@ -587,12 +587,9 @@ const createInput: CreateTodoInput = {
   description,
 };
 
-const res = await API.graphql<GraphQLQuery<UpdateTodoMutation>>(
-  graphqlOperation(updateTodo, {
-    input: createInput,
-    //^? Throws a type error. `input` must be of type `UpdateTodoInput`
-  })
-);
+const res = await API.mutate(updateTodo, {
+    input: createInput, // Throws a type error. `input` must be of type `UpdateTodoInput`
+});
 ```
 
 
@@ -603,8 +600,10 @@ In v5, there's a type mismatch bug for GraphQL subscriptions that forces the dev
 
 **Current Usage (v5)**
 ```ts
-subscription.value = (API.graphql(graphqlOperation(
-  SUBSCRIBE_USER,
+import { onCreateUser } from './graphql/subscriptions'
+
+const subscription.value = (API.graphql(graphqlOperation(
+  onCreateUser,
   { id: userId }
 )) as any).subscribe({ next: onSubscribe })
 
@@ -613,12 +612,14 @@ subscription.value = (API.graphql(graphqlOperation(
 
 **Proposed Usage (v6)**
 ```ts
-  subscription = API.subscribe(
-    SUBSCRIBE_USER,
-    { id: userId }
-  ).on({ next: onSubscribe })
+import { onCreateUser } from './graphql/subscriptions'
+
+const subscription = API.subscribe(
+  onCreateUser,
+  { id: userId }
+).on({ next: onSubscribe })
 // . . .
-  subscription.unsubscribe()
+subscription.unsubscribe()
 ```
 
 
