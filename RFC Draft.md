@@ -582,7 +582,9 @@ const res = await API.mutate(updateTodo, {
 });
 ```
 
+## [Bug fix: Add `__typename` to GraphQL operations' selection set](https://github.com/aws-amplify/amplify-codegen/issues/445)
 
+Currently there's a bug in which the generated API types contain `__typenames` but not in the selection set of the generated GraphQL operations. This causes runtime type checking errors when you rely on TypeScript to expect the "__typename" field to be present but it isn't. Prior to the v6 launch, we'll fix this bug to ensure the type definition matches the selection set/return value of the GraphQL operation during runtime.
 
 ## [Bug fix: Remove `any` cast needed for subscriptions](https://github.com/aws-amplify/amplify-js/issues/7589#issuecomment-1258596131)
 
