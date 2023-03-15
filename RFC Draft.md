@@ -85,7 +85,7 @@ type CustomChannel = 'custom_channel';
 type CustomEventDataMap = {
   A: number;
   B: string;
-  C: null;
+  C: void;
   D: Object
 };
 
@@ -108,6 +108,7 @@ Hub.listen<CustomChannel, CustomEventDataMap>(
         break;
       case 'C':
         // Type C doesn't have any associated event data
+        // @ts-expect-error
         data = payload.data;
         break;
       case 'D':
