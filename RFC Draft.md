@@ -510,15 +510,10 @@ function subscribeToCreate() {
 
 **Proposed Usage (v6)**
 ```ts
-import { API, graphqlOperation } from 'aws-amplify';
-import { GraphQLQuery, GraphQLSubscription } from '@aws-amplify/api';
+import { API } from 'aws-amplify';
 import { createTodo } from './graphql/mutations';
 import { onCreateTodo } from './graphql/subscriptions';
-import {
-  CreateTodoInput,
-  CreateTodoMutation,
-  OnCreateTodoSubscription,
-} from './API';
+import { CreateTodoInput } from './API';
 // so many imports from disparate modules 
 
 function createMutation() {
