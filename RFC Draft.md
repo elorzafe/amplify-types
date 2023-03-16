@@ -535,7 +535,6 @@ function subscribeToCreate() {
     next: (message) => {
       // Return value immediately available instead of `value?.data?.onCreateTodo`
       const newTodo = message;
-      console.log('new todo created', newTodo);
     }
   });
 }
