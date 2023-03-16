@@ -78,49 +78,44 @@ Hub.listen(channel, ({ payload }) => {
 **Proposed Usage (v6)**
 
 ```Typescript
-type CustomChannel = 'custom_channel';
-
 // Each key in the map represents a payload event and the key value is the data type for that event.
-// Note: If an event is assigned the null type, the payload object will not contain a data key.
+// Note: If an event is assigned the void type, the payload object will not contain a data key.
 type CustomEventDataMap = {
   A: number;
   B: string;
-  C: null;
-  D: Object
+  C: void;
+  D: object;
 };
 
-Hub.dispatch<CustomChannel, CustomEventDataMap >('custom_channel', {
-  event: 'A',
-  data: 42
-});
+type CustomChannelMap = {
+  channel: 'custom_channel';
+  eventDataMap: CustomEventDataMap;
+};
 
-Hub.listen<CustomChannel, CustomEventDataMap>(
-  'custom_channel',
-  ({ payload }) => {
-    let data;
-
-    switch (payload.event) {
-      case 'A':
-        data = payload.data;
-        break;
-      case 'B':
-        data = payload.data;
-        break;
-      case 'C':
-        // Type C doesn't have any associated event data
-        data = payload.data;
-        break;
-      case 'D':
-        data = payload.data;
-        break;
-    }
+Hub.dispatch<CustomChannelMap>('custom_channel', { event: 'A', data: 1 });
+Hub.listen<CustomChannelMap>('custom_channel', ({ payload }) => {
+  switch (payload.event) {
+    case 'A':
+      payload.data;
+      break;
+    case 'B':
+      payload.data;
+      break;
+    case 'C':
+      // Type C doesn't have any associated event data
+      // @ts-expect-error
+      data = payload.data;
+      break;
+    case 'D':
+      payload.data;
+      break;
   }
-);
+});
 ```
 
 **Proposed DX (v6)**
 
-<img src="https://user-images.githubusercontent.com/70438514/222813252-19c4e4e7-b56c-46ed-82e7-1cde6293d19e.gif" width="600" alt="custom-hub-v6">
+<img src="https://user-images.githubusercontent.com/70438514/225745517-d9436a7c-329e-4ed9-b88b-823b92406cc4.gif" width="600" alt="custom-hub-v6">
 
 ## TypeScript support for Amplify Configuration
 
@@ -643,13 +638,13 @@ const result = await API.get(apiName, path, myInit);
 ```typescript
 await API.get(
   {
-    apiName: 'MyApi',
-    path: '/items',
-    authMode: 'AWS_IAM',
+    apiName: "MyApi",
+    path: "/items",
+    authMode: "AWS_IAM",
   },
   {
     headers: {
-      'custom-header': 'x',
+      "custom-header": "x",
     },
   }
 );
@@ -669,23 +664,23 @@ Amplify v5 does not support using generics for the request body or response.
 type MyApiResponse = { firstName: string; lastName: string };
 
 const result = await API.get<MyApiResponse>({
-  apiName: 'MyApi',
-  path: '/getName',
+  apiName: "MyApi",
+  path: "/getName",
 });
 
 console.log(`The name is ${result.body.firstName} ${result.body.lastName}`);
 
 const result = await API.put<string, { data: Array<number> }>(
   {
-    apiName: '',
-    path: '/',
-    authMode: 'API_KEY',
+    apiName: "",
+    path: "/",
+    authMode: "API_KEY",
   },
   {
     headers: {
-      'Content-type': 'text/plain',
+      "Content-type": "text/plain",
     },
-    body: 'this is my content',
+    body: "this is my content",
   }
 );
 
@@ -703,8 +698,8 @@ Amplify v5 does not support narrowing down errors.
 ```typescript
 try {
   await API.get({
-    apiName: 'myApi',
-    path: '/',
+    apiName: "myApi",
+    path: "/",
   });
 } catch (err: unknown) {
   if (err instanceof API.NetworkError) {
