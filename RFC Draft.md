@@ -528,7 +528,6 @@ function createMutation() {
   // The returned data is the result of the request. If there are more than one queries/mutations in a request,
   // then the return value stays the same as v5. i.e. res.createTodo.data
   const newTodo = res;
-  console.log('new todo created', newTodo);
 }
 
 function subscribeToCreate() {
