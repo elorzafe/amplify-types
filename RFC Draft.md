@@ -577,7 +577,8 @@ const createInput: CreateTodoInput = {
 };
 
 const res = await API.mutate(updateTodo, {
-    input: createInput, // Throws a type error. `input` must be of type `UpdateTodoInput`
+    // @ts-expect-error
+    input: createInput, // `input` must be of type `UpdateTodoInput`
 });
 ```
 
