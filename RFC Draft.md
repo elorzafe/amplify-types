@@ -81,7 +81,7 @@ Hub.listen(channel, ({ payload }) => {
 type CustomChannel = 'custom_channel';
 
 // Each key in the map represents a payload event and the key value is the data type for that event.
-// Note: If an event is assigned the null type, the payload object will not contain a data key.
+// Note: If an event is assigned the void type, the payload object will not contain a data key.
 type CustomEventDataMap = {
   A: number;
   B: string;
@@ -89,7 +89,7 @@ type CustomEventDataMap = {
   D: Object
 };
 
-Hub.dispatch<CustomChannel, CustomEventDataMap >('custom_channel', {
+Hub.dispatch<CustomChannel, CustomEventDataMap>('custom_channel', {
   event: 'A',
   data: 42
 });
