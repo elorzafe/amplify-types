@@ -560,7 +560,7 @@ async function createNewTodo() {
     input: { id: uuid() },
   });
   
-  // res flattened to todo level
+  // Response flattened to the todo level
   console.log(res); 
 }
 ```
