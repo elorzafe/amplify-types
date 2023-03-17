@@ -550,14 +550,6 @@ async function createNewTodo() {
   // Mutation result is nested
   console.log(res.data.createTodo); 
 }
-
-interface GraphQLResult<T = object> {
-    data?: T; // in the above example T is Todo
-    errors?: GraphQLError[];
-    extensions?: {
-        [key: string]: any;
-    };
-}
 ```
 
 ### Proposed behavior for single query/mutation in the response
