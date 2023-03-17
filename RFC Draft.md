@@ -568,11 +568,9 @@ async function createNewTodo() {
 **Proposed Option 2: Flatten to the `data` level (v6)**
 ```ts
 async function createNewTodo() {
-  const res: GraphQLData<Todo> = await API.graphql<GraphQLQuery<Todo>>(
-    graphqlOperation(createTodo, {
-      input: { id: uuid() },
-    })
-  );
+  const res: Todo = await API.mutate(createTodo, {
+    input: { id: uuid() },
+  });
 
   // Response flattened to the `data` level
   console.log(res.createTodo); 
