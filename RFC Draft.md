@@ -167,6 +167,24 @@ Amplify is proposing the following changes for the `Auth` category. Similar chan
 
 User attributes inference on the `signUp` API.
 
+**Current Usage (v5)**
+
+```Typescript
+Auth.signUp({
+  username: 'username',
+  password: '*******',
+  attributes: {
+    email: 'email@domain.com'
+  }
+});
+```
+
+**Current DX (v5)**
+
+![signup-v5](https://user-images.githubusercontent.com/70438514/222456624-b4af7349-db9d-4304-9cdc-08cf649e2d31.png)
+
+**Proposed Usage (v6)**
+
 ```Typescript
 Auth.signUp({
   username: "username",
@@ -178,10 +196,6 @@ Auth.signUp({
   },
 });
 ```
-
-**Current DX (v5)**
-
-![signup-v5](https://user-images.githubusercontent.com/70438514/222456624-b4af7349-db9d-4304-9cdc-08cf649e2d31.png)
 
 **Proposed DX (v6)**
 
