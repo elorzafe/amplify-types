@@ -556,11 +556,9 @@ async function createNewTodo() {
 **Proposed Option 1: Flatten to the lowest level (v6)**
 ```ts
 async function createNewTodo() {
-  const res: Todo = await API.graphql<GraphQLQuery<Todo>>(
-    graphqlOperation(createTodo, {
-      input: { id: uuid() },
-    })
-  );
+  const res: Todo = await API.mutate(createTodo, {
+    input: { id: uuid() },
+  });
   
   // res flattened to todo level
   console.log(res); 
