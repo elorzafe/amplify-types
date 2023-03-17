@@ -609,7 +609,10 @@ async function custom() {
     authToken: undefined,
     userAgentSuffix: undefined
   }
-  const res = await API.graphql<GraphQLQuery<any>>(operation);
+  
+  const result = await API.query<MyQueryType>(operation.query, {
+    variables: operation.variables
+  });
 }
 ```
 
