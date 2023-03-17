@@ -573,7 +573,8 @@ async function createNewTodo() {
       input: { id: uuid() },
     })
   );
-  // res in at .data level
+
+  // Response flattened to the `data` level
   console.log(res.createTodo); 
 }
 
