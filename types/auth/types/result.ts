@@ -8,7 +8,7 @@ import {
   AuthNextSignUpStep,
   AuthNextUpdateAttributeStep,
 } from "./step";
-import { GetAttributeKey } from "./utilts";
+
 
 export type AuthSignInResult<
   UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey
@@ -56,7 +56,7 @@ export type UpdateUserAttributeResult<
 export type UpdateUserAttributesResult<
   UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey
 > = {
-  [authKey in UserAttributeKey as `${GetAttributeKey<authKey>}`]?: UpdateUserAttributeResult<UserAttributeKey>;
+  [authKey in UserAttributeKey]?: UpdateUserAttributeResult<UserAttributeKey>;
 };
 
 

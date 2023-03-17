@@ -1,5 +1,5 @@
 import { AuthError } from "../authError";
-import { GetAttributeKey } from "./utilts";
+
 
 export type AdditionalInfo = { [key: string]: string };
 
@@ -13,7 +13,7 @@ export type AuthCodeDeliveryDetails<
 > = {
   destination: string;
   deliveryMedium: DeliveryMedium;
-  attributeName?: GetAttributeKey<UserAttributeKey>;
+  attributeName?: UserAttributeKey
 };
 
 export type AuthMFAType = string;
@@ -29,12 +29,10 @@ export type AuthProvider =
 
 export type AuthSignInDetails = Record<string, unknown>;
 
-export type AuthUserAttribute<
-  UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey
-> = {
-  userAttributeKey: UserAttributeKey;
-  value: string;
+export type AuthUserAttribute<UserAttributeKey extends AuthUserAttributeKey = AuthUserAttributeKey> = {
+  [Attribute in UserAttributeKey]?:  string
 };
+
 
 /**
  * Attribute ref - {@link https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-attributes.html}
@@ -61,8 +59,7 @@ export type AuthStandardAttributeKey =
   | "website"
   | "zoneInfo";
 
-type AnyAttribute = (string & {}) | Record<string, string>;
-
+type AnyAttribute = (string & {}) 
 export type AuthUserAttributeKey = AuthStandardAttributeKey | AnyAttribute;
 
 export const enum DeliveryMedium {
