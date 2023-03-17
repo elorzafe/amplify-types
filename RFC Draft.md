@@ -536,7 +536,7 @@ function subscribeToCreate() {
 ```
 
 ## Flatten GraphQL operation responses
-As alluded to in the prior suggestion, we're looking to flatten the results for the GraphQL operations to make them more easily accessible instead of the current three-levels-deep nested object. Would love to get your understanding on which option you prefer.
+As alluded to in the previous section, we're looking to flatten the results of GraphQL operations to make them more easily accessible instead of the current three-levels-deep nested object. Would love to get your understanding on which option you prefer.
 
 **Current Usage (v5)**
 ```ts
