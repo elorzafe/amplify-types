@@ -187,17 +187,19 @@ Auth.signUp({
 
 ```Typescript
 Auth.signUp({
-  username: 'username',
-  password: '********',
+  username: "username",
+  password: "*******",
   options: {
-    userAttributes: [{ userAttributeKey: 'email', value: 'email@domain.com' }],
+    userAttributes: {
+      email: "email@domain.com",
+    },
   },
 });
 ```
 
 **Proposed DX (v6)**
 
-<img src="https://user-images.githubusercontent.com/70438514/222456627-f196eedf-90e5-4bb0-81a7-78e11d88b09b.png" width="600" alt="signup-v6">
+<img width="385" alt="user attributes" src="https://user-images.githubusercontent.com/70438514/225924992-d578c486-9775-4ce4-a5e7-718388f7d56b.png">
 
 ## Predictable API responses
 

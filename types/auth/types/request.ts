@@ -108,7 +108,7 @@ export type FetchAuthSessionRequest = {
 };
 
 export type FetchUserAttributesRequest = {
-  bypassCache?: boolean;
+  recache?: boolean;
 };
 
 export type ForgetDeviceRequest = {
@@ -116,7 +116,7 @@ export type ForgetDeviceRequest = {
 };
 
 export type GetCurrentUserRequest = {
-  bypassCache?: boolean;
+  recache?: boolean;
 };
 
 export type ResendConfirmationCodeRequest<

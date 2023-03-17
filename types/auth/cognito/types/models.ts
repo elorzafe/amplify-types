@@ -27,7 +27,7 @@ export type ValidationData = { [key: string]: string };
 
 export type CognitoMFAType = "SMS" | "NOMFA" | "TOTP";
 
-export type CustomAttribute = { custom: string };
+export type CustomAttribute = `custom:${string}`
 
 export type CognitoUserAttributeKey = AuthStandardAttributeKey | CustomAttribute;
 

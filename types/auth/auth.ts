@@ -22,6 +22,7 @@ import {
   AuthStandardAttributeKey,
   AuthUserAttribute,
 } from "./types/models";
+import { AuthSignUpOptions } from "./types/options";
 import {
   ConfirmResetPasswordRequest,
   ConfirmSignInRequest,
@@ -156,3 +157,4 @@ declare function confirmResetPassword(
 ): Promise<void>;
 
 declare function signOut(req?: SignOutRequest): Promise<SignOutResult>;
+
