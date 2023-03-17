@@ -535,6 +535,111 @@ function subscribeToCreate() {
 }
 ```
 
+## Flatten the GraphQL operations' responses
+As alluded to in the prior suggestion, we're looking to flatten the results for the GraphQL operations to make them more easily accessible instead of the current three-levels-deep nested object. Would love to get your understanding on which option you prefer.
+
+**Current Usage (v5)**
+```ts
+async function createNewTodo() {
+  const res: GraphQLResult<Todo> = await API.graphql<GraphQLQuery<Todo>>(
+    graphqlOperation(createTodo, {
+      input: { id: uuid() },
+    })
+  );
+  // todo result is nested
+  console.log(res.data.createTodo); 
+}
+
+interface GraphQLResult<T = object> {
+    data?: T; // in the above example T is Todo
+    errors?: GraphQLError[];
+    extensions?: {
+        [key: string]: any;
+    };
+}
+```
+
+### Proposed behavior for single query/mutation in the response
+**Proposed Option 1: Flatten to the lowest level (v6)**
+```ts
+async function createNewTodo() {
+  const res: Todo = await API.graphql<GraphQLQuery<Todo>>(
+    graphqlOperation(createTodo, {
+      input: { id: uuid() },
+    })
+  );
+  
+  // res flattened to todo level
+  console.log(res); 
+}
+```
+
+**Proposed Option 2: Flatten to the `data` level (v6)**
+```ts
+async function createNewTodo() {
+  const res: GraphQLData<Todo> = await API.graphql<GraphQLQuery<Todo>>(
+    graphqlOperation(createTodo, {
+      input: { id: uuid() },
+    })
+  );
+  // res in at .data level
+  console.log(res.createTodo); 
+}
+
+interface GraphQLData<T = object> {
+  [query: string]: T // in the above example T is Todo
+}
+```
+
+### Proposed behavior for multiple queries/mutations in the response
+In GraphQL, you can define multiple queries or mutations in a single request. The response object will include the result of all the queries and mutations. For example, given the following queries:
+
+```ts
+async function custom() {
+  const operation = {
+    query: `
+      query GetTodo($todoId: ID!, $fooId: ID!) {
+        getTodo(id: $todoId) {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        getFoo(id: $fooId) {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+    variables: { todoId: 'c48481bd-f808-426f-8fed-19e1368ca0bc', fooId: '9d4e6e30-fcb4-4409-8160-7d44931a6a02' },
+    authToken: undefined,
+    userAgentSuffix: undefined
+  }
+  const res = await API.graphql<GraphQLQuery<any>>(operation);
+}
+```
+
+**Proposed Option 1: Flatten to data level**
+```ts
+  console.log(res.getTodo);
+  console.log(res.getFoo);
+```
+
+**Proposed Option 2: Flatten to the array level**
+```ts
+  // retains the ordering of the queries in the graphql request
+  console.log(res[0]); // todo
+  console.log(res[1]); // foo
+```
+
+**Proposed Option 3: Don't flatten at all** 
+```ts
+  console.log(res.data.getTodo);
+  console.log(res.data.getFoo);
+```
+
 ## Type safety for GraphQL query, mutation, subscription inputs
 
 In v6, we want to ensure type safety on GraphQL inputs if you use one of the generated GraphQL queries, mutations, or subscriptions.
