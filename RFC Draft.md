@@ -546,7 +546,8 @@ async function createNewTodo() {
       input: { id: uuid() },
     })
   );
-  // todo result is nested
+
+  // Mutation result is nested
   console.log(res.data.createTodo); 
 }
 
