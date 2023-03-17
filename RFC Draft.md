@@ -169,11 +169,13 @@ User attributes inference on the `signUp` API.
 
 ```Typescript
 Auth.signUp({
-  username: 'username',
-  password: '*******',
-  options: {userAttributes: {
-    email: 'email@domain.com'
-  } }
+  username: "username",
+  password: "*******",
+  options: {
+    userAttributes: {
+      email: "email@domain.com",
+    },
+  },
 });
 ```
 
