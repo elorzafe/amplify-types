@@ -383,7 +383,7 @@ Amplify is proposing the following changes for the GraphQL `API` category to imp
 
 ## Introduce dedicated, type-safe `query()`, `mutation()`, and `subscription()` GraphQL operation APIs
 
-To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
+To better capture customer intent and simplify API types we will introduce dedicated APIs for queries, mutations, and subscriptions. We're going to retain the `graphql()` operation in case you want to issue multiple queries/mutations in a single request.
 
 **Current Usage (v5)**
 
