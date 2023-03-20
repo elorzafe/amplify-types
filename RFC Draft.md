@@ -459,11 +459,29 @@ const result = await API.mutate<MyMutationType>('mutation createTodo....', {
 
 console.log(`Todo : ${result.createTodo.id} ${result.createTodo.name} ${result.createTodo.description})`);
 
-API.subscribe<MyQueryType>('subscription OnCreateTodo...').on({
-  next: (result) =>
-    console.log(
-      `Todo info: ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-    ),
+type MySubscriptionType = {
+  variables: {
+    filter: {
+      name: {
+        eq: string;
+      };
+    };
+  };
+  result: {
+    createTodo: {
+      id: number;
+      name: string;
+      description: string;
+    };
+  };
+};
+
+API.subscribe<MySubscriptionType>('subscription OnCreateTodo...', {
+  filter: {
+    name: { eq: 'awesome things' },
+  },
+}).on({
+  next: (result) => console.log(`Todo info: ${result.createTodo.name})`),
 });
 ```
 
