@@ -615,6 +615,30 @@ In GraphQL, you can define multiple queries or mutations in a single request via
 
 ```ts
 async function custom() {
+
+  type MyMultiQueryType = {
+    variables: {
+      input: {
+        todoId: string;
+        fooId: string;
+      };
+    };
+    result: {
+      getTodo: {
+        id: number;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+      };
+      getFoo: {
+        id: number;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+      };
+    };
+  };
+
   const operation = {
     query: `
       query GetTodo($todoId: ID!, $fooId: ID!) {
@@ -637,7 +661,7 @@ async function custom() {
     userAgentSuffix: undefined
   }
   
-  const result = await API.query<MyQueryType>(operation.query, {
+  const result = await API.graphql<MyMultiQueryType>(operation.query, {
     variables: operation.variables
   });
 }
