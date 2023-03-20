@@ -381,7 +381,7 @@ Try out the proposed `storage` types here: https://stackblitz.com/edit/rfc-types
 
 Amplify is proposing the following changes for the GraphQL `API` category to improve type safety and readability.
 
-## Split GraphQL operations into `query()`, `mutation()`, and `subscription()` APIs
+## Introduce dedicated, type-safe `query()`, `mutation()`, and `subscription()` GraphQL operation APIs
 
 To better capture customer intent and simplify API types we will split up the `graphql` API into individual APIs for queries, mutations, and subscriptions.
 
