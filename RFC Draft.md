@@ -434,28 +434,30 @@ console.log(`Todo : ${result.listTodos[0].name})`);
 
 type MyMutationType = {
   variables: {
-    id: number;
-    name: string;
-    description: string;
+    input: {
+      id: number;
+      name: string;
+      description: string;
+    };
   };
   result: {
-    id: number;
-    name: string;
-    description: string;
+    createTodo: {
+      id: number;
+      name: string;
+      description: string;
+    };
   };
 };
 
 const result = await API.mutate<MyMutationType>('mutation createTodo....', {
-  variables: {
+  input: {
     id: 123,
     name: 'My Todo',
     description: 'This is a todo',
   },
 });
 
-console.log(
-  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-);
+console.log(`Todo : ${result.createTodo.id} ${result.createTodo.name} ${result.createTodo.description})`);
 
 API.subscribe<MyQueryType>('subscription OnCreateTodo...').on({
   next: (result) =>
