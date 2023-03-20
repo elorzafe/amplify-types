@@ -410,20 +410,27 @@ const subscription = API.graphql<GraphQLSubscription<OnCreateTodoSubscription>>(
 
 ```typescript
 type MyQueryType = {
+  variables: {
+    filter: {
+      id: number;
+    };
+  };
   result: {
-    id: string;
-    name: string;
-    description: string;
+    listTodos: {
+      items: {
+        id: number;
+        name: string;
+        description: string;
+      }[];
+    };
   };
 };
 
-const result = await API.query<MyQueryType>('query getTodo...', {
-  variables: { ... }
+const result = await API.query<MyQueryType>('query lisTodos...', {
+  filter: { id: 123 },
 });
 
-console.log(
-  `Todo : ${result.data?.id}: ${result.data?.name} (${result.data?.description})`
-);
+console.log(`Todo : ${result.listTodos[0].name})`);
 
 type MyMutationType = {
   variables: {
