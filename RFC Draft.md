@@ -165,14 +165,14 @@ Amplify.configure({
 
 ![configure-v6](https://user-images.githubusercontent.com/70438514/222813249-f2782358-27c5-4d16-b5d4-9f4fd6d1b594.gif)
 
+Related issue:
+[A suggestion regarding typings for the Amplify.configure() function (#5095)](https://github.com/aws-amplify/amplify-js/issues/5095)
+
 Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-core.ts
 
 # `Auth` Category Changes
 
 Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
-
-Related issue:
-[A suggestion regarding typings for the Amplify.configure() function (#5095)](https://github.com/aws-amplify/amplify-js/issues/5095)
 
 ## TypeScript support for user attributes
 
