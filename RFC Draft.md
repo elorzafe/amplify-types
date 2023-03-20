@@ -19,10 +19,10 @@ Amplify JS will be making the following improvements to our TypeScript support. 
 - Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for developers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
 Related issues:
-[Could not compile library when strict mode is enabled in typescript (#7188)](https://github.com/aws-amplify/amplify-js/issues/7188)
-[Typescript 4.9.4 compatibility issue with catch(err) in Storage module (#10824)](https://github.com/aws-amplify/amplify-js/issues/10824)
-[Cannot use namespace 'Observable' as a type (#9204)](https://github.com/aws-amplify/amplify-js/issues/9204)
-[New Angular 15 Apps don't build due to TS error (#10775)](https://github.com/aws-amplify/amplify-js/issues/10775)
+- [Could not compile library when strict mode is enabled in typescript (#7188)](https://github.com/aws-amplify/amplify-js/issues/7188)
+- [Typescript 4.9.4 compatibility issue with catch(err) in Storage module (#10824)](https://github.com/aws-amplify/amplify-js/issues/10824)
+- [Cannot use namespace 'Observable' as a type (#9204)](https://github.com/aws-amplify/amplify-js/issues/9204)
+- [New Angular 15 Apps don't build due to TS error (#10775)](https://github.com/aws-amplify/amplify-js/issues/10775)
 
 # Utility Changes
 
@@ -252,9 +252,9 @@ if (resp.isSignUpComplete) {
 <img src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png" width="650" alt="confirmSignUp-v6">
 
 Related issues:
-[Update types for Promises on Auth calls (#9286)](https://github.com/aws-amplify/amplify-js/issues/9286)
-[authenticator: add key types to user session payload (#10142)](https://github.com/aws-amplify/amplify-js/issues/10142)
-[Return types of functions in AuthClass are unsafe (#6053)](https://github.com/aws-amplify/amplify-js/issues/6053)
+- [Update types for Promises on Auth calls (#9286)](https://github.com/aws-amplify/amplify-js/issues/9286)
+- [authenticator: add key types to user session payload (#10142)](https://github.com/aws-amplify/amplify-js/issues/10142)
+- [Return types of functions in AuthClass are unsafe (#6053)](https://github.com/aws-amplify/amplify-js/issues/6053)
 
 Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-auth.ts
 
