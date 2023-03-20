@@ -595,7 +595,7 @@ async function createNewTodo() {
 **Proposed Option 2: Flatten to the `data` level (v6)**
 ```ts
 async function createNewTodo() {
-  const res: Todo = await API.mutate(createTodo, {
+  const res = await API.mutate(createTodo, {
     input: { id: uuid() },
   });
 
