@@ -18,6 +18,12 @@ Amplify JS will be making the following improvements to our TypeScript support. 
 - Better runtime error typing — We will provide utilities for asserting type information of runtime errors emitted by Amplify.
 - Upgraded TypeScript version — We will be upgrading the version of TypeScript that Amplify uses and provide explicit type definitions for developers using older versions. This will provide a variety benefits such as removing the need to specify `skipLibCheck` when using Amplify with newer versions of TypeScript.
 
+Related issues:
+[Could not compile library when strict mode is enabled in typescript (#7188)](https://github.com/aws-amplify/amplify-js/issues/7188)
+[Typescript 4.9.4 compatibility issue with catch(err) in Storage module (#10824)](https://github.com/aws-amplify/amplify-js/issues/10824)
+[Cannot use namespace 'Observable' as a type (#9204)](https://github.com/aws-amplify/amplify-js/issues/9204)
+[New Angular 15 Apps don't build due to TS error (#10775)](https://github.com/aws-amplify/amplify-js/issues/10775)
+
 # Utility Changes
 
 Amplify is proposing the following changes to our core utilities.
@@ -117,6 +123,8 @@ Hub.listen<CustomChannelMap>('custom_channel', ({ payload }) => {
 
 <img src="https://user-images.githubusercontent.com/70438514/225745517-d9436a7c-329e-4ed9-b88b-823b92406cc4.gif" width="600" alt="custom-hub-v6">
 
+Related issue: [Fully typed hubs (#5997)](https://github.com/aws-amplify/amplify-js/issues/5997)
+
 ## TypeScript support for Amplify Configuration
 
 To help developers configure Amplify categories, we are introducing type support for the `Amplify.configure` API. This will allow you to easily setup your AWS resources if you are connecting Amplify JS to resources you have not created directly with the Amplify CLI. The examples below demonstrate an `Auth` configuration.
@@ -163,6 +171,9 @@ Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?f
 
 Amplify is proposing the following changes for the `Auth` category. Similar changes will be applied across all of the `Auth` APIs but examples for specific APIs are highlighted below.
 
+Related issue:
+[A suggestion regarding typings for the Amplify.configure() function (#5095)](https://github.com/aws-amplify/amplify-js/issues/5095)
+
 ## TypeScript support for user attributes
 
 User attributes inference on the `signUp` API.
@@ -201,6 +212,8 @@ Auth.signUp({
 
 <img width="385" alt="user attributes" src="https://user-images.githubusercontent.com/70438514/225924992-d578c486-9775-4ce4-a5e7-718388f7d56b.png">
 
+Related issue: [TypeScript definition not matching: Property 'attributes' does not exist on type 'CognitoUser' (#9941)](https://github.com/aws-amplify/amplify-js/issues/9941)
+
 ## Predictable API responses
 
 We are improving **_DX_** by providing descriptive API responses to help developers complete auth flows. An example for the `confirmSignUp` API is highlighted below.
@@ -237,6 +250,11 @@ if (resp.isSignUpComplete) {
 **Proposed DX (v6)**
 
 <img src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png" width="650" alt="confirmSignUp-v6">
+
+Related issues:
+[Update types for Promises on Auth calls (#9286)](https://github.com/aws-amplify/amplify-js/issues/9286)
+[authenticator: add key types to user session payload (#10142)](https://github.com/aws-amplify/amplify-js/issues/10142)
+[Return types of functions in AuthClass are unsafe (#6053)](https://github.com/aws-amplify/amplify-js/issues/6053)
 
 Try out the proposed types here: https://stackblitz.com/edit/rfc-typescript-v6?file=examples-auth.ts
 
