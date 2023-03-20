@@ -77,8 +77,6 @@ Hub.listen(channel, ({ payload }) => {
 });
 ```
 
-**Current DX (v5)**
-
 <img src="https://user-images.githubusercontent.com/70438514/222809595-1181fe84-f375-4d30-a866-c654b1c97024.gif" width="450" alt="custom-hub-v5">
 
 **Proposed Usage (v6)**
@@ -119,8 +117,6 @@ Hub.listen<CustomChannelMap>('custom_channel', ({ payload }) => {
 });
 ```
 
-**Proposed DX (v6)**
-
 <img src="https://user-images.githubusercontent.com/70438514/225745517-d9436a7c-329e-4ed9-b88b-823b92406cc4.gif" width="600" alt="custom-hub-v6">
 
 Related issue: [Fully typed hubs (#5997)](https://github.com/aws-amplify/amplify-js/issues/5997)
@@ -143,8 +139,6 @@ Amplify.configure({
 });
 ```
 
-**Current DX (v5)**
-
 <img src="https://user-images.githubusercontent.com/70438514/222543613-50124bf6-a5d8-4b6f-9196-320100922ec7.png" width="600" alt="configure-v5">
 
 **Proposed Usage (v6)**
@@ -160,8 +154,6 @@ Amplify.configure({
   Auth: authConfig
 });
 ```
-
-**Proposed DX (v6)**
 
 ![configure-v6](https://user-images.githubusercontent.com/70438514/222813249-f2782358-27c5-4d16-b5d4-9f4fd6d1b594.gif)
 
@@ -190,8 +182,6 @@ Auth.signUp({
 });
 ```
 
-**Current DX (v5)**
-
 ![signup-v5](https://user-images.githubusercontent.com/70438514/222456624-b4af7349-db9d-4304-9cdc-08cf649e2d31.png)
 
 **Proposed Usage (v6)**
@@ -207,8 +197,6 @@ Auth.signUp({
   },
 });
 ```
-
-**Proposed DX (v6)**
 
 <img width="385" alt="user attributes" src="https://user-images.githubusercontent.com/70438514/225924992-d578c486-9775-4ce4-a5e7-718388f7d56b.png">
 
@@ -228,8 +216,6 @@ if (resp === 'SUCCESS'){
 }
 ```
 
-**Current DX (v5)**
-
 ![confirmSignUp-v5](https://user-images.githubusercontent.com/70438514/222456621-fca2d313-3d39-4a1e-8bcb-a1e86235bd06.png)
 
 **Proposed Usage (v6)**
@@ -246,8 +232,6 @@ if (resp.isSignUpComplete) {
 }
 
 ```
-
-**Proposed DX (v6)**
 
 <img src="https://user-images.githubusercontent.com/70438514/222456623-34d48988-5e3d-43be-bc9a-7c6d8ecb0b00.png" width="650" alt="confirmSignUp-v6">
 
@@ -291,6 +275,27 @@ if (firstPhoto) {
 **Proposed Usage (v6)**
 
 ```TypeScript
+// New reference types
+type AccessLevelConfig = {
+  readonly level?: StorageAccessLevel;
+  readonly identityId?: string;
+};
+
+type StorageObjectMetadata = {
+  readonly size?: number;
+  readonly eTag?: string;
+  readonly lastModified?: Date;
+};
+
+type StorageObjectReference = {
+  readonly key: string;
+  readonly metadata?: StorageObjectMetadata;
+} & AccessLevelConfig;
+
+type StoragePathReference = {
+  readonly path: string;
+} & AccessLevelConfig;
+
 // List all public photos
 const listResponse = await Storage.list({
   path: getPathReference('photos/', { level: 'public' })
