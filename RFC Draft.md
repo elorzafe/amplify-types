@@ -275,12 +275,7 @@ if (firstPhoto) {
 **Proposed Usage (v6)**
 
 ```TypeScript
-// New reference types
-type AccessLevelConfig = {
-  readonly level?: StorageAccessLevel;
-  readonly identityId?: string;
-};
-
+// New reference types (full types available in the sandbox)
 type StorageObjectMetadata = {
   readonly size?: number;
   readonly eTag?: string;
