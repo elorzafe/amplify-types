@@ -555,8 +555,10 @@ function createMutation() {
 function subscribeToCreate() {
   const sub = API.subscribe(onCreateTodo).on({
     next: (message) => {
-      // Return value immediately available instead of `value?.data?.onCreateTodo`
-      const newTodo = message;
+      // Return value shortened slightly from `message?.data?.onCreateTodo`.
+      next: (message) => {
+        console.log(message.onCreateTodo);
+      },
     }
   });
 }
