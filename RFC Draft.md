@@ -611,7 +611,7 @@ interface GraphQLData<T = object> {
 ```
 
 ### Proposed behavior for multiple queries/mutations in the response
-In GraphQL, you can define multiple queries or mutations in a single request. The response object will include the result of all the queries and mutations. For example, given the following queries:
+In GraphQL, you can define multiple queries or mutations in a single request via the `.graphql()` operation. The response object will include the result of all the queries and mutations. For example, given the following queries:
 
 ```ts
 async function custom() {
