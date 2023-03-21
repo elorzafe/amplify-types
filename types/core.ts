@@ -72,71 +72,36 @@ type AmplifyChannel =
   | "pubsub"
   | "datastore";
 
-type AmplifyEventDataMap = Record<string, any>;
+type AmplifyEventDataMap = { event: string; data?: unknown };
 
-type AuthEvent =
-  | "signIn"
-  | "signInFailure"
-  | "signUp"
-  | "signUpFailure"
-  | "confirmSignUp"
-  | "tokenRefresh";
-
-type GetAuthData<T extends AuthEvent> = T extends `${string}Failure`
-  ? AuthError
-  : T extends "signIn"
-  ? AuthSignInResult
-  : T extends "signUp" | "confirmSignUp"
-  ? AuthSignUpResult
-  : any;
-
-type AuthEventDataMap = {
-  [authEvent in AuthEvent]: GetAuthData<authEvent>;
-};
+type AuthHubEventData =
+  | { event: "signIn"; data: AuthSignInResult }
+  | { event: "signUp"; data: AuthSignUpResult }
+  | { event: "signUpFailure"; data: AuthError };
 
 type HubCapsule<
   Channel extends string | RegExp,
-  EventMap extends AmplifyEventDataMap
+  EventDataMap extends AmplifyEventDataMap
 > = {
   channel: Channel;
-  payload: GetPayload<EventMap, keyof EventMap, GetEventsWithoutData<EventMap>>;
+  payload: HubPayload<EventDataMap>;
   source: string;
   patternInfo?: string[];
 };
 
-type GetEventsWithoutData<T extends Record<string, any>> = {
-  [event in keyof T]: T[event] extends void ? event : never;
-}[keyof T];
-
-type GetPayload<
-  EventMap extends AmplifyEventDataMap,
-  Event extends keyof EventMap = keyof EventMap,
-  EventsWithOutData extends keyof EventMap = never
-> = Event extends EventsWithOutData
-  ? HubPayloadWithOutData<EventsWithOutData>
-  : HubPayload<EventMap, Event>;
-
 type HubCallback<
   Channel extends string | RegExp,
-  EventMap extends AmplifyEventDataMap = AmplifyEventDataMap
-> = (capsule: HubCapsule<Channel, EventMap>) => void;
-
-type HubPayloadWithOutData<Event> = {
-  event: Event;
-  message?: string;
-};
+  EventData extends AmplifyEventDataMap = AmplifyEventDataMap
+> = (capsule: HubCapsule<Channel, EventData>) => void;
 
 type HubPayload<
-  EventDataMap extends AmplifyEventDataMap = AmplifyEventDataMap,
-  Event extends keyof EventDataMap = keyof EventDataMap
-> = {
-  event: Event;
-  data: EventDataMap[Event];
+  EventDataMap extends AmplifyEventDataMap = AmplifyEventDataMap
+> = EventDataMap & {
   message?: string;
 };
 
 type AmplifyHubCallbackMap<Channel extends AmplifyChannel> = {
-  auth: HubCallback<Channel, AuthEventDataMap>;
+  auth: HubCallback<Channel, AuthHubEventData>;
   storage: HubCallback<Channel>;
   core: HubCallback<Channel>;
   analytics: HubCallback<Channel>;
@@ -166,21 +131,27 @@ type AmplifyChannelMap<
   EventDataMap extends AmplifyEventDataMap = AmplifyEventDataMap
 > = {
   channel: Channel | RegExp;
-  eventDataMap: EventDataMap;
+  eventData: EventDataMap;
 };
 
 // Hub
 declare class HubClass {
-  listen<ChannelMap extends AmplifyChannelMap>(
-    channel: ChannelMap["channel"],
-    callback: GetHubCallBack<ChannelMap["channel"], ChannelMap["eventDataMap"]>,
+  listen<
+    ChannelMap extends AmplifyChannelMap,
+    Channel extends ChannelMap["channel"] = ChannelMap["channel"]
+  >(
+    channel: Channel,
+    callback: GetHubCallBack<Channel, ChannelMap["eventData"]>,
     listenerName?: string
   ): void;
 
-  dispatch<ChannelMap extends AmplifyChannelMap>(
-    channel: ChannelMap["channel"],
+  dispatch<
+    ChannelMap extends AmplifyChannelMap,
+    Channel extends ChannelMap["channel"] = ChannelMap["channel"]
+  >(
+    channel: Channel,
     payload: PayloadFromCallback<
-      GetHubCallBack<ChannelMap["channel"], ChannelMap["eventDataMap"]>
+      GetHubCallBack<Channel, ChannelMap["eventData"]>
     >,
     source?: string,
     ampSymbol?: Symbol
